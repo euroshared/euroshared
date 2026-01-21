@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test time wall</title>
+     <link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+
+<div class="container">
+    <h1>Gagnez de l'argent</h1>
+    <p>Entrez votre email PayPal/Payeer pour commencer :</p>
+    
+    <!-- Formulaire d'identification -->
+    <input type="email" id="userEmail" placeholder="votre-email@exemple.com">
+    <button class="btn" id="btnValider" onclick="validerEmail()">Valider mon identifiant</button>
+
+    <!-- Menu de travail (caché au début) -->
+    <div id="menuTravail" class="btn-group">
+        <h3>Choisissez une tâche :</h3>
+         <a href="#" id="linkSurveys" class="btn" target="_blank">📝 Sondages</a>
+        <a href="#" id="linkClicks" class="btn btn-clicks" target="_blank">🖱️ Clics Rémunérés</a>
+        <a href="#" id="linkTasks" class="btn" target="_blank">⚙️ Micro-Tâches</a>
+        <a href="#" id="linkGames" class="btn" target="_blank">🖱️ Jeux</a>
+        <a href="#" id="linkBuypoints" class="btn" target="_blank">📝Achat de Points</a>
+
+        <p class="info">Identifié en tant que : <span id="displayEmail"></span></p>
+        <button onclick="reinitialiser()" style="background:none; border:none; color:red; cursor:pointer; text-decoration:underline;">Changer d'email</button>
+    </div>
+</div>
+
+ <script src="./script.js"></script
+
+</body>
+</html>
