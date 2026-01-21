@@ -11,17 +11,37 @@
         }
     }
 
-    function afficherMenu(email) {
-        // Cacher le champ de saisie
-        document.getElementById('userEmail').style.display = 'none';
-        document.getElementById('btnValider').style.display = 'none';
-        
-        // Configurer les liens directs
-        document.getElementById('linkSurveys').href = `https://timewall.io/users/login?oid=9c481747da9d5015&uid=${email}`;
-        // Afficher le menu
-        document.getElementById('displayEmail').innerText = email;
-        document.getElementById('menuTravail').style.display = 'flex';
+function afficherMenu(email) {
+    // 1. Gestion de l'affichage
+    document.getElementById('userEmail').style.display = 'none';
+    document.getElementById('btnValider').style.display = 'none';
+    document.getElementById('displayEmail').innerText = email;
+    document.getElementById('menuTravail').style.display = 'flex';
+
+    // 2. Mise à jour du lien TimeWall (Sécurisé avec encodeURIComponent)
+    const OID = "9c481747da9d5015";
+    const linkSurveys = document.getElementById('linkSurveys');
+    linkSurveys.href = `https://timewall.io{OID}&uid=${encodeURIComponent(email)}`;
+
+    // 3. Appel au Worker pour afficher le solde
+    // REMPLACEZ BIEN l'URL ci-dessous par votre URL de Worker "get-user-balance-timewall"
+    const URL_WORKER_SOLDE = "https://get-user-balance-timewall.euroshared.workers.dev/";
+    const afficheur = document.getElementById('user-balance'); 
+
+    if (afficheur) {
+        fetch(`${URL_WORKER_SOLDE}?uid=${encodeURIComponent(email)}`)
+            .then(response => response.json())
+            .then(data => {
+                // Affiche le solde du KV ou 0 par défaut
+                afficheur.innerText = data.balance || "0";
+            })
+            .catch(err => {
+                console.error("Erreur de lecture du solde", err);
+                afficheur.innerText = "Non disponible";
+            });
     }
+}
+
 
     function reinitialiser() {
         localStorage.removeItem('tw_user_email');
