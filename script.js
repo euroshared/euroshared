@@ -18,12 +18,6 @@
         
         // Configurer les liens directs
         document.getElementById('linkSurveys').href = `https://timewall.io/users/login?oid=9c481747da9d5015&uid=${email}`;
-        document.getElementById('linkClicks').href = `https://timewall.io/users/login?oid=9c481747da9d5015&uid=${email}&tab=clicks`;
-        document.getElementById('linkTasks').href = `https://timewall.io/users/login?oid=9c481747da9d5015&uid=${email}&tab=tasks`;
-        document.getElementById('linkGames').href = `https://timewall.io/users/login?oid=9c481747da9d5015&uid=${email}&tab=games`;
-        document.getElementById('linkBuypoints').href = `https://timewall.io/users/login?oid=9c481747da9d5015&uid=${email}&tab=buypoints`;
-        
-
         // Afficher le menu
         document.getElementById('displayEmail').innerText = email;
         document.getElementById('menuTravail').style.display = 'flex';
