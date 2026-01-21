@@ -21,7 +21,8 @@ function afficherMenu(email) {
     // 2. Mise à jour du lien TimeWall (Sécurisé avec encodeURIComponent)
     const OID = "9c481747da9d5015";
     const linkSurveys = document.getElementById('linkSurveys');
-    linkSurveys.href = `https://timewall.io{OID}&uid=${encodeURIComponent(email)}`;
+    linkSurveys.href = `https://www.timewall.io/users/login?oid=9c481747da9d5015&uid=${encodeURIComponent(email)}`;
+    
 
     // 3. Appel au Worker pour afficher le solde
     // REMPLACEZ BIEN l'URL ci-dessous par votre URL de Worker "get-user-balance-timewall"
