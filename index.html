@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Euroshared</title>
-    <!-- Lien vers le fichier CSS -->
     <link rel="stylesheet" href="./style.css">
-    <!-- Chargement de la bibliothèque Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
@@ -21,7 +19,6 @@
         <main class="card" id="auth-section">
             <h3>Bienvenue</h3>
             <div style="display: flex; flex-direction: column; gap: 10px;">
-                <!-- Pour l'inscription, on demande le nom -->
                 <input type="text" id="reg-username" placeholder="Nom d'utilisateur">
                 <input type="email" id="reg-email" placeholder="Email">
                 <input type="password" id="reg-password" placeholder="Mot de passe">
@@ -33,7 +30,7 @@
             </div>
         </main>
 
-        <!-- SECTION 2 : DASHBOARD (Caché par défaut) -->
+        <!-- SECTION 2 : DASHBOARD -->
         <main class="card" id="dashboard" style="display:none;">
             <div class="user-info">
                 <h3>Bonjour, <span id="username">...</span></h3>
@@ -45,21 +42,29 @@
             
             <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
                 <button id="btn-gagner">💰 Gagner 10 MGA</button>
+
+                <!-- SECTION RETRAIT -->
+                <div id="retrait-section" style="margin-top: 15px; padding: 15px; background: #fff3e0; border-radius: 10px; border: 1px solid #ffe0b2;">
+                    <h4 style="margin: 0 0 10px 0; color: #e65100; font-size: 0.9rem;">Retirer mes MGA</h4>
+                    <div style="display: flex; gap: 5px;">
+                        <input type="number" id="montant-retrait" placeholder="Montant" style="margin-bottom: 0; flex: 1; padding: 8px;">
+                        <button id="btn-retirer" style="background-color: #e65100; width: auto; margin: 0; padding: 8px 15px;">Retirer</button>
+                    </div>
+                </div>
                 
                 <!-- HISTORIQUE -->
                 <div id="historique-section" style="margin-top: 20px; border-top: 1px dashed #ccc; padding-top: 15px; text-align: left;">
-                    <h4 style="margin-bottom: 10px; color: #555;">Activités récentes :</h4>
+                    <h4 style="margin-bottom: 10px; color: #555; font-size: 0.9rem;">Activités récentes :</h4>
                     <ul id="liste-transactions" style="list-style: none; padding: 0; margin: 0;">
                         <!-- JS -->
                     </ul>
                 </div>
 
-                <button id="btn-logout" style="background-color: #f44336; margin-top: 20px; font-size: 0.8rem;">Se déconnecter</button>
+                <button id="btn-logout" style="background-color: #f44336; margin-top: 20px; font-size: 0.8rem; padding: 10px;">Se déconnecter</button>
             </div>
         </main>
     </div>
 
-    <!-- Lien vers votre fichier JavaScript -->
     <script src="./script.js"></script>
 </body>
 </html>
