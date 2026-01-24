@@ -86,6 +86,27 @@ async function simulerGain() {
     }
 }
 
+// FONCTION CHARGER HISTORIQUE
+async function chargerHistorique() {
+    const { data, error } = await supabaseClient
+        .from('transactions')
+        .select('*')
+        .eq('user_email', emailActuel)
+        .order('created_at', { ascending: false }) // Les plus récents en premier
+        .limit(5); // On n'affiche que les 5 derniers
+
+    const listeEl = document.getElementById('liste-transactions');
+    listeEl.innerHTML = ""; // On vide la liste
+
+    if (data) {
+        data.forEach(trans => {
+            const li = document.createElement('li');
+            li.innerHTML = `✅ +${trans.montant} MGA - <small>${trans.description}</small>`;
+            listeEl.appendChild(li);
+        });
+    }
+}
+
 
 // 5. ÉCOUTEURS D'ÉVÉNEMENTS
 document.addEventListener('DOMContentLoaded', () => {
