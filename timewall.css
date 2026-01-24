@@ -1,0 +1,10 @@
+.btn-wall {
+    display: block;
+    padding: 12px;
+    background-color: #673ab7;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center;
+}
