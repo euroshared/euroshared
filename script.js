@@ -103,17 +103,26 @@ async function chargerHistorique() {
 
 // 7. INITIALISATION
 document.addEventListener('DOMContentLoaded', async () => {
+    // Vérification de la session existante
     const { data: { session } } = await supabaseClient.auth.getSession();
     if (session) {
         emailActuel = session.user.email;
         chargerProfilEtAfficher();
     }
 
+    // Liaison des boutons
     document.getElementById('btn-register').addEventListener('click', inscrireUtilisateur);
     document.getElementById('btn-login').addEventListener('click', connecterUtilisateur);
     document.getElementById('btn-gagner').addEventListener('click', simulerGain);
     document.getElementById('btn-retirer').addEventListener('click', effectuerRetrait);
+
+    // CORRECTION ICI : Liaison du bouton déconnexion
+    const logoutBtn = document.getElementById('btn-logout');
+    if (logoutBtn) {
+        logoutBtn.onclick = deconnexion; // Utilisation de .onclick pour plus de stabilité
+    }
 });
+
 
 // fonction deconnection
 async function deconnexion() {
