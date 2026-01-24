@@ -1,164 +1,134 @@
 // 1. CONFIGURATION
 const SUPABASE_URL = "https://qhxwbjzmdpzvgmmwxclj.supabase.co";
 const SUPABASE_KEY = "sb_publishable_XIgeAxAVCpq0Qv161ZQwEw_fJggWr-F";
-
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Variable globale pour suivre l'utilisateur actuel
 let emailActuel = "";
 
-// 2. FONCTION D'INSCRIPTION / CONNEXION
+// 2. FONCTION INSCRIPTION (Sign Up)
 async function inscrireUtilisateur() {
-    const usernameInput = document.getElementById('reg-username').value;
-    const emailInput = document.getElementById('reg-email').value;
+    const email = document.getElementById('reg-email').value;
+    const password = document.getElementById('reg-password').value;
+    const username = document.getElementById('reg-username').value;
     const statusEl = document.getElementById('status');
 
-    if (!usernameInput || !emailInput) {
-        alert("Veuillez remplir le nom et l'email !");
-        return;
-    }
+    if (!email || !password || !username) return alert("Remplissez tous les champs !");
 
-    statusEl.innerText = "⏳ Vérification/Inscription...";
+    statusEl.innerText = "⏳ Création du compte...";
 
-    // .upsert ajoute si l'email n'existe pas, ou met à jour s'il existe
-    const { data, error } = await supabaseClient
+    // A. Création dans le système Auth de Supabase
+    const { data: authData, error: authError } = await supabaseClient.auth.signUp({
+        email: email,
+        password: password
+    });
+
+    if (authError) return alert("Erreur Auth : " + authError.message);
+
+    // B. Création dans votre table utlisateursEuroshared
+    const { error: dbError } = await supabaseClient
         .from('utlisateursEuroshared')
-        .upsert({ username: usernameInput, email: emailInput }, { onConflict: 'email' })
-        .select()
-        .maybeSingle();
+        .insert([{ email: email, username: username, solde: 0 }]);
 
-    if (error) {
-        console.error("Erreur:", error);
-        statusEl.innerText = "❌ Erreur : " + error.message;
-    } else if (data) {
-        emailActuel = data.email;
-        localStorage.setItem('euroshared_email', data.email); // Sauvegarde l'email
-        localStorage.setItem('euroshared_username', data.username); // Sauvegarde le nom
-
-        afficherDashboard(data);
+    if (dbError) {
+        alert("Erreur base de données : " + dbError.message);
+    } else {
+        alert("Compte créé avec succès ! Vous pouvez maintenant vous connecter.");
     }
 }
 
-// 3. FONCTION POUR AFFICHER LE TABLEAU DE BORD
+// 3. FONCTION CONNEXION (Sign In)
+async function connecterUtilisateur() {
+    const email = document.getElementById('reg-email').value;
+    const password = document.getElementById('reg-password').value;
+    const statusEl = document.getElementById('status');
+
+    statusEl.innerText = "⏳ Connexion...";
+
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+    });
+
+    if (error) {
+        alert("Erreur : " + error.message);
+    } else {
+        emailActuel = data.user.email;
+        // Récupérer les données de la table
+        chargerProfilEtAfficher();
+    }
+}
+
+// 4. CHARGER PROFIL ET HISTORIQUE
+async function chargerProfilEtAfficher() {
+    const { data: userDB, error } = await supabaseClient
+        .from('utlisateursEuroshared')
+        .select('*')
+        .eq('email', emailActuel)
+        .maybeSingle();
+
+    if (userDB) {
+        afficherDashboard(userDB);
+        chargerHistorique();
+    }
+}
+
 function afficherDashboard(user) {
     document.getElementById('auth-section').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
-    
     document.getElementById('username').innerText = user.username;
-    // Si le solde est null (nouveau compte), on affiche 0
-    document.getElementById('solde').innerText = user.solde !== null ? user.solde : 0;
-    document.getElementById('status').innerText = "✅ Bienvenue " + user.username;
+    document.getElementById('solde').innerText = user.solde || 0;
+    document.getElementById('status').innerText = "✅ Connecté en tant que " + user.username;
+}
 
-    // CHARGEMENT AUTOMATIQUE DE L'HISTORIQUE À LA CONNEXION
+// 5. FONCTION GAGNER (MISE À JOUR SOLDE + TRANS)
+async function simulerGain() {
+    const soldeEl = document.getElementById('solde');
+    let soldeActuel = parseInt(soldeEl.innerText) || 0;
+    let nouveauSolde = soldeActuel + 10;
+
+    // Update Solde
+    await supabaseClient.from('utlisateursEuroshared').update({ solde: nouveauSolde }).eq('email', emailActuel);
+    // Add Transaction
+    await supabaseClient.from('transactions').insert([{ user_email: emailActuel, type: 'gain', description: 'Gain manuel', montant: 10 }]);
+
+    soldeEl.innerText = nouveauSolde;
     chargerHistorique();
 }
 
-// 4. FONCTION POUR GAGNER (MISE À JOUR DU SOLDE)
-async function simulerGain() {
-    const soldeEl = document.getElementById('solde');
-    const statusEl = document.getElementById('status');
-    
-    let soldeActuel = parseInt(soldeEl.innerText);
-    if (isNaN(soldeActuel)) { soldeActuel = 0; }
-    
-    let gain = 10;
-    let nouveauSolde = soldeActuel + gain;
-
-    statusEl.innerText = "⏳ Enregistrement du gain...";
-
-    // ÉTAPE A : Mettre à jour le solde dans la table principale
-    const { error: errorUpdate } = await supabaseClient
-        .from('utlisateursEuroshared')
-        .update({ solde: nouveauSolde })
-        .eq('email', emailActuel);
-
-    // ÉTAPE B : Ajouter une ligne dans l'historique (transactions)
-    const { error: errorHistory } = await supabaseClient
-        .from('transactions')
-        .insert([
-            { 
-                user_email: emailActuel, 
-                type: 'gain', 
-                description: 'Gain manuel (Simulation)', 
-                montant: gain 
-            }
-        ]);
-
-    if (errorUpdate || errorHistory) {
-        console.error("Détails erreur:", errorUpdate || errorHistory);
-        statusEl.innerText = "❌ Erreur lors de l'enregistrement";
-    } else {
-        soldeEl.innerText = nouveauSolde;
-        statusEl.innerText = "💰 Gain enregistré et historique mis à jour !";
-        // RECHARGER L'AFFICHAGE DE L'HISTORIQUE APRÈS LE GAIN
-        chargerHistorique(); 
-    }
-}
-
-// 5. FONCTION POUR CHARGER ET AFFICHER L'HISTORIQUE
 async function chargerHistorique() {
     const listeEl = document.getElementById('liste-transactions');
-    if (!listeEl) return;
+    const { data } = await supabaseClient.from('transactions').select('*').eq('user_email', emailActuel).order('created_at', { ascending: false }).limit(5);
 
-    const { data, error } = await supabaseClient
-        .from('transactions')
-        .select('*')
-        .eq('user_email', emailActuel)
-        .order('created_at', { ascending: false }) // Les plus récents en premier
-        .limit(5); // On n'affiche que les 5 derniers
-
-    if (error) {
-        console.error("Erreur chargement historique:", error);
-        return;
-    }
-
-    listeEl.innerHTML = ""; // On vide la liste avant de la remplir
-
-    if (data && data.length > 0) {
-        data.forEach(trans => {
+    listeEl.innerHTML = "";
+    if (data) {
+        data.forEach(t => {
             const li = document.createElement('li');
-            li.style.display = "flex";
-            li.style.justifyContent = "space-between";
-            li.style.padding = "8px 0";
-            li.style.borderBottom = "1px solid #f0f0f0";
-            
-            li.innerHTML = `
-                <span>✅ ${trans.description}</span>
-                <span style="color: #2e7d32; font-weight: bold;">+${trans.montant} MGA</span>
-            `;
+            li.innerHTML = `<span>✅ ${t.description}</span> <b>+${t.montant} MGA</b>`;
             listeEl.appendChild(li);
         });
-    } else {
-        listeEl.innerHTML = "<li style='color: #999; font-style: italic; text-align: center; padding: 10px;'>Aucune activité pour le moment</li>";
     }
 }
 
-// 6. ÉCOUTEURS D'ÉVÉNEMENTS
-document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Vérifier si un utilisateur est déjà "mémorisé"
-    const savedEmail = localStorage.getItem('euroshared_email');
-    const savedUsername = localStorage.getItem('euroshared_username');
+async function deconnexion() {
+    await supabaseClient.auth.signOut();
+    location.reload();
+}
 
-    if (savedEmail) {
-        emailActuel = savedEmail;
-        // On simule un objet utilisateur pour l'affichage
-        const userSimulation = { email: savedEmail, username: savedUsername, solde: "..." };
-        afficherDashboard(userSimulation);
-        
-        // On récupère les données fraîches de Supabase pour mettre à jour le solde
-        const { data } = await supabaseClient
-            .from('utlisateursEuroshared')
-            .select('*')
-            .eq('email', savedEmail)
-            .maybeSingle();
-            
-        if (data) {
-            document.getElementById('solde').innerText = data.solde;
-            chargerHistorique();
-        }
+// 6. INITIALISATION ET MÉMOIRE (SESSION)
+document.addEventListener('DOMContentLoaded', async () => {
+    // Vérifie si une session existe déjà (mémoire automatique)
+    const { data: { session } } = await supabaseClient.auth.getSession();
+
+    if (session) {
+        emailActuel = session.user.email;
+        chargerProfilEtAfficher();
     }
 
-    // 2. Vos écouteurs de boutons habituels
+    // Écouteurs
     document.getElementById('btn-register').addEventListener('click', inscrireUtilisateur);
+    document.getElementById('btn-login').addEventListener('click', connecterUtilisateur);
     document.getElementById('btn-gagner').addEventListener('click', simulerGain);
+    if(document.getElementById('btn-logout')) {
+        document.getElementById('btn-logout').addEventListener('click', deconnexion);
+    }
 });
