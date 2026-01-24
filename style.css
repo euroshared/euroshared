@@ -1,49 +1,123 @@
 /* Style général 2026 */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f7f6;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #f4f7f6 0%, #e1e8e7 100%);
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh; /* Corrigé : pas d'espace entre 100 et vh */
     margin: 0;
+    color: #333;
 }
 
 .container {
-    text-align: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
 }
 
 .card {
     background: white;
     padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    width: 350px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+    transition: transform 0.3s ease;
 }
 
+/* Style des titres */
+h1 { color: #1976d2; font-size: 1.8rem; margin-bottom: 5px; }
+h3 { color: #555; margin-bottom: 20px; }
+
+/* Box de Solde */
 .balance-box {
-    margin: 20px 0;
-    padding: 15px;
-    background-color: #e8f5e9;
-    border-radius: 10px;
+    margin: 25px 0;
+    padding: 20px;
+    background: linear-gradient(145deg, #e8f5e9, #c8e6c9);
+    border-radius: 15px;
+    border: 1px solid #a5d6a7;
 }
 
 .amount {
-    font-size: 2em;
-    font-weight: bold;
+    font-size: 2.5em;
+    font-weight: 800;
     color: #2e7d32;
+    display: block;
 }
 
+.currency { font-weight: bold; color: #4caf50; }
+
+/* Formulaires et Inputs */
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box; /* Important pour que le padding ne dépasse pas */
+    font-size: 1rem;
+}
+
+/* Boutons */
 button {
+    width: 100%;
     background-color: #2196f3;
     color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: 0.3s;
+    transition: all 0.3s ease;
+    margin-bottom: 10px;
 }
 
 button:hover {
-    background-color: #1976d2;
+    background-color: #1565c0;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(33, 150, 243, 0.3);
+}
+
+#btn-gagner {
+    background-color: #ff9800; /* Orange pour attirer l'oeil */
+}
+
+#btn-gagner:hover {
+    background-color: #f57c00;
+}
+
+/* Style de l'historique */
+#historique-section {
+    margin-top: 25px;
+    text-align: left;
+    background: #fdfdfd;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #eee;
+}
+
+#liste-transactions {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#liste-transactions li {
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+#liste-transactions li:last-child { border-bottom: none; }
+
+/* Statut (messages d'erreur/succès) */
+#status {
+    font-size: 0.85rem;
+    margin-top: 15px;
+    font-weight: 500;
 }
