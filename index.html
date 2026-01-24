@@ -33,6 +33,25 @@
 
      <button id="btn-gagner">Simuler un gain (10 MGA)</button>
 
+
+
+    <!-- Formulaire de simulation d'inscription -->
+<div id="auth-section" style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
+    <h3>Simulation : Inscription</h3>
+    <input type="text" id="reg-username" placeholder="Nom d'utilisateur">
+    <input type="email" id="reg-email" placeholder="Email">
+    <button id="btn-register">S'inscrire et commencer</button>
+</div>
+
+<!-- Votre affichage actuel (modifié pour être dynamique) -->
+<div id="dashboard" style="display:none;">
+    <h2>Bienvenue, <span id="username">...</span></h2>
+    <p>Votre solde : <span id="solde">0</span> MGA</p>
+    <button id="btn-gagner">Gagner 10 MGA</button>
+    <p id="status"></p>
+</div>
+
+
     <!-- Lien vers le fichier JavaScript (à mettre à la fin) -->
     <script src="./script.js"></script>
 </body>
