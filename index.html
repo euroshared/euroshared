@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Éditeur - 2026</title>
+    <!-- Lien vers le fichier CSS -->
+    <link rel="stylesheet" href="./style.css">
+    <!-- Chargement de la bibliothèque Supabase -->
+     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Mon Espace Gains</h1>
+            <p id="status">Vérification de la connexion...</p>
+        </header>
+
+        <main class="card">
+            <div class="user-info">
+                <h3>Bienvenue, <span id="username">Chargement...</span></h3>
+                <div class="balance-box">
+                    <span class="label">Votre Solde :</span>
+                    <span id="solde" class="amount">0</span> <span class="currency">MGA</span>
+                </div>
+               
+                <h1>...................................</h1>
+            </div>
+            <button id="btn-refresh">Actualiser le solde</button>
+        </main>
+    </div>
+
+     <button id="btn-gagner">Simuler un gain (10 MGA)</button>
+
+    <!-- Lien vers le fichier JavaScript (à mettre à la fin) -->
+    <script src="./script.js"></script>
+</body>
+</html>
