@@ -5,57 +5,50 @@ const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let emailActuel = "";
 
-// 2. INSCRIPTION & CONNEXION
+// 2. INSCRIPTION (SIGN UP) AVEC VÉRIFICATION DES DOUBLONS
 async function inscrireUtilisateur() {
-    const email = document.getElementById('reg-email').value;
+    const email = document.getElementById('reg-email').value.trim().toLowerCase();
     const password = document.getElementById('reg-password').value;
-    const username = document.getElementById('reg-username').value;
+    const username = document.getElementById('reg-username').value.trim();
     const statusEl = document.getElementById('status');
 
     if (!email || !password || !username) return alert("Veuillez remplir tous les champs !");
 
-    statusEl.innerText = "⏳ Vérification de l'existence du compte...";
+    statusEl.innerText = "⏳ Tentative d'inscription...";
 
-    // A. Vérifier si l'email existe déjà dans votre table publique
-    const { data: userExists } = await supabaseClient
-        .from('utlisateursEuroshared')
-        .select('email')
-        .eq('email', email)
-        .maybeSingle();
-
-    if (userExists) {
-        statusEl.innerText = "❌ Compte déjà existant";
-        return alert("Un compte possède déjà cet email. Veuillez utiliser le bouton 'Se connecter'.");
-    }
-
-    statusEl.innerText = "⏳ Création du compte sécurisé...";
-
-    // B. Création dans le système Auth de Supabase (Mot de passe)
+    // A. Création dans le système Auth de Supabase
     const { data: authData, error: authError } = await supabaseClient.auth.signUp({
         email: email,
         password: password
     });
 
-    if (authError) return alert("Erreur d'authentification : " + authError.message);
+    // Gestion des doublons au niveau de l'Auth
+    if (authError) {
+        if (authError.message.includes("already registered") || authError.status === 422) {
+            statusEl.innerText = "❌ Ce compte existe déjà.";
+            return alert("Un compte possède déjà cet email. Veuillez vous connecter.");
+        }
+        return alert("Erreur d'inscription : " + authError.message);
+    }
 
-    // C. Création de la ligne dans votre table de données (Solde)
+    // B. Création de la ligne dans votre table utlisateursEuroshared
     const { error: dbError } = await supabaseClient
         .from('utlisateursEuroshared')
         .insert([{ email: email, username: username, solde: 0 }]);
 
     if (dbError) {
         console.error("Erreur DB:", dbError);
-        alert("Compte créé mais erreur de profil. Contactez le support.");
+        statusEl.innerText = "⚠️ Erreur profil, mais compte Auth créé.";
     } else {
-        alert("Compte créé avec succès ! Vous pouvez maintenant vous connecter.");
-        // Nettoyage des champs pour la connexion
-        document.getElementById('reg-username').value = "";
+        alert("Compte créé avec succès ! Connectez-vous maintenant.");
         statusEl.innerText = "✅ Inscription réussie. Connectez-vous !";
+        document.getElementById('reg-username').value = "";
     }
 }
 
+// 3. CONNEXION (SIGN IN)
 async function connecterUtilisateur() {
-    const email = document.getElementById('reg-email').value;
+    const email = document.getElementById('reg-email').value.trim().toLowerCase();
     const password = document.getElementById('reg-password').value;
     const statusEl = document.getElementById('status');
 
@@ -78,33 +71,42 @@ async function connecterUtilisateur() {
     }
 }
 
-// 3. AFFICHAGE ET DASHBOARD
+// 4. AFFICHAGE DU DASHBOARD
 async function chargerProfilEtAfficher() {
-    const { data: userDB } = await supabaseClient.from('utlisateursEuroshared').select('*').eq('email', emailActuel).maybeSingle();
+    const { data: userDB } = await supabaseClient
+        .from('utlisateursEuroshared')
+        .select('*')
+        .eq('email', emailActuel)
+        .maybeSingle();
+
     if (userDB) {
         document.getElementById('auth-section').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
         document.getElementById('username').innerText = userDB.username;
         document.getElementById('solde').innerText = userDB.solde || 0;
-        document.getElementById('status').innerText = "✅ Bienvenue " + userDB.username;
         chargerHistorique();
     }
 }
 
-// 4. LOGIQUE DES GAINS (AJOUT)
+// 5. LOGIQUE DES GAINS (AJOUT)
 async function simulerGain() {
     const soldeEl = document.getElementById('solde');
     let soldeActuel = parseInt(soldeEl.innerText) || 0;
     let nouveauSolde = soldeActuel + 10;
 
     await supabaseClient.from('utlisateursEuroshared').update({ solde: nouveauSolde }).eq('email', emailActuel);
-    await supabaseClient.from('transactions').insert([{ user_email: emailActuel, type: 'gain', description: 'Gain manuel', montant: 10 }]);
+    await supabaseClient.from('transactions').insert([{ 
+        user_email: emailActuel, 
+        type: 'gain', 
+        description: 'Gain manuel', 
+        montant: 10 
+    }]);
 
     soldeEl.innerText = nouveauSolde;
     chargerHistorique();
 }
 
-// 5. LOGIQUE DES RETRAITS (SOUSTRACTION) - NOUVEAU
+// 6. LOGIQUE DES RETRAITS (SOUSTRACTION)
 async function effectuerRetrait() {
     const montantInput = document.getElementById('montant-retrait');
     const soldeEl = document.getElementById('solde');
@@ -117,7 +119,12 @@ async function effectuerRetrait() {
     let nouveauSolde = soldeActuel - montant;
 
     const { error } = await supabaseClient.from('utlisateursEuroshared').update({ solde: nouveauSolde }).eq('email', emailActuel);
-    await supabaseClient.from('transactions').insert([{ user_email: emailActuel, type: 'retrait', description: 'Demande de retrait', montant: -montant }]);
+    await supabaseClient.from('transactions').insert([{ 
+        user_email: emailActuel, 
+        type: 'retrait', 
+        description: 'Demande de retrait', 
+        montant: -montant 
+    }]);
 
     if (!error) {
         soldeEl.innerText = nouveauSolde;
@@ -127,10 +134,15 @@ async function effectuerRetrait() {
     }
 }
 
-// 6. CHARGER L'HISTORIQUE (AVEC COULEURS)
+// 7. CHARGER L'HISTORIQUE (AVEC COULEURS)
 async function chargerHistorique() {
     const listeEl = document.getElementById('liste-transactions');
-    const { data } = await supabaseClient.from('transactions').select('*').eq('user_email', emailActuel).order('created_at', { ascending: false }).limit(5);
+    const { data } = await supabaseClient
+        .from('transactions')
+        .select('*')
+        .eq('user_email', emailActuel)
+        .order('created_at', { ascending: false })
+        .limit(5);
 
     listeEl.innerHTML = "";
     if (data) {
@@ -139,6 +151,8 @@ async function chargerHistorique() {
             const li = document.createElement('li');
             li.style.display = "flex";
             li.style.justifyContent = "space-between";
+            li.style.padding = "5px 0";
+            li.style.borderBottom = "1px solid #eee";
             li.innerHTML = `
                 <span>${isGain ? '✅' : '💸'} ${t.description}</span>
                 <b style="color: ${isGain ? '#2e7d32' : '#d32f2f'}">${isGain ? '+' : ''}${t.montant} MGA</b>
@@ -148,39 +162,27 @@ async function chargerHistorique() {
     }
 }
 
-// 7. INITIALISATION
+// 8. DÉCONNEXION
+async function deconnexion() {
+    await supabaseClient.auth.signOut();
+    location.reload();
+}
+
+// 9. INITIALISATION ET SESSION
 document.addEventListener('DOMContentLoaded', async () => {
-    // Vérification de la session existante
     const { data: { session } } = await supabaseClient.auth.getSession();
+    
     if (session) {
         emailActuel = session.user.email;
         chargerProfilEtAfficher();
     }
 
-    // Liaison des boutons
+    // Écouteurs d'événements
     document.getElementById('btn-register').addEventListener('click', inscrireUtilisateur);
     document.getElementById('btn-login').addEventListener('click', connecterUtilisateur);
     document.getElementById('btn-gagner').addEventListener('click', simulerGain);
     document.getElementById('btn-retirer').addEventListener('click', effectuerRetrait);
-
-    // CORRECTION ICI : Liaison du bouton déconnexion
+    
     const logoutBtn = document.getElementById('btn-logout');
-    if (logoutBtn) {
-        logoutBtn.onclick = deconnexion; // Utilisation de .onclick pour plus de stabilité
-    }
+    if (logoutBtn) logoutBtn.onclick = deconnexion;
 });
-
-
-// fonction deconnection
-async function deconnexion() {
-    const { error } = await supabaseClient.auth.signOut();
-    if (error) {
-        alert("Erreur lors de la déconnexion : " + error.message);
-    } else {
-        // Vide aussi la mémoire locale par sécurité
-        localStorage.clear();
-        // Redirige vers l'accueil
-        window.location.reload();
-    }
-}
-
