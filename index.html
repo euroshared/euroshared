@@ -17,17 +17,17 @@
             <p id="status">Prêt pour l'inscription</p>
         </header>
 
-        <!-- SECTION 1 : INSCRIPTION (Affichée au début) -->
+        <!-- SECTION 1 : INSCRIPTION -->
         <main class="card" id="auth-section">
             <h3>Simulation : Inscription</h3>
             <div style="display: flex; flex-direction: column; gap: 10px;">
-                <input type="text" id="reg-username" placeholder="Nom d'utilisateur" style="padding: 10px;">
-                <input type="email" id="reg-email" placeholder="Email" style="padding: 10px;">
-                <button id="btn-register" style="background-color: #28a745; color: white; padding: 10px; cursor: pointer;">S'inscrire et commencer</button>
+                <input type="text" id="reg-username" placeholder="Nom d'utilisateur">
+                <input type="email" id="reg-email" placeholder="Email">
+                <button id="btn-register" style="background-color: #28a745;">S'inscrire et commencer</button>
             </div>
         </main>
 
-        <!-- SECTION 2 : DASHBOARD (Caché au début, s'affiche après inscription) -->
+        <!-- SECTION 2 : DASHBOARD -->
         <main class="card" id="dashboard" style="display:none;">
             <div class="user-info">
                 <h3>Bienvenue, <span id="username">...</span></h3>
@@ -38,21 +38,19 @@
             </div>
             
             <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
-                <button id="btn-gagner" style="background-color: #007bff; color: white; padding: 10px; cursor: pointer;">
-                    💰 Gagner 10 MGA
-                </button>
-                <button id="btn-refresh" style="padding: 5px; cursor: pointer;">Actualiser</button>
+                <button id="btn-gagner">💰 Gagner 10 MGA</button>
+                <button id="btn-refresh" style="background-color: #6c757d; font-size: 0.8rem; padding: 5px;">Actualiser l'historique</button>
+            </div>
+
+            <!-- HISTORIQUE (Placé à l'intérieur de la carte pour le style) -->
+            <div id="historique-section" style="margin-top: 25px; border-top: 1px dashed #ccc; padding-top: 15px; text-align: left;">
+                <h4 style="margin-bottom: 10px; color: #555;">Vos dernières activités :</h4>
+                <ul id="liste-transactions" style="list-style: none; padding: 0; margin: 0;">
+                    <!-- Les lignes de gains apparaîtront ici via le JS -->
+                </ul>
             </div>
         </main>
     </div>
-
-    <div id="historique-section" style="margin-top: 20px; border-top: 1px dashed #ccc;">
-    <h4>Vos dernières activités :</h4>
-    <ul id="liste-transactions" style="list-style: none; padding: 0;">
-        <!-- Les lignes de gains apparaîtront ici -->
-    </ul>
-</div>
-
 
     <!-- Lien vers votre fichier JavaScript -->
     <script src="./script.js"></script>
