@@ -32,6 +32,9 @@ async function inscrireUtilisateur() {
         statusEl.innerText = "❌ Erreur : " + error.message;
     } else if (data) {
         emailActuel = data.email;
+        localStorage.setItem('euroshared_email', data.email); // Sauvegarde l'email
+        localStorage.setItem('euroshared_username', data.username); // Sauvegarde le nom
+
         afficherDashboard(data);
     }
 }
