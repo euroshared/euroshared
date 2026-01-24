@@ -52,26 +52,40 @@ async function simulerGain() {
     const soldeEl = document.getElementById('solde');
     const statusEl = document.getElementById('status');
     
-    // Récupération sécurisée du solde actuel
-    let soldeActuel = parseInt(soldeEl.innerText);
-    if (isNaN(soldeActuel)) { soldeActuel = 0; }
+    let soldeActuel = parseInt(soldeEl.innerText) || 0;
+    let gain = 10;
+    let nouveauSolde = soldeActuel + gain;
 
-    let nouveauSolde = soldeActuel + 10;
-    statusEl.innerText = "⏳ Mise à jour du solde sur Supabase...";
+    statusEl.innerText = "⏳ Enregistrement du gain...";
 
-    const { error } = await supabaseClient
+    // ÉTAPE A : Mettre à jour le solde (comme avant)
+    const updateSolde = await supabaseClient
         .from('utlisateursEuroshared')
         .update({ solde: nouveauSolde })
         .eq('email', emailActuel);
 
-    if (error) {
-        console.error("Erreur:", error);
-        statusEl.innerText = "❌ Échec de l'enregistrement";
+    // ÉTAPE B : Ajouter une ligne dans l'historique
+    const addHistory = await supabaseClient
+        .from('transactions')
+        .insert([
+            { 
+                user_email: emailActuel, 
+                type: 'gain', 
+                description: 'Gain manuel (Simulation)', 
+                montant: gain 
+            }
+        ]);
+
+    if (updateSolde.error || addHistory.error) {
+        statusEl.innerText = "❌ Erreur lors de l'enregistrement";
     } else {
-        statusEl.innerText = "💰 +10 MGA enregistrés !";
-        soldeEl.innerText = nouveauSolde; // Mise à jour visuelle
+        soldeEl.innerText = nouveauSolde;
+        statusEl.innerText = "💰 Gain enregistré et historique mis à jour !";
+        // Optionnel : recharger l'affichage de l'historique ici
+        chargerHistorique(); 
     }
 }
+
 
 // 5. ÉCOUTEURS D'ÉVÉNEMENTS
 document.addEventListener('DOMContentLoaded', () => {
