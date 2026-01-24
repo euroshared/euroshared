@@ -7,52 +7,46 @@
     <!-- Lien vers le fichier CSS -->
     <link rel="stylesheet" href="./style.css">
     <!-- Chargement de la bibliothèque Supabase -->
-     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="https://cdn.jsdelivr.net"></script>
 </head>
 <body>
 
     <div class="container">
         <header>
-            <h1>Mon Espace Gains</h1>
-            <p id="status">Vérification de la connexion...</p>
+            <h1>Euroshared</h1>
+            <p id="status">Prêt pour l'inscription</p>
         </header>
 
-        <main class="card">
+        <!-- SECTION 1 : INSCRIPTION (Affichée au début) -->
+        <main class="card" id="auth-section">
+            <h3>Simulation : Inscription</h3>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <input type="text" id="reg-username" placeholder="Nom d'utilisateur" style="padding: 10px;">
+                <input type="email" id="reg-email" placeholder="Email" style="padding: 10px;">
+                <button id="btn-register" style="background-color: #28a745; color: white; padding: 10px; cursor: pointer;">S'inscrire et commencer</button>
+            </div>
+        </main>
+
+        <!-- SECTION 2 : DASHBOARD (Caché au début, s'affiche après inscription) -->
+        <main class="card" id="dashboard" style="display:none;">
             <div class="user-info">
-                <h3>Bienvenue, <span id="username">Chargement...</span></h3>
+                <h3>Bienvenue, <span id="username">...</span></h3>
                 <div class="balance-box">
                     <span class="label">Votre Solde :</span>
                     <span id="solde" class="amount">0</span> <span class="currency">MGA</span>
                 </div>
-               
-                <h1>...................................</h1>
             </div>
-            <button id="btn-refresh">Actualiser le solde</button>
+            
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+                <button id="btn-gagner" style="background-color: #007bff; color: white; padding: 10px; cursor: pointer;">
+                    💰 Gagner 10 MGA
+                </button>
+                <button id="btn-refresh" style="padding: 5px; cursor: pointer;">Actualiser</button>
+            </div>
         </main>
     </div>
 
-     <button id="btn-gagner">Simuler un gain (10 MGA)</button>
-
-
-
-    <!-- Formulaire de simulation d'inscription -->
-<div id="auth-section" style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
-    <h3>Simulation : Inscription</h3>
-    <input type="text" id="reg-username" placeholder="Nom d'utilisateur">
-    <input type="email" id="reg-email" placeholder="Email">
-    <button id="btn-register">S'inscrire et commencer</button>
-</div>
-
-<!-- Votre affichage actuel (modifié pour être dynamique) -->
-<div id="dashboard" style="display:none;">
-    <h2>Bienvenue, <span id="username">...</span></h2>
-    <p>Votre solde : <span id="solde">0</span> MGA</p>
-    <button id="btn-gagner">Gagner 10 MGA</button>
-    <p id="status"></p>
-</div>
-
-
-    <!-- Lien vers le fichier JavaScript (à mettre à la fin) -->
+    <!-- Lien vers votre fichier JavaScript -->
     <script src="./script.js"></script>
 </body>
 </html>
