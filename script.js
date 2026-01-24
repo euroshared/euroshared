@@ -10,23 +10,70 @@ async function inscrireUtilisateur() {
     const email = document.getElementById('reg-email').value;
     const password = document.getElementById('reg-password').value;
     const username = document.getElementById('reg-username').value;
-    if (!email || !password || !username) return alert("Remplissez tout !");
+    const statusEl = document.getElementById('status');
 
-    const { error: authError } = await supabaseClient.auth.signUp({ email, password });
-    if (authError) return alert(authError.message);
+    if (!email || !password || !username) return alert("Veuillez remplir tous les champs !");
 
-    await supabaseClient.from('utlisateursEuroshared').insert([{ email, username, solde: 0 }]);
-    alert("Compte créé ! Vous pouvez maintenant vous connecter.");
+    statusEl.innerText = "⏳ Vérification de l'existence du compte...";
+
+    // A. Vérifier si l'email existe déjà dans votre table publique
+    const { data: userExists } = await supabaseClient
+        .from('utlisateursEuroshared')
+        .select('email')
+        .eq('email', email)
+        .maybeSingle();
+
+    if (userExists) {
+        statusEl.innerText = "❌ Compte déjà existant";
+        return alert("Un compte possède déjà cet email. Veuillez utiliser le bouton 'Se connecter'.");
+    }
+
+    statusEl.innerText = "⏳ Création du compte sécurisé...";
+
+    // B. Création dans le système Auth de Supabase (Mot de passe)
+    const { data: authData, error: authError } = await supabaseClient.auth.signUp({
+        email: email,
+        password: password
+    });
+
+    if (authError) return alert("Erreur d'authentification : " + authError.message);
+
+    // C. Création de la ligne dans votre table de données (Solde)
+    const { error: dbError } = await supabaseClient
+        .from('utlisateursEuroshared')
+        .insert([{ email: email, username: username, solde: 0 }]);
+
+    if (dbError) {
+        console.error("Erreur DB:", dbError);
+        alert("Compte créé mais erreur de profil. Contactez le support.");
+    } else {
+        alert("Compte créé avec succès ! Vous pouvez maintenant vous connecter.");
+        // Nettoyage des champs pour la connexion
+        document.getElementById('reg-username').value = "";
+        statusEl.innerText = "✅ Inscription réussie. Connectez-vous !";
+    }
 }
 
 async function connecterUtilisateur() {
     const email = document.getElementById('reg-email').value;
     const password = document.getElementById('reg-password').value;
-    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    const statusEl = document.getElementById('status');
 
-    if (error) alert(error.message);
-    else {
+    if (!email || !password) return alert("Email et mot de passe requis !");
+
+    statusEl.innerText = "⏳ Connexion en cours...";
+
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+    });
+
+    if (error) {
+        statusEl.innerText = "❌ Échec de la connexion";
+        alert("Erreur : " + error.message);
+    } else {
         emailActuel = data.user.email;
+        statusEl.innerText = "✅ Connexion réussie !";
         chargerProfilEtAfficher();
     }
 }
