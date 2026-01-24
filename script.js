@@ -114,3 +114,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('btn-gagner').addEventListener('click', simulerGain);
     document.getElementById('btn-retirer').addEventListener('click', effectuerRetrait);
 });
+
+// fonction deconnection
+async function deconnexion() {
+    const { error } = await supabaseClient.auth.signOut();
+    if (error) {
+        alert("Erreur lors de la déconnexion : " + error.message);
+    } else {
+        // Vide aussi la mémoire locale par sécurité
+        localStorage.clear();
+        // Redirige vers l'accueil
+        window.location.reload();
+    }
+}
+
