@@ -134,21 +134,31 @@ async function chargerHistorique() {
 }
 
 // 6. ÉCOUTEURS D'ÉVÉNEMENTS
-document.addEventListener('DOMContentLoaded', () => {
-    // Bouton Inscription
-    const btnReg = document.getElementById('btn-register');
-    if(btnReg) btnReg.addEventListener('click', inscrireUtilisateur);
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Vérifier si un utilisateur est déjà "mémorisé"
+    const savedEmail = localStorage.getItem('euroshared_email');
+    const savedUsername = localStorage.getItem('euroshared_username');
 
-    // Bouton Gagner
-    const btnGagner = document.getElementById('btn-gagner');
-    if(btnGagner) btnGagner.addEventListener('click', simulerGain);
-
-    // Bouton Actualiser (Optionnel selon votre HTML)
-    const btnRefresh = document.getElementById('btn-refresh');
-    if(btnRefresh) {
-        btnRefresh.addEventListener('click', () => {
+    if (savedEmail) {
+        emailActuel = savedEmail;
+        // On simule un objet utilisateur pour l'affichage
+        const userSimulation = { email: savedEmail, username: savedUsername, solde: "..." };
+        afficherDashboard(userSimulation);
+        
+        // On récupère les données fraîches de Supabase pour mettre à jour le solde
+        const { data } = await supabaseClient
+            .from('utlisateursEuroshared')
+            .select('*')
+            .eq('email', savedEmail)
+            .maybeSingle();
+            
+        if (data) {
+            document.getElementById('solde').innerText = data.solde;
             chargerHistorique();
-            statusEl.innerText = "🔄 Historique actualisé";
-        });
+        }
     }
+
+    // 2. Vos écouteurs de boutons habituels
+    document.getElementById('btn-register').addEventListener('click', inscrireUtilisateur);
+    document.getElementById('btn-gagner').addEventListener('click', simulerGain);
 });
