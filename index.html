@@ -1,0 +1,40 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EuroShared</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div id="register-container">
+    <h1>Inscrivez-vous</h1>
+    <form id="register-form">
+      <label for="name">Nom :</label>
+      <input type="text" id="name" name="name"><br><br>
+      <label for="email">Email :</label>
+      <input type="email" id="email" name="email"><br><br>
+      <label for="birthdate">Date de naissance :</label>
+      <input type="date" id="birthdate" name="birthdate"><br><br>
+      <button type="submit">S'inscrire</button>
+    </form>
+    <p>Déjà inscrit ? <a href="#" id="login-link">Se connecter</a></p>
+  </div>
+  <div id="login-container" style="display: none;">
+    <h1>Connectez-vous</h1>
+    <form id="login-form">
+      <label for="email-login">Email :</label>
+      <input type="email" id="email-login" name="email"><br><br>
+      <button type="submit">Se connecter</button>
+    </form>
+    <p>Pas encore inscrit ? <a href="#" id="register-link">S'inscrire</a></p>
+  </div>
+  <div id="timewall-container" style="display: none;">
+    <iframe id="timewall-iframe" title="TimeWall" frameborder="0" width="100%" height="1000" scrolling="auto" />
+    <button id="logout-button">Se déconnecter</button>
+  </div>
+
+  <script type="module" src="./script.js"></script>
+</body>
+</html>
