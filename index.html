@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EuroShared - Connexion Supabase</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+    <!-- Indicateur de statut de connexion -->
+    <div id="db-status" class="status-loading">
+        <span class="dot"></span> 
+        <span id="status-text">Vérification de la connexion...</span>
+    </div>
+
+    <!-- Formulaire d'Inscription -->
+    <div id="register-container" class="container">
+        <h1>Inscription</h1>
+        <form id="register-form">
+            <input type="text" id="name" placeholder="Nom complet" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="date" id="birthdate" required>
+            <button type="submit" id="btn-register">S'inscrire</button>
+        </form>
+        <p>Déjà membre ? <a href="#" id="login-link">Se connecter</a></p>
+    </div>
+
+    <!-- Formulaire de Connexion -->
+    <div id="login-container" class="container" style="display: none;">
+        <h1>Connexion</h1>
+        <form id="login-form">
+            <input type="email" id="email-login" placeholder="Votre Email" required>
+            <button type="submit" id="btn-login">Accéder à TimeWall</button>
+        </form>
+        <p>Nouveau ici ? <a href="#" id="register-link">Créer un compte</a></p>
+    </div>
+
+    <!-- Zone Iframe TimeWall -->
+    <div id="timewall-container" class="container" style="display: none;">
+        <div class="nav-bar">
+            <button id="logout-button">Déconnexion</button>
+        </div>
+        <iframe id="timewall-iframe" title="TimeWall" frameborder="0" width="100%" height="800"></iframe>
+    </div>
+
+    <!-- Chargement du Script en mode Module -->
+    <script type="module" src="./script.js"></script>
+</body>
+</html>
