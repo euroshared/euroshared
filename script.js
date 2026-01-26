@@ -1,6 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-// 1. Configuration et Initialisation
+// 1. Configuration Supabase 2026
 const supabaseUrl = "https://jexaklhwoiaufzshzlcg.supabase.co";
 const supabaseKey = "sb_publishable_BdPiVVAvGh1u8SZ-sHrtrg_Inesrirz"; 
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -23,25 +23,24 @@ const elements = {
 // --- FONCTION DE CHARGEMENT DE L'IFRAME ---
 function loadTimeWall(userId) {
     const offerWallId = "9c481747da9d5015";
-    // Utilisation de l'URL exacte attendue par TimeWall en 2026
     const timeWallUrl = `https://timewall.io/users/login?oid=${offerWallId}&uid=${userId}&tab=tasks`;
     
     if (elements.iframe) {
         elements.iframe.src = timeWallUrl;
         showView('tw');
         if (elements.dbStatus) elements.dbStatus.style.display = 'none';
-        console.log("✅ TimeWall activé pour l'utilisateur :", userId);
+        console.log("✅ TimeWall chargé pour :", userId);
     }
 }
 
-// --- LOGIQUE DE NAVIGATION ---
+// --- NAVIGATION ---
 function showView(view) {
     if (elements.regCont) elements.regCont.style.display = view === 'reg' ? 'block' : 'none';
     if (elements.logCont) elements.logCont.style.display = view === 'log' ? 'block' : 'none';
     if (elements.twCont) elements.twCont.style.display = view === 'tw' ? 'block' : 'none';
 }
 
-// --- GESTION DES ÉVÉNEMENTS ---
+// --- GESTIONNAIRES D'ÉVÉNEMENTS ---
 if (elements.logoutBtn) {
     elements.logoutBtn.onclick = () => {
         localStorage.removeItem('euroshared_userid');
@@ -52,14 +51,13 @@ if (elements.logoutBtn) {
 if (elements.loginLink) elements.loginLink.onclick = (e) => { e.preventDefault(); showView('log'); };
 if (elements.registerLink) elements.registerLink.onclick = (e) => { e.preventDefault(); showView('reg'); };
 
-// --- GESTION DE L'INSCRIPTION ---
+// --- INSCRIPTION ---
 if (elements.regForm) {
     elements.regForm.onsubmit = async (e) => {
         e.preventDefault();
         const name = document.getElementById('name').value;
         const email = document.getElementById('email').value;
-        // Supabase génère l'UUID automatiquement si on ne l'envoie pas
-        
+
         try {
             const { data: existingUser } = await supabase
                 .from('users')
@@ -67,33 +65,30 @@ if (elements.regForm) {
                 .eq('email', email)
                 .maybeSingle();
 
-            if (existingUser) throw new Error("Cet email est déjà utilisé.");
+            if (existingUser) throw new Error("Email déjà utilisé.");
 
-            // On laisse Supabase générer l'ID (UUID)
-            const { data, error } = await supabase
+            // On insère l'utilisateur. L'ID est généré automatiquement par Supabase.
+            const { error } = await supabase
                 .from('users')
-                .insert([{ name, email }]) 
-                .select()
-                .single();
+                .insert([{ name, email }]);
 
             if (error) throw error;
 
             alert("Inscription réussie ! Connectez-vous.");
             showView('log');
         } catch (err) {
-            alert("Erreur Inscription : " + err.message);
+            alert("Erreur : " + err.message);
         }
     };
 }
 
-// --- GESTION DE LA CONNEXION ---
+// --- CONNEXION ---
 if (elements.logForm) {
     elements.logForm.onsubmit = async (e) => {
         e.preventDefault();
         const email = document.getElementById('email-login').value;
 
         try {
-            // Important : On récupère l'ID sous forme de TEXT pour correspondre au SQL
             const { data: user, error } = await supabase
                 .from('users')
                 .select('id')
@@ -101,11 +96,9 @@ if (elements.logForm) {
                 .maybeSingle();
             
             if (error) throw error;
-            if (!user) throw new Error("Aucun compte trouvé.");
+            if (!user) throw new Error("Utilisateur non trouvé.");
 
-            // Sauvegarde de l'ID dans le navigateur
             localStorage.setItem('euroshared_userid', user.id);
-            
             loadTimeWall(user.id);
         } catch (err) {
             alert("Erreur : " + err.message);
@@ -124,15 +117,13 @@ async function initApp() {
     }
 
     try {
-        // Test de connexion simple
         const { error } = await supabase.from('users').select('id').limit(1);
         if (error) throw error;
-        
         if (elements.dbStatus) elements.dbStatus.className = "status-online";
-        if (elements.statusText) elements.statusText.innerText = "EuroShared est en ligne";
+        if (elements.statusText) elements.statusText.innerText = "Connecté à EuroShared";
     } catch (err) {
         if (elements.dbStatus) elements.dbStatus.className = "status-offline";
-        if (elements.statusText) elements.statusText.innerText = "Mode hors-ligne";
+        if (elements.statusText) elements.statusText.innerText = "Serveur déconnecté";
     }
 }
 
