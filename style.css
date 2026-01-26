@@ -130,24 +130,43 @@ input:focus {
 .switch-text { margin-top: 20px; font-size: 0.9em; }
 .switch-text a { color: var(--primary-color); text-decoration: none; font-weight: bold; }
 
+/* --- Mise à jour du champ Mot de passe --- */
+
 .password-wrapper {
     position: relative;
+    display: flex;
+    align-items: center;
     width: 100%;
 }
 
 .password-wrapper input {
     width: 100%;
-    padding-right: 45px; /* Laisse de la place pour l'icône à droite */
-    box-sizing: border-box;
+    /* On garde le même padding que vos autres inputs, 
+       mais on ajoute du padding à droite pour l'icône */
+    padding-right: 45px !important; 
 }
 
 .toggle-password {
     position: absolute;
-    right: 15px;
+    right: 12px; /* Positionné à l'intérieur du champ à droite */
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     z-index: 10;
+    user-select: none; /* Empêche la sélection de l'icône */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #777; /* Couleur discrète */
+    transition: opacity 0.2s;
 }
 
+.toggle-password:hover {
+    opacity: 0.7;
+}
+
+/* On ajuste l'input-group pour qu'il n'y ait pas de conflit de marge */
+.input-group.password-wrapper {
+    margin-bottom: 15px;
+}
