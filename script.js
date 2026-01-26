@@ -128,3 +128,77 @@ async function initApp() {
 }
 
 document.addEventListener('DOMContentLoaded', initApp);
+
+
+// --- 1. FONCTION VISIBILITÉ DU MOT DE PASSE ---
+window.togglePasswordVisibility = function(inputId) {
+    const input = document.getElementById(inputId);
+    const icon = input.nextElementSibling;
+    if (input.type === "password") {
+        input.type = "text";
+        icon.innerText = "🔒";
+    } else {
+        input.type = "password";
+        icon.innerText = "👁️";
+    }
+};
+
+// --- 2. INSCRIPTION AVEC VÉRIFICATION D'EMAIL ---
+if (elements.regForm) {
+    elements.regForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        try {
+            // Utilisation de Supabase Auth pour l'inscription
+            const { data, error } = await supabase.auth.signUp({
+                email: email,
+                password: password,
+                options: {
+                    data: { full_name: name } // Sauvegarde le nom
+                }
+            });
+
+            if (error) throw error;
+
+            // Si l'inscription réussit, Supabase envoie l'email automatiquement
+            alert("✅ Inscription réussie ! Un email de confirmation a été envoyé à " + email + ". Merci de valider votre compte avant de vous connecter.");
+            showView('log');
+        } catch (err) {
+            alert("❌ Erreur d'inscription : " + err.message);
+        }
+    };
+}
+
+// --- 3. CONNEXION SÉCURISÉE ---
+if (elements.logForm) {
+    elements.logForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email-login').value;
+        const password = document.getElementById('password-login').value;
+
+        try {
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+
+            if (error) throw error;
+
+            // Vérification si l'email a été confirmé
+            if (data.user && data.user.confirmed_at === null && data.user.email_confirmed_at === undefined) {
+                alert("⚠️ Veuillez confirmer votre adresse email avant d'accéder aux offres.");
+                return;
+            }
+
+            // Stockage de la session et chargement TimeWall
+            localStorage.setItem('euroshared_userid', data.user.id);
+            loadTimeWall(data.user.id);
+        } catch (err) {
+            alert("❌ Erreur de connexion : " + err.message);
+        }
+    };
+}
+
