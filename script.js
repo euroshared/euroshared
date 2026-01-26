@@ -63,13 +63,13 @@ if (elements.regForm) {
             const newUserId = crypto.randomUUID(); 
 
             // 2. Insertion avec l'ID inclus
-            const { error } = await supabase
-                .from('users')
-                .insert([{ 
-                    id: newUserId, // On envoie l'ID généré ici
-                    name: name, 
-                    email: email 
-                }]);
+                const { error } = await supabase
+                    .from('users')
+                    .upsert([{ 
+                        id: newUserId, 
+                        name: name, 
+                        email: email 
+                    }], { onConflict: 'email' }); // Si l'email existe déjà, il met à jour au lieu de créer un doublon
 
             if (error) throw error;
 
