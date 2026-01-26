@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EuroShared - Connexion Supabase</title>
+    <title>EuroShared - Offres TimeWall</title>
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
@@ -17,34 +17,47 @@
     <!-- Formulaire d'Inscription -->
     <div id="register-container" class="container">
         <h1>Inscription</h1>
+        <p class="subtitle">Rejoignez EuroShared pour commencer à gagner</p>
         <form id="register-form">
-            <input type="text" id="name" placeholder="Nom complet" required>
-            <input type="email" id="email" placeholder="Email" required>
-            <input type="date" id="birthdate" required>
-            <button type="submit" id="btn-register">S'inscrire</button>
+            <div class="input-group">
+                <input type="text" id="name" placeholder="Nom complet" required>
+            </div>
+            <div class="input-group">
+                <input type="email" id="email" placeholder="Email" required>
+            </div>
+            <div class="input-group">
+                <label for="birthdate">Date de naissance (optionnel)</label>
+                <input type="date" id="birthdate">
+            </div>
+            <button type="submit" class="btn-primary">S'inscrire</button>
         </form>
-        <p>Déjà membre ? <a href="#" id="login-link">Se connecter</a></p>
+        <p class="switch-text">Déjà membre ? <a href="#" id="login-link">Se connecter</a></p>
     </div>
 
     <!-- Formulaire de Connexion -->
     <div id="login-container" class="container" style="display: none;">
         <h1>Connexion</h1>
+        <p class="subtitle">Accédez à votre espace TimeWall</p>
         <form id="login-form">
-            <input type="email" id="email-login" placeholder="Votre Email" required>
-            <button type="submit" id="btn-login">Accéder à TimeWall</button>
+            <div class="input-group">
+                <input type="email" id="email-login" placeholder="Votre Email" required>
+            </div>
+            <button type="submit" class="btn-primary">Accéder aux offres</button>
         </form>
-        <p>Nouveau ici ? <a href="#" id="register-link">Créer un compte</a></p>
+        <p class="switch-text">Nouveau ici ? <a href="#" id="register-link">Créer un compte</a></p>
     </div>
 
     <!-- Zone Iframe TimeWall -->
-    <div id="timewall-container" class="container" style="display: none;">
-        <div class="nav-bar">
-            <button id="logout-button">Déconnexion</button>
+    <div id="timewall-container" class="full-container" style="display: none;">
+        <header class="nav-bar">
+            <div class="logo">EuroShared</div>
+            <button id="logout-button" class="btn-outline">Déconnexion</button>
+        </header>
+        <div class="iframe-wrapper">
+            <iframe id="timewall-iframe" title="TimeWall" frameborder="0"></iframe>
         </div>
-        <iframe id="timewall-iframe" title="TimeWall" frameborder="0" width="100%" height="800"></iframe>
     </div>
 
-    <!-- Chargement du Script en mode Module -->
     <script type="module" src="./script.js"></script>
 </body>
 </html>
