@@ -51,7 +51,7 @@ if (elements.logoutBtn) {
 if (elements.loginLink) elements.loginLink.onclick = (e) => { e.preventDefault(); showView('log'); };
 if (elements.registerLink) elements.registerLink.onclick = (e) => { e.preventDefault(); showView('reg'); };
 
-// --- INSCRIPTION ---
+// --- INSCRIPTION  ---
 if (elements.regForm) {
     elements.regForm.onsubmit = async (e) => {
         e.preventDefault();
@@ -59,18 +59,17 @@ if (elements.regForm) {
         const email = document.getElementById('email').value;
 
         try {
-            const { data: existingUser } = await supabase
-                .from('users')
-                .select('email')
-                .eq('email', email)
-                .maybeSingle();
+            // 1. Génération d'un ID unique côté client
+            const newUserId = crypto.randomUUID(); 
 
-            if (existingUser) throw new Error("Email déjà utilisé.");
-
-            // On insère l'utilisateur. L'ID est généré automatiquement par Supabase.
+            // 2. Insertion avec l'ID inclus
             const { error } = await supabase
                 .from('users')
-                .insert([{ name, email }]);
+                .insert([{ 
+                    id: newUserId, // On envoie l'ID généré ici
+                    name: name, 
+                    email: email 
+                }]);
 
             if (error) throw error;
 
@@ -81,6 +80,7 @@ if (elements.regForm) {
         }
     };
 }
+
 
 // --- CONNEXION ---
 if (elements.logForm) {
