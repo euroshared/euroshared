@@ -68,7 +68,13 @@ body {
 h1 { margin-bottom: 10px; color: var(--secondary-color); }
 .subtitle { color: #777; margin-bottom: 25px; font-size: 0.9em; }
 
-.input-group { margin-bottom: 15px; text-align: left; }
+.input-group { 
+    margin-bottom: 15px; 
+    text-align: left;
+    position: relative; /* CRUCIAL pour l'œil */
+    width: 100%;
+}
+
 label { display: block; margin-bottom: 5px; font-size: 0.8em; color: #666; }
 
 input {
@@ -78,11 +84,43 @@ input {
     border-radius: 6px;
     font-size: 1em;
     transition: border 0.3s;
+    background-color: var(--white);
 }
 
 input:focus {
     outline: none;
     border-color: var(--primary-color);
+}
+
+/* --- Champ Mot de passe Spécifique --- */
+.password-wrapper {
+    position: relative; /* Définit le repère pour l'icône */
+}
+
+.password-wrapper input {
+    padding-right: 45px !important; /* Empêche le texte de passer sous l'icône */
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    /* Aligne l'icône verticalement au centre de l'input */
+    top: 50%;
+    transform: translateY(-50%); 
+    
+    cursor: pointer;
+    font-size: 1.1rem;
+    z-index: 10;
+    user-select: none;
+    color: #777;
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+}
+
+.toggle-password:hover {
+    opacity: 0.7;
 }
 
 /* --- Boutons --- */
@@ -97,6 +135,7 @@ input:focus {
     font-weight: bold;
     cursor: pointer;
     transition: transform 0.2s, background 0.3s;
+    margin-top: 10px;
 }
 
 .btn-primary:hover { background-color: #34b27b; transform: translateY(-2px); }
@@ -129,44 +168,3 @@ input:focus {
 
 .switch-text { margin-top: 20px; font-size: 0.9em; }
 .switch-text a { color: var(--primary-color); text-decoration: none; font-weight: bold; }
-
-/* --- Mise à jour du champ Mot de passe --- */
-
-.password-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 100%;
-}
-
-.password-wrapper input {
-    width: 100%;
-    /* On garde le même padding que vos autres inputs, 
-       mais on ajoute du padding à droite pour l'icône */
-    padding-right: 45px !important; 
-}
-
-.toggle-password {
-    position: absolute;
-    right: 12px; /* Positionné à l'intérieur du champ à droite */
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    font-size: 1.1rem;
-    z-index: 10;
-    user-select: none; /* Empêche la sélection de l'icône */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #777; /* Couleur discrète */
-    transition: opacity 0.2s;
-}
-
-.toggle-password:hover {
-    opacity: 0.7;
-}
-
-/* On ajuste l'input-group pour qu'il n'y ait pas de conflit de marge */
-.input-group.password-wrapper {
-    margin-bottom: 15px;
-}
