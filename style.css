@@ -160,18 +160,18 @@ input:focus {
 .logo { font-weight: bold; font-size: 1.2em; color: var(--primary-color); }
 
 css
-#timewall-container {
-    display: none; /* Sera mis en 'block' ou 'flex' par le JS */
+.iframe-wrapper {
     width: 100%;
-    height: 100vh;
+    height: calc(100vh - 60px); /* 60px correspond à la hauteur de votre nav-bar */
+    overflow: hidden;
 }
 
 #timewall-iframe {
     width: 100%;
     height: 100%;
-    min-height: 800px; /* Force l'affichage visuel */
     border: none;
 }
+
 
 /* --- Liens de bascule --- */
 .switch-text { margin-top: 20px; font-size: 0.85em; color: #666; }
