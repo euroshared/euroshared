@@ -18,105 +18,77 @@ const elements = {
 
 // --- NAVIGATION ---
 function showView(view) {
-    if (elements.regCont) elements.regCont.style.display = view === 'reg' ? 'block' : 'none';
-    if (elements.logCont) elements.logCont.style.display = view === 'log' ? 'block' : 'none';
-    if (elements.twCont) elements.twCont.style.display = view === 'tw' ? 'block' : 'none';
+    elements.regCont.style.display = view === 'reg' ? 'block' : 'none';
+    elements.logCont.style.display = view === 'log' ? 'block' : 'none';
+    elements.twCont.style.display = view === 'tw' ? 'block' : 'none';
 }
+
+document.getElementById('to-login').onclick = () => showView('log');
+document.getElementById('to-register').onclick = () => showView('reg');
 
 // --- CHARGEMENT TIMEWALL ---
 function loadTimeWall(userId) {
     const offerWallId = "9c481747da9d5015";
-    // Utilisation de l'UUID immuable pour éviter les doublons sur TimeWall
-    const timeWallUrl = `https://timewall.io{offerWallId}&uid=${userId}&tab=tasks`;
+    // Correction syntaxe URL 2026
+   const timeWallUrl = `https://timewall.io/v4/wall?wallId=${offerWallId}&userId=${userId}`;
     
     if (elements.iframe) {
         elements.iframe.src = timeWallUrl;
         showView('tw');
-        if (elements.dbStatus) elements.dbStatus.style.display = 'none';
-        console.log("✅ TimeWall connecté avec l'ID immuable :", userId);
+        console.log("✅ TimeWall chargé pour :", userId);
     }
 }
 
-// --- INSCRIPTION (AUTH SUPABASE) ---
-if (elements.regForm) {
-    elements.regForm.onsubmit = async (e) => {
-        e.preventDefault();
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+// --- INSCRIPTION ---
+elements.regForm.onsubmit = async (e) => {
+    e.preventDefault();
+    const { data, error } = await supabase.auth.signUp({
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value,
+        options: { data: { full_name: document.getElementById('name').value } }
+    });
 
-        try {
-            const { data, error } = await supabase.auth.signUp({
-                email: email,
-                password: password,
-                options: { data: { full_name: name } }
-            });
+    if (error) alert("Erreur : " + error.message);
+    else {
+        alert("✅ Inscription réussie ! Vérifiez vos emails.");
+        showView('log');
+    }
+};
 
-            if (error) throw error;
-            alert("✅ Inscription réussie ! Merci de confirmer votre email avant de vous connecter.");
-            showView('log');
-        } catch (err) {
-            alert("❌ Erreur d'inscription : " + err.message);
-        }
-    };
-}
+// --- CONNEXION ---
+elements.logForm.onsubmit = async (e) => {
+    e.preventDefault();
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email: document.getElementById('email-login').value,
+        password: document.getElementById('password-login').value
+    });
 
-// --- CONNEXION SÉCURISÉE ---
-if (elements.logForm) {
-    elements.logForm.onsubmit = async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('email-login').value;
-        const password = document.getElementById('password-login').value;
+    if (error) alert("Erreur : " + error.message);
+    else if (data.user) loadTimeWall(data.user.id);
+};
 
-        try {
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email: email,
-                password: password
-            });
-
-            if (error) throw error;
-
-            // Vérification de la confirmation email (Standard 2026)
-            if (data.user && !data.user.email_confirmed_at) {
-                alert("⚠️ Votre email n'est pas encore confirmé.");
-                return;
-            }
-
-            loadTimeWall(data.user.id);
-        } catch (err) {
-            alert("❌ Erreur de connexion : " + err.message);
-        }
-    };
-}
-
-// --- GESTION DE LA SESSION AU DÉMARRAGE ---
+// --- INITIALISATION & TEST DB ---
 async function initApp() {
+    // 1. Vérifier session existante
     const { data: { session } } = await supabase.auth.getSession();
-    
-    if (session && session.user.email_confirmed_at) {
-        loadTimeWall(session.user.id);
-    } else {
-        showView('reg');
-    }
+    if (session) loadTimeWall(session.user.id);
 
-    // Test de connexion DB
+    // 2. Test connexion pour passer le voyant au vert
     try {
+        // On tente de lire une table (ex: 'profiles' ou 'users')
         const { error } = await supabase.from('users').select('id').limit(1);
-        if (error) throw error;
-        if (elements.statusText) elements.statusText.innerText = "Connecté à EuroShared";
+        if (!error || error.code === 'PGRST116') { // PGRST116 = Table vide mais accessible
+            elements.dbStatus.classList.add('connected');
+            elements.statusText.innerText = "Connecté à EuroShared";
+        }
     } catch (err) {
-        if (elements.statusText) elements.statusText.innerText = "Serveur en attente";
+        elements.statusText.innerText = "Mode hors-ligne";
     }
 }
 
-// --- DÉCONNEXION ---
-if (elements.logoutBtn) {
-    elements.logoutBtn.onclick = async () => {
-        await supabase.auth.signOut();
-        location.reload();
-    };
-}
+elements.logoutBtn.onclick = async () => {
+    await supabase.auth.signOut();
+    window.location.reload();
+};
 
 document.addEventListener('DOMContentLoaded', initApp);
-
-
