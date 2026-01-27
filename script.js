@@ -4,7 +4,6 @@ const supabaseUrl = "https://jexaklhwoiaufzshzlcg.supabase.co";
 const supabaseKey = "sb_publishable_BdPiVVAvGh1u8SZ-sHrtrg_Inesrirz"; 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// On ajoute les nouveaux éléments de confirmation et d'affichage au dictionnaire
 const elements = {
     dbStatus: document.getElementById('db-status'),
     statusText: document.getElementById('status-text'),
@@ -15,14 +14,14 @@ const elements = {
     regForm: document.getElementById('register-form'),
     logForm: document.getElementById('login-form'),
     logoutBtn: document.getElementById('logout-button'),
-    // Éléments pour l'étape intermédiaire
     confStep: document.getElementById('confirmation-step'),
     confBtn: document.getElementById('confirm-access-btn'),
-    userEmailDisplay: document.getElementById('user-email-display'), // Affichage email
-    cancelAuth: document.getElementById('cancel-auth')               // Lien déconnexion
+    userEmailDisplay: document.getElementById('user-email-display'),
+    cancelAuth: document.getElementById('cancel-auth'),
+    // Nouvel élément pour le mot de passe oublié
+    forgotBtn: document.getElementById('forgot-password')
 };
 
-// Variable globale pour stocker l'ID après auth mais avant clic final
 let authenticatedUserId = null;
 
 // --- NAVIGATION ---
@@ -30,11 +29,9 @@ function showView(view) {
     elements.regCont.style.display = view === 'reg' ? 'block' : 'none';
     elements.logCont.style.display = view === 'log' ? 'block' : 'none';
     elements.twCont.style.display = view === 'tw' ? 'block' : 'none';
-    // On cache l'étape de confirmation par défaut dans les autres vues
     if (elements.confStep) elements.confStep.style.display = 'none';
 }
 
-// Sécurité pour les liens de bascule (vérification de l'existence des éléments)
 if (document.getElementById('to-login')) {
     document.getElementById('to-login').onclick = (e) => { e.preventDefault(); showView('log'); };
 }
@@ -42,16 +39,45 @@ if (document.getElementById('to-register')) {
     document.getElementById('to-register').onclick = (e) => { e.preventDefault(); showView('reg'); };
 }
 
+// --- VISIBILITÉ DU MOT DE PASSE (L'ŒIL) ---
+document.querySelectorAll('.toggle-password').forEach(btn => {
+    btn.onclick = function() {
+        const inputId = this.getAttribute('data-target');
+        const input = document.getElementById(inputId);
+        if (input.type === "password") {
+            input.type = "text";
+            this.innerText = "🙈"; 
+        } else {
+            input.type = "password";
+            this.innerText = "👁️";
+        }
+    };
+});
+
+// --- MOT DE PASSE OUBLIÉ ---
+if (elements.forgotBtn) {
+    elements.forgotBtn.onclick = async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email-login').value;
+        if (!email) {
+            alert("Veuillez saisir votre email dans le champ de connexion avant de cliquer sur 'Mot de passe oublié'.");
+            return;
+        }
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: window.location.origin + window.location.pathname,
+        });
+        if (error) alert("Erreur : " + error.message);
+        else alert("✅ Un lien de réinitialisation a été envoyé à " + email);
+    };
+}
+
 // --- CHARGEMENT TIMEWALL ---
 function loadTimeWall(userId) {
     const offerWallId = "9c481747da9d5015";
-    // URL mise à jour avec le chemin exact v4
     const timeWallUrl = `https://timewall.io/v4/wall?wallId=${offerWallId}&userId=${userId}`;
-    
     if (elements.iframe) {
         elements.iframe.src = timeWallUrl;
         showView('tw');
-        console.log("✅ TimeWall chargé pour :", userId);
     }
 }
 
@@ -67,14 +93,12 @@ elements.regForm.onsubmit = async (e) => {
         password: password,
         options: { 
             data: { full_name: name },
-            // Redirection automatique vers votre page après confirmation e-mail
             emailRedirectTo: window.location.origin + window.location.pathname 
         }
     });
 
-    if (error) {
-        alert("Erreur d'inscription : " + error.message);
-    } else {
+    if (error) alert("Erreur d'inscription : " + error.message);
+    else {
         alert("✅ Un lien de confirmation a été envoyé à " + email);
         showView('log');
     }
@@ -91,23 +115,16 @@ elements.logForm.onsubmit = async (e) => {
         password: password
     });
 
-    if (error) {
-        alert("Erreur de connexion : " + error.message);
-    } else if (data.user) {
-        // Préparation de l'étape de confirmation manuelle
+    if (error) alert("Erreur de connexion : " + error.message);
+    else if (data.user) {
         authenticatedUserId = data.user.id;
-        
-        // Affichage de l'email de l'utilisateur pour confirmation visuelle
-        if (elements.userEmailDisplay) {
-            elements.userEmailDisplay.innerText = data.user.email;
-        }
-        
-        showView('none'); // Cache les formulaires
-        elements.confStep.style.display = 'block'; // Affiche le bouton "Lancer TimeWall"
+        if (elements.userEmailDisplay) elements.userEmailDisplay.innerText = data.user.email;
+        showView('none');
+        elements.confStep.style.display = 'block';
     }
 };
 
-// --- BOUTON DE LANCEMENT FINAL ---
+// --- BOUTONS D'ACTION ---
 if (elements.confBtn) {
     elements.confBtn.onclick = () => {
         if (authenticatedUserId) {
@@ -117,7 +134,6 @@ if (elements.confBtn) {
     };
 }
 
-// --- BOUTON DE DECONNEXION DE SECOURS (DANS CONFIRMATION) ---
 if (elements.cancelAuth) {
     elements.cancelAuth.onclick = async (e) => {
         e.preventDefault();
@@ -126,39 +142,30 @@ if (elements.cancelAuth) {
     };
 }
 
-// --- INITIALISATION & TEST DB ---
+// --- INITIALISATION ---
 async function initApp() {
     const { data: { session } } = await supabase.auth.getSession();
     
-    // Si déjà connecté, on affiche l'étape de lancement avec l'email
     if (session) {
         authenticatedUserId = session.user.id;
-        if (elements.userEmailDisplay) {
-            elements.userEmailDisplay.innerText = session.user.email;
-        }
+        if (elements.userEmailDisplay) elements.userEmailDisplay.innerText = session.user.email;
         showView('none');
         elements.confStep.style.display = 'block';
     } else {
         showView('reg');
     }
 
-    // Test de connexion à la base de données pour le voyant
     try {
         const { error } = await supabase.from('users').select('id').limit(1);
-        // Code PGRST116 signifie que la table est vide mais accessible
         if (!error || error.code === 'PGRST116') {
             elements.dbStatus.classList.add('status-online'); 
             elements.statusText.innerText = "Connecté à EuroShared";
-        } else {
-            elements.dbStatus.classList.add('status-offline');
         }
     } catch (err) {
         elements.statusText.innerText = "Serveur en attente";
-        elements.dbStatus.classList.add('status-offline');
     }
 }
 
-// --- LOGOUT PRINCIPAL ---
 elements.logoutBtn.onclick = async () => {
     await supabase.auth.signOut();
     window.location.reload();
