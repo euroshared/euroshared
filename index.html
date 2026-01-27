@@ -8,6 +8,7 @@
 </head>
 <body>
 
+    <!-- Statut DB -->
     <div id="db-status" class="status-area">
         <span class="dot" id="status-dot"></span> 
         <span id="status-text">Vérification...</span>
@@ -44,12 +45,13 @@
         <p class="switch-text">Nouveau ? <a href="#" id="to-register">Créer un compte</a></p>
     </div>
 
-    <!-- 3. Récupération -->
+    <!-- 3. Récupération Email -->
     <div id="forgot-password-container" class="container" style="display: none;">
         <h1>Récupération</h1>
+        <p class="subtitle">Saisissez votre e-mail pour recevoir un lien.</p>
         <input type="email" id="email-recovery-confirm" placeholder="Confirmez votre e-mail" required>
         <button id="send-recovery-btn" class="btn-primary">Envoyer le lien</button>
-        <p class="switch-text"><a href="#" id="back-to-login">Retour</a></p>
+        <p class="switch-text"><a href="#" id="back-to-login">Retour à la connexion</a></p>
     </div>
 
     <!-- 4. Nouveau Mot de Passe -->
@@ -62,7 +64,7 @@
         <button id="save-new-password-btn" class="btn-primary">Enregistrer</button>
     </div>
 
-    <!-- 5. Confirmation (Dashboard) -->
+    <!-- 5. Dashboard -->
     <div id="confirmation-step" class="container" style="display: none;">
         <h1>Session validée</h1>
         <p class="subtitle">Connecté : <strong id="user-email-display">...</strong></p>
@@ -70,16 +72,16 @@
         <p class="switch-text"><a href="#" id="cancel-auth">Se déconnecter</a></p>
     </div>
 
-    <!-- 6. Interface TimeWall -->
+    <!-- 6. TimeWall -->
     <div id="timewall-container" class="full-container" style="display: none;">
         <header class="nav-bar">
             <div class="logo">EuroShared</div>
-            <button id="logout-button" class="btn-outline">Quitter</button>
+            <button id="logout-button" class="btn-outline">Déconnexion</button>
         </header>
         <div class="iframe-wrapper">
             <div id="timewall-loader" class="loader-overlay">
                 <div class="spinner"></div>
-                <p>Connexion sécurisée à TimeWall...</p>
+                <p>Chargement sécurisé...</p>
             </div>
             <iframe id="timewall-iframe" frameborder="0" allowfullscreen></iframe>
         </div>
