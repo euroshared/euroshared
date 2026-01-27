@@ -47,8 +47,8 @@ function showView(view) {
 }
 
 // --- NAVIGATION ---
-document.getElementById('to-login').onclick = (e) => { e.preventDefault(); showView('log'); };
-document.getElementById('to-register').onclick = (e) => { e.preventDefault(); showView('reg'); };
+if (document.getElementById('to-login')) document.getElementById('to-login').onclick = (e) => { e.preventDefault(); showView('log'); };
+if (document.getElementById('to-register')) document.getElementById('to-register').onclick = (e) => { e.preventDefault(); showView('reg'); };
 if (elements.backToLogin) elements.backToLogin.onclick = (e) => { e.preventDefault(); showView('log'); };
 if (elements.forgotBtn) elements.forgotBtn.onclick = (e) => { e.preventDefault(); showView('forgot'); };
 
@@ -94,20 +94,27 @@ if (elements.savePassBtn) {
 // --- CHARGEMENT TIMEWALL ---
 function loadTimeWall(userId) {
     const offerWallId = "9c481747da9d5015";
-    // Correction de la syntaxe de l'URL
-    elements.iframe.src = `https://timewall.io{offerWallId}&userId=${userId}`;
-    showView('tw');
+    // RECTIFICATION : Utilisation de la syntaxe template literal correcte ($)
+    // et URL adaptée au format partenaire
+    const timeWallUrl = `https://timewall.io{offerWallId}&uid=${userId}`;
+    const timeWallUrl = `https://timewall.io/users/login?oid=${offerWallId}&uid=${userId}&tab=tasks`;
+    
+    if (elements.iframe) {
+        elements.iframe.src = timeWallUrl;
+        showView('tw');
+        console.log("✅ TimeWall chargé pour :", userId);
+    }
 }
 
 // --- INSCRIPTION ---
 elements.regForm.onsubmit = async (e) => {
     e.preventDefault();
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
         email: document.getElementById('email').value,
         password: document.getElementById('password').value,
         options: { data: { full_name: document.getElementById('name').value } }
     });
-    if (error) alert(error.message);
+    if (error) alert("Erreur d'inscription : " + error.message);
     else { alert("✅ Inscription réussie ! Vérifiez vos emails."); showView('log'); }
 };
 
@@ -118,7 +125,7 @@ elements.logForm.onsubmit = async (e) => {
         email: document.getElementById('email-login').value,
         password: document.getElementById('password-login').value
     });
-    if (error) alert("Erreur : " + error.message);
+    if (error) alert("Erreur de connexion : " + error.message);
     else if (data.user) {
         authenticatedUserId = data.user.id;
         if (elements.userEmailDisplay) elements.userEmailDisplay.innerText = data.user.email;
@@ -128,11 +135,10 @@ elements.logForm.onsubmit = async (e) => {
 
 // --- INITIALISATION & DÉTECTION LIEN ---
 async function initApp() {
-    // 1. Détecter l'événement de récupération et nettoyer l'URL immédiatement
+    // 1. Détecter l'événement de récupération
     supabase.auth.onAuthStateChange(async (event, session) => {
         if (event === "PASSWORD_RECOVERY") {
             showView('newpass');
-            // Nettoyage de l'URL pour éviter les doublons d'onglets
             window.history.replaceState({}, document.title, window.location.pathname);
         }
     });
@@ -140,9 +146,7 @@ async function initApp() {
     const { data: { session } } = await supabase.auth.getSession();
     
     if (session) {
-        // Vérifier si nous ne sommes pas en plein processus de récupération (via l'URL)
         const isRecovery = window.location.hash.includes("type=recovery");
-        
         if (!isRecovery) {
             authenticatedUserId = session.user.id;
             if (elements.userEmailDisplay) elements.userEmailDisplay.innerText = session.user.email;
@@ -152,7 +156,7 @@ async function initApp() {
         showView('reg');
     }
 
-    // Test Statut DB pour le voyant vert
+    // Test Statut DB
     try {
         const { error } = await supabase.from('users').select('id').limit(1);
         if (!error || error.code === 'PGRST116') {
@@ -172,6 +176,8 @@ if (elements.confBtn) {
 if (elements.cancelAuth || elements.logoutBtn) {
     const logoutAction = async (e) => {
         if(e) e.preventDefault();
+        // SÉCURITÉ : Vider l'iframe avant de quitter
+        if (elements.iframe) elements.iframe.src = "about:blank";
         await supabase.auth.signOut();
         window.location.href = window.location.origin + window.location.pathname;
     };
