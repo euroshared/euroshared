@@ -18,21 +18,31 @@ const elements = {
     confBtn: document.getElementById('confirm-access-btn'),
     userEmailDisplay: document.getElementById('user-email-display'),
     cancelAuth: document.getElementById('cancel-auth'),
-    forgotBtn: document.getElementById('forgot-password')
+    forgotBtn: document.getElementById('forgot-password'),
+    forgotCont: document.getElementById('forgot-password-container'),
+    recoveryInput: document.getElementById('email-recovery-confirm'),
+    sendRecoveryBtn: document.getElementById('send-recovery-btn'),
+    backToLogin: document.getElementById('back-to-login')
 };
 
 let authenticatedUserId = null;
 
 function showView(view) {
-    elements.regCont.style.display = view === 'reg' ? 'block' : 'none';
-    elements.logCont.style.display = view === 'log' ? 'block' : 'none';
-    elements.twCont.style.display = view === 'tw' ? 'block' : 'none';
-    if (elements.confStep) elements.confStep.style.display = view === 'conf' ? 'block' : 'none';
+    [elements.regCont, elements.logCont, elements.twCont, elements.confStep, elements.forgotCont].forEach(el => {
+        if(el) el.style.display = 'none';
+    });
+    if (view === 'reg') elements.regCont.style.display = 'block';
+    if (view === 'log') elements.logCont.style.display = 'block';
+    if (view === 'tw') elements.twCont.style.display = 'block';
+    if (view === 'conf') elements.confStep.style.display = 'block';
+    if (view === 'forgot') elements.forgotCont.style.display = 'block';
 }
 
-// Navigation
+// Navigation basique
 document.getElementById('to-login').onclick = (e) => { e.preventDefault(); showView('log'); };
 document.getElementById('to-register').onclick = (e) => { e.preventDefault(); showView('reg'); };
+if (elements.backToLogin) elements.backToLogin.onclick = (e) => { e.preventDefault(); showView('log'); };
+if (elements.forgotBtn) elements.forgotBtn.onclick = (e) => { e.preventDefault(); showView('forgot'); };
 
 // Gestion de l'œil
 document.querySelectorAll('.toggle-password').forEach(btn => {
@@ -43,22 +53,22 @@ document.querySelectorAll('.toggle-password').forEach(btn => {
     };
 });
 
-// Mot de passe oublié
-if (elements.forgotBtn) {
-    elements.forgotBtn.onclick = async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('email-login').value;
-        if (!email) return alert("Saisissez votre email d'abord.");
+// Récupération de mot de passe
+if (elements.sendRecoveryBtn) {
+    elements.sendRecoveryBtn.onclick = async () => {
+        const email = elements.recoveryInput.value;
+        if (!email) return alert("Veuillez saisir votre email.");
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: window.location.href,
+            redirectTo: window.location.origin + window.location.pathname,
         });
-        alert(error ? error.message : "Lien envoyé !");
+        alert(error ? "Erreur : " + error.message : "✅ Lien envoyé ! Vérifiez vos spams.");
+        if (!error) showView('log');
     };
 }
 
 function loadTimeWall(userId) {
     const offerWallId = "9c481747da9d5015";
-    elements.iframe.src = `https://timewall.io/v4/wall?wallId=${offerWallId}&userId=${userId}`;
+    elements.iframe.src = `https://timewall.io{offerWallId}&userId=${userId}`;
     showView('tw');
 }
 
@@ -71,7 +81,7 @@ elements.regForm.onsubmit = async (e) => {
         options: { data: { full_name: document.getElementById('name').value } }
     });
     if (error) alert(error.message);
-    else { alert("Lien de confirmation envoyé !"); showView('log'); }
+    else { alert("✅ Inscription réussie ! Vérifiez vos emails."); showView('log'); }
 };
 
 // Connexion
@@ -81,7 +91,7 @@ elements.logForm.onsubmit = async (e) => {
         email: document.getElementById('email-login').value,
         password: document.getElementById('password-login').value
     });
-    if (error) alert(error.message);
+    if (error) alert("Erreur : " + error.message);
     else if (data.user) {
         authenticatedUserId = data.user.id;
         elements.userEmailDisplay.innerText = data.user.email;
@@ -91,9 +101,7 @@ elements.logForm.onsubmit = async (e) => {
 
 // Boutons finaux
 if (elements.confBtn) {
-    elements.confBtn.onclick = () => {
-        if (authenticatedUserId) loadTimeWall(authenticatedUserId);
-    };
+    elements.confBtn.onclick = () => { if (authenticatedUserId) loadTimeWall(authenticatedUserId); };
 }
 
 if (elements.cancelAuth) {
@@ -113,7 +121,6 @@ async function initApp() {
     } else {
         showView('reg');
     }
-    // Test DB
     const { error } = await supabase.from('users').select('id').limit(1);
     if (!error || error.code === 'PGRST116') {
         elements.dbStatus.classList.add('status-online');
