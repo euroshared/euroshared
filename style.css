@@ -9,7 +9,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: sans-serif; background: var(--bg-color); display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
 
-.status-area { position: fixed; top: 15px; right: 15px; background: white; padding: 8px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 8px; z-index: 1000; font-size: 13px; }
+.status-area { position: fixed; top: 15px; right: 15px; background: white; padding: 8px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 8px; z-index: 1000; font-size: 12px; }
 .dot { height: 10px; width: 10px; border-radius: 50%; background: #ccc; }
 .status-online .dot { background: var(--primary-color); box-shadow: 0 0 8px var(--primary-color); }
 
@@ -18,21 +18,21 @@ body { font-family: sans-serif; background: var(--bg-color); display: flex; flex
 
 input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; }
 .password-wrapper { position: relative; }
-.toggle-password { position: absolute; right: 10px; top: 12px; cursor: pointer; }
+.toggle-password { position: absolute; right: 10px; top: 12px; cursor: pointer; color: #888; }
 
-.btn-primary { width: 100%; padding: 14px; background: var(--primary-color); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+.btn-primary { width: 100%; padding: 14px; background: var(--primary-color); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px; }
 .btn-outline { padding: 8px 15px; border: 1px solid var(--error-color); color: var(--error-color); background: none; cursor: pointer; border-radius: 4px; }
 
 .nav-bar { background: var(--secondary-color); color: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; }
 
-/* IFRAME & LOADER */
-.iframe-wrapper { position: relative; flex-grow: 1; width: 100%; background: #eee; }
+/* IFRAME WRAPPER */
+.iframe-wrapper { position: relative; flex-grow: 1; width: 100%; background: #fff; }
 #timewall-iframe { width: 100%; height: 100%; border: none; }
 
 .loader-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: white; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 100; }
-.spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; }
+.spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 10px; }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 .iframe-loaded .loader-overlay { display: none; }
-.switch-text { margin-top: 15px; font-size: 13px; }
+.switch-text { margin-top: 20px; font-size: 13px; }
 .switch-text a { color: var(--primary-color); text-decoration: none; font-weight: bold; }
