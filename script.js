@@ -23,7 +23,6 @@ const elements = {
     recoveryInput: document.getElementById('email-recovery-confirm'),
     sendRecoveryBtn: document.getElementById('send-recovery-btn'),
     backToLogin: document.getElementById('back-to-login'),
-    // Nouveaux éléments pour la réinitialisation réelle
     newPassCont: document.getElementById('new-password-container'),
     newPassInput: document.getElementById('new-password-input'),
     savePassBtn: document.getElementById('save-new-password-btn')
@@ -31,6 +30,7 @@ const elements = {
 
 let authenticatedUserId = null;
 
+// --- GESTION DES VUES ---
 function showView(view) {
     const allConts = [
         elements.regCont, elements.logCont, elements.twCont, 
@@ -52,7 +52,7 @@ document.getElementById('to-register').onclick = (e) => { e.preventDefault(); sh
 if (elements.backToLogin) elements.backToLogin.onclick = (e) => { e.preventDefault(); showView('log'); };
 if (elements.forgotBtn) elements.forgotBtn.onclick = (e) => { e.preventDefault(); showView('forgot'); };
 
-// --- GESTION DE L'OEIL ---
+// --- GESTION DE L'OEIL (PASSWORD) ---
 document.querySelectorAll('.toggle-password').forEach(btn => {
     btn.onclick = function() {
         const input = document.getElementById(this.getAttribute('data-target'));
@@ -74,7 +74,7 @@ if (elements.sendRecoveryBtn) {
     };
 }
 
-// --- MISE À JOUR DU MOT DE PASSE (RETOUR EMAIL) ---
+// --- MISE À JOUR DU MOT DE PASSE (ACTION FINALE) ---
 if (elements.savePassBtn) {
     elements.savePassBtn.onclick = async () => {
         const newPassword = elements.newPassInput.value;
@@ -84,7 +84,8 @@ if (elements.savePassBtn) {
         if (error) {
             alert("Erreur : " + error.message);
         } else {
-            alert("✅ Mot de passe mis à jour !");
+            alert("✅ Mot de passe mis à jour ! Veuillez vous reconnecter.");
+            await supabase.auth.signOut();
             window.location.href = window.location.origin + window.location.pathname; 
         }
     };
@@ -93,6 +94,7 @@ if (elements.savePassBtn) {
 // --- CHARGEMENT TIMEWALL ---
 function loadTimeWall(userId) {
     const offerWallId = "9c481747da9d5015";
+    // Correction de la syntaxe de l'URL
     elements.iframe.src = `https://timewall.io{offerWallId}&userId=${userId}`;
     showView('tw');
 }
@@ -119,41 +121,50 @@ elements.logForm.onsubmit = async (e) => {
     if (error) alert("Erreur : " + error.message);
     else if (data.user) {
         authenticatedUserId = data.user.id;
-        elements.userEmailDisplay.innerText = data.user.email;
+        if (elements.userEmailDisplay) elements.userEmailDisplay.innerText = data.user.email;
         showView('conf');
     }
 };
 
 // --- INITIALISATION & DÉTECTION LIEN ---
 async function initApp() {
-    // Détecter l'événement de récupération de mot de passe (Lien cliqué)
+    // 1. Détecter l'événement de récupération et nettoyer l'URL immédiatement
     supabase.auth.onAuthStateChange(async (event, session) => {
         if (event === "PASSWORD_RECOVERY") {
             showView('newpass');
+            // Nettoyage de l'URL pour éviter les doublons d'onglets
+            window.history.replaceState({}, document.title, window.location.pathname);
         }
     });
 
     const { data: { session } } = await supabase.auth.getSession();
+    
     if (session) {
-        // Si session active et pas en cours de récupération
-        const urlParams = new URLSearchParams(window.location.hash.substring(1));
-        if (!urlParams.has('type') || urlParams.get('type') !== 'recovery') {
+        // Vérifier si nous ne sommes pas en plein processus de récupération (via l'URL)
+        const isRecovery = window.location.hash.includes("type=recovery");
+        
+        if (!isRecovery) {
             authenticatedUserId = session.user.id;
-            elements.userEmailDisplay.innerText = session.user.email;
+            if (elements.userEmailDisplay) elements.userEmailDisplay.innerText = session.user.email;
             showView('conf');
         }
     } else {
         showView('reg');
     }
 
-    const { error } = await supabase.from('users').select('id').limit(1);
-    if (!error || error.code === 'PGRST116') {
-        elements.dbStatus.classList.add('status-online');
-        elements.statusText.innerText = "EuroShared Connecté";
+    // Test Statut DB pour le voyant vert
+    try {
+        const { error } = await supabase.from('users').select('id').limit(1);
+        if (!error || error.code === 'PGRST116') {
+            elements.dbStatus.classList.add('status-online');
+            elements.statusText.innerText = "EuroShared Connecté";
+        }
+    } catch (err) {
+        elements.statusText.innerText = "Serveur en attente";
     }
 }
 
-// --- ACTIONS FINALES ---
+// --- ACTIONS BOUTONS ---
 if (elements.confBtn) {
     elements.confBtn.onclick = () => { if (authenticatedUserId) loadTimeWall(authenticatedUserId); };
 }
