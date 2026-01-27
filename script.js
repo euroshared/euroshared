@@ -62,7 +62,7 @@ document.querySelectorAll('.toggle-password').forEach(btn => {
 // --- TIMEWALL LOGIC ---
 function loadTimeWall(userId) {
     const offerWallId = "9c481747da9d5015";
-    const timeWallUrl = `https://timewall.io/users/login?oid=${offerWallId}&uid=${userId}&tab=tasks`;
+    const timeWallUrl = `https://timewall.io/users/login/?oid=${offerWallId}&uid=${userId}&tab=tasks`;
     
     elements.twCont.classList.remove('iframe-loaded');
     elements.iframe.src = wallUrl;
