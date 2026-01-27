@@ -8,13 +8,12 @@
 </head>
 <body>
 
-    <!-- Indicateur de statut de connexion à la DB -->
     <div id="db-status" class="status-area">
         <span class="dot" id="status-dot"></span> 
-        <span id="status-text">Vérification de la connexion...</span>
+        <span id="status-text">Vérification...</span>
     </div>
 
-    <!-- 1. Formulaire d'Inscription -->
+    <!-- 1. Inscription -->
     <div id="register-container" class="container">
         <h1>Inscription</h1>
         <p class="subtitle">Rejoignez EuroShared pour gagner</p>
@@ -30,10 +29,9 @@
         <p class="switch-text">Déjà membre ? <a href="#" id="to-login">Se connecter</a></p>
     </div>
 
-    <!-- 2. Formulaire de Connexion -->
+    <!-- 2. Connexion -->
     <div id="login-container" class="container" style="display: none;">
         <h1>Connexion</h1>
-        <p class="subtitle">Heureux de vous revoir</p>
         <form id="login-form">
             <input type="email" id="email-login" placeholder="Votre Email" required>
             <div class="password-wrapper">
@@ -46,19 +44,17 @@
         <p class="switch-text">Nouveau ? <a href="#" id="to-register">Créer un compte</a></p>
     </div>
 
-    <!-- 3. Formulaire de demande de Récupération (Envoi Email) -->
+    <!-- 3. Récupération -->
     <div id="forgot-password-container" class="container" style="display: none;">
         <h1>Récupération</h1>
-        <p class="subtitle">Saisissez votre e-mail pour recevoir un lien de réinitialisation.</p>
         <input type="email" id="email-recovery-confirm" placeholder="Confirmez votre e-mail" required>
         <button id="send-recovery-btn" class="btn-primary">Envoyer le lien</button>
-        <p class="switch-text"><a href="#" id="back-to-login">Retour à la connexion</a></p>
+        <p class="switch-text"><a href="#" id="back-to-login">Retour</a></p>
     </div>
 
-    <!-- 4. Formulaire de Nouveau Mot de Passe (Après clic sur le lien email) -->
+    <!-- 4. Nouveau Mot de Passe -->
     <div id="new-password-container" class="container" style="display: none;">
         <h1>Nouveau mot de passe</h1>
-        <p class="subtitle">Choisissez un mot de passe sécurisé (min. 6 caractères).</p>
         <div class="password-wrapper">
             <input type="password" id="new-password-input" placeholder="Nouveau mot de passe" required minlength="6">
             <span class="toggle-password" data-target="new-password-input">👁️</span>
@@ -66,27 +62,29 @@
         <button id="save-new-password-btn" class="btn-primary">Enregistrer</button>
     </div>
 
-    <!-- 5. Étape de Confirmation Finale (Dashboard) -->
+    <!-- 5. Confirmation (Dashboard) -->
     <div id="confirmation-step" class="container" style="display: none;">
         <h1>Session validée</h1>
-        <p class="subtitle">Connecté en tant que : <strong id="user-email-display">...</strong></p>
-        <p class="subtitle">Prêt à accéder au mur d'offres ?</p>
+        <p class="subtitle">Connecté : <strong id="user-email-display">...</strong></p>
         <button id="confirm-access-btn" class="btn-primary">Lancer TimeWall</button>
-        <p class="switch-text">Ce n'est pas vous ? <a href="#" id="cancel-auth">Se déconnecter</a></p>
+        <p class="switch-text"><a href="#" id="cancel-auth">Se déconnecter</a></p>
     </div>
 
-    <!-- 6. Interface TimeWall (Plein écran) -->
+    <!-- 6. Interface TimeWall -->
     <div id="timewall-container" class="full-container" style="display: none;">
         <header class="nav-bar">
             <div class="logo">EuroShared</div>
-            <button id="logout-button" class="btn-outline">Déconnexion</button>
+            <button id="logout-button" class="btn-outline">Quitter</button>
         </header>
         <div class="iframe-wrapper">
-            <iframe id="timewall-iframe" frameborder="0"></iframe>
+            <div id="timewall-loader" class="loader-overlay">
+                <div class="spinner"></div>
+                <p>Connexion sécurisée à TimeWall...</p>
+            </div>
+            <iframe id="timewall-iframe" frameborder="0" allowfullscreen></iframe>
         </div>
     </div>
 
-    <!-- Chargement du Script JavaScript (Module) -->
-    <script type="module" src="script.js"></script>
+    <script type="module" src="./script.js"></script>
 </body>
 </html>
