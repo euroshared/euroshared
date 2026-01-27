@@ -75,24 +75,37 @@ h1 { margin-bottom: 10px; color: var(--secondary-color); }
     font-weight: bold;
 }
 
+input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1em;
+    margin-bottom: 15px; /* Marge standard */
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
 /* --- Champ Mot de passe Spécifique (L'œil) --- */
 .password-wrapper {
     position: relative;
     width: 100%;
-    margin-bottom: 15px;
     display: flex;
     align-items: center;
 }
 
 .password-wrapper input {
     padding-right: 45px !important;
+    margin-bottom: 15px; /* Conserve la marge même dans le wrapper */
 }
 
 .toggle-password {
     position: absolute;
     right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
+    top: calc(50% - 7.5px); /* Ajustement pour compenser le margin-bottom de l'input */
     cursor: pointer;
     z-index: 10;
     font-size: 1.2rem;
@@ -101,20 +114,6 @@ h1 { margin-bottom: 10px; color: var(--secondary-color); }
 }
 
 .toggle-password:hover { color: var(--primary-color); }
-
-input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 1em;
-    margin-bottom: 15px;
-}
-
-input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-}
 
 /* --- Boutons --- */
 .btn-primary {
@@ -128,7 +127,7 @@ input:focus {
     font-weight: bold;
     cursor: pointer;
     transition: 0.3s;
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 .btn-primary:hover {
@@ -143,6 +142,7 @@ input:focus {
     color: var(--error-color);
     border-radius: 4px;
     cursor: pointer;
+    transition: 0.3s;
 }
 
 .btn-outline:hover { background: var(--error-color); color: white; }
@@ -159,15 +159,27 @@ input:focus {
 
 .logo { font-weight: bold; font-size: 1.2em; color: var(--primary-color); }
 
-.iframe-wrapper { flex-grow: 1; width: 100%; background: white; }
-#timewall-iframe { width: 100%; height: 100%; border: none; }
+.iframe-wrapper { 
+    flex-grow: 1; 
+    width: 100%; 
+    background: white;
+    position: relative;
+}
+
+#timewall-iframe { 
+    width: 100%; 
+    height: 100%; 
+    border: none;
+    position: absolute; /* Garantit que l'iframe remplit le wrapper */
+    top: 0;
+    left: 0;
+}
 
 /* --- Liens de bascule --- */
 .switch-text { margin-top: 20px; font-size: 0.85em; color: #666; }
 .switch-text a { color: var(--primary-color); text-decoration: none; font-weight: bold; }
 .switch-text a:hover { text-decoration: underline; }
 
-/* Style spécial pour le bouton de déconnexion de secours */
 #cancel-auth {
     color: var(--error-color);
     font-weight: normal;
