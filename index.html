@@ -4,69 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EuroShared - Offres TimeWall</title>
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Indicateur de statut de connexion -->
-    <div id="db-status" class="status-loading">
-        <span class="dot"></span> 
+    <!-- Indicateur de statut -->
+    <div id="db-status" class="status-area">
+        <span class="dot" id="status-dot"></span> 
         <span id="status-text">Vérification de la connexion...</span>
     </div>
 
-    <!-- Formulaire d'Inscription -->
+    <!-- Inscription -->
     <div id="register-container" class="container">
         <h1>Inscription</h1>
-        <p class="subtitle">Rejoignez EuroShared pour commencer à gagner</p>
+        <p class="subtitle">Rejoignez EuroShared</p>
         <form id="register-form">
-            <div class="input-group">
-                <input type="text" id="name" placeholder="Nom complet" required>
+            <input type="text" id="name" placeholder="Nom complet" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <div class="password-wrapper">
+                <input type="password" id="password" placeholder="Mot de passe" required minlength="6">
             </div>
-            <div class="input-group">
-                <input type="email" id="email" placeholder="Email" required>
-            </div>
-            <div class="input-group">
-                <label for="birthdate">Date de naissance (optionnel)</label>
-                <input type="date" id="birthdate">
-            </div>
-                <div class="input-group password-wrapper">
-                    <input type="password" id="password" placeholder="Créer un mot de passe" required minlength="6">
-                    <span class="toggle-password" onclick="togglePasswordVisibility('password')">👁️</span>
-                </div>
-
             <button type="submit" class="btn-primary">S'inscrire</button>
         </form>
-        <p class="switch-text">Déjà membre ? <a href="#" id="login-link">Se connecter</a></p>
+        <p class="switch-text">Déjà membre ? <a href="#" id="to-login">Se connecter</a></p>
     </div>
 
-    <!-- Formulaire de Connexion -->
+    <!-- Connexion -->
     <div id="login-container" class="container" style="display: none;">
         <h1>Connexion</h1>
-        <p class="subtitle">Accédez à votre espace TimeWall</p>
         <form id="login-form">
-            <div class="input-group">
-                <input type="email" id="email-login" placeholder="Votre Email" required>
-            </div>
-               <div class="input-group password-wrapper">
-                    <input type="password" id="password-login" placeholder="Votre mot de passe" required>
-                    <span class="toggle-password" onclick="togglePasswordVisibility('password-login')">👁️</span>
-                </div>
+            <input type="email" id="email-login" placeholder="Votre Email" required>
+            <input type="password" id="password-login" placeholder="Mot de passe" required>
             <button type="submit" class="btn-primary">Accéder aux offres</button>
         </form>
-        <p class="switch-text">Nouveau ici ? <a href="#" id="register-link">Créer un compte</a></p>
+        <p class="switch-text">Nouveau ? <a href="#" id="to-register">Créer un compte</a></p>
     </div>
 
-    <!-- Zone Iframe TimeWall -->
+    <!-- TimeWall -->
     <div id="timewall-container" class="full-container" style="display: none;">
         <header class="nav-bar">
             <div class="logo">EuroShared</div>
             <button id="logout-button" class="btn-outline">Déconnexion</button>
         </header>
-        <div class="iframe-wrapper">
-            <iframe id="timewall-iframe" title="TimeWall" frameborder="0"></iframe>
-        </div>
+        <iframe id="timewall-iframe" frameborder="0"></iframe>
     </div>
 
-    <script src="./script.js"></script>
+    <!-- Chargement du module JS -->
+    <script type="module" src="script.js"></script>
 </body>
 </html>
