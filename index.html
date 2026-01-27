@@ -8,22 +8,18 @@
 </head>
 <body>
 
-    <!-- Indicateur de statut -->
     <div id="db-status" class="status-area">
         <span class="dot" id="status-dot"></span> 
         <span id="status-text">Vérification de la connexion...</span>
     </div>
 
-    <!-- Inscription -->
     <div id="register-container" class="container">
         <h1>Inscription</h1>
-        <p class="subtitle">Rejoignez EuroShared</p>
         <form id="register-form">
             <input type="text" id="name" placeholder="Nom complet" required>
             <input type="email" id="email" placeholder="Email" required>
             <div class="password-wrapper">
                 <input type="password" id="password" placeholder="Mot de passe" required minlength="6">
-                <!-- Ajout de l'œil pour visualiser -->
                 <span class="toggle-password" data-target="password">👁️</span>
             </div>
             <button type="submit" class="btn-primary">S'inscrire</button>
@@ -31,39 +27,27 @@
         <p class="switch-text">Déjà membre ? <a href="#" id="to-login">Se connecter</a></p>
     </div>
 
-    <!-- Connexion -->
     <div id="login-container" class="container" style="display: none;">
         <h1>Connexion</h1>
         <form id="login-form">
             <input type="email" id="email-login" placeholder="Votre Email" required>
             <div class="password-wrapper">
                 <input type="password" id="password-login" placeholder="Mot de passe" required>
-                <!-- Ajout de l'œil pour visualiser -->
                 <span class="toggle-password" data-target="password-login">👁️</span>
             </div>
             <button type="submit" class="btn-primary">Accéder aux offres</button>
         </form>
-        
-        <!-- Ajout : Récupération de mot de passe -->
-        <p class="switch-text">
-            <a href="#" id="forgot-password" style="font-size: 0.85em; color: #777;">Mot de passe oublié ?</a>
-        </p>
-        
+        <p class="switch-text"><a href="#" id="forgot-password">Mot de passe oublié ?</a></p>
         <p class="switch-text">Nouveau ? <a href="#" id="to-register">Créer un compte</a></p>
     </div>
 
-    <!-- Étape de confirmation après authentification -->
     <div id="confirmation-step" class="container" style="display: none;">
         <h1>Session validée</h1>
         <p class="subtitle">Connecté en tant que : <strong id="user-email-display">...</strong></p>
-        <p class="subtitle">Cliquez sur le bouton ci-dessous pour charger votre mur d'offres personnel.</p>
-        
         <button id="confirm-access-btn" class="btn-primary">Lancer TimeWall</button>
-        
         <p class="switch-text">Ce n'est pas vous ? <a href="#" id="cancel-auth">Se déconnecter</a></p>
     </div>
 
-    <!-- TimeWall -->
     <div id="timewall-container" class="full-container" style="display: none;">
         <header class="nav-bar">
             <div class="logo">EuroShared</div>
@@ -74,6 +58,6 @@
         </div>
     </div>
 
-    <script type="module" src="./script.js"></script>
+    <script type="module" src="script.js"></script>
 </body>
 </html>
