@@ -40,10 +40,23 @@ body {
     z-index: 1000;
 }
 
-.dot { height: 10px; width: 10px; border-radius: 50%; background-color: #ccc; }
+.dot { 
+    height: 10px; 
+    width: 10px; 
+    border-radius: 50%; 
+    background-color: #ccc; 
+    transition: background-color 0.3s ease;
+}
+
 /* Classe ajoutée par le JS pour le succès */
-.status-online .dot { background-color: var(--primary-color); box-shadow: 0 0 8px var(--primary-color); }
-.status-online #status-text { color: var(--primary-color); font-weight: bold; }
+.status-online .dot { 
+    background-color: var(--primary-color); 
+    box-shadow: 0 0 8px var(--primary-color); 
+}
+.status-online #status-text { 
+    color: var(--primary-color); 
+    font-weight: bold; 
+}
 
 /* --- Containers --- */
 .container {
@@ -68,23 +81,56 @@ body {
 h1 { margin-bottom: 10px; color: var(--secondary-color); }
 .subtitle { color: #777; margin-bottom: 20px; font-size: 0.9em; line-height: 1.4; }
 
-/* Style spécifique pour l'affichage de l'email */
 #user-email-display {
     color: var(--secondary-color);
     word-break: break-all;
     display: block;
     margin-top: 5px;
+    font-weight: bold;
 }
 
-.password-wrapper { position: relative; width: 100%; }
+/* --- Correction spécifique Mot de passe + Icône --- */
+.password-wrapper {
+    position: relative; /* Repère pour l'icône absolute */
+    width: 100%;
+    margin-bottom: 15px; /* Espace sous le champ */
+    display: flex;
+    align-items: center;
+}
 
 input {
     width: 100%;
     padding: 12px;
-    margin-bottom: 15px;
     border: 1px solid #ddd;
     border-radius: 6px;
     font-size: 1em;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.password-wrapper input {
+    padding-right: 45px !important; /* Laisse la place à l'œil */
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%); /* Centrage vertical parfait */
+    cursor: pointer;
+    z-index: 10;
+    font-size: 1.2rem;
+    line-height: 1;
+    user-select: none; /* Empêche la sélection du texte de l'icône */
+    color: #888;
+}
+
+.toggle-password:hover {
+    color: var(--primary-color);
 }
 
 /* --- Boutons --- */
@@ -99,6 +145,7 @@ input {
     font-weight: bold;
     cursor: pointer;
     transition: background 0.3s, transform 0.2s;
+    margin-top: 5px;
 }
 
 .btn-primary:hover {
@@ -113,9 +160,13 @@ input {
     color: var(--error-color);
     border-radius: 4px;
     cursor: pointer;
+    transition: all 0.3s;
 }
 
-.btn-outline:hover { background: var(--error-color); color: white; }
+.btn-outline:hover { 
+    background: var(--error-color); 
+    color: white; 
+}
 
 /* --- Navigation et Iframe --- */
 .nav-bar {
@@ -144,29 +195,3 @@ input {
     display: inline-block;
     margin-top: 10px;
 }
-
-/* --- Correction du conteneur --- */
-.password-wrapper {
-    position: relative;
-    width: 100%;
-    display: flex;
-    align-items: center; /* Aligne verticalement */
-}
-
-.password-wrapper input {
-    width: 100%;
-    padding-right: 45px !important; /* Espace réservé pour l'icône */
-}
-
-/* --- Correction de l'icône --- */
-.toggle-password {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%); /* Centrage parfait */
-    cursor: pointer;
-    z-index: 10;
-    font-size: 1.2rem;
-    line-height: 1;
-}
-
