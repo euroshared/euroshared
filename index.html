@@ -8,13 +8,13 @@
 </head>
 <body>
 
-    <!-- Statut DB -->
+    <!-- Indicateur de statut -->
     <div id="db-status" class="status-area">
         <span class="dot" id="status-dot"></span> 
         <span id="status-text">Vérification...</span>
     </div>
 
-    <!-- 1. Inscription -->
+    <!-- 1. Formulaire d'Inscription -->
     <div id="register-container" class="container">
         <h1>Inscription</h1>
         <p class="subtitle">Rejoignez EuroShared pour gagner</p>
@@ -30,7 +30,7 @@
         <p class="switch-text">Déjà membre ? <a href="#" id="to-login">Se connecter</a></p>
     </div>
 
-    <!-- 2. Connexion -->
+    <!-- 2. Formulaire de Connexion -->
     <div id="login-container" class="container" style="display: none;">
         <h1>Connexion</h1>
         <form id="login-form">
@@ -64,7 +64,7 @@
         <button id="save-new-password-btn" class="btn-primary">Enregistrer</button>
     </div>
 
-    <!-- 5. Dashboard -->
+    <!-- 5. Dashboard / Confirmation -->
     <div id="confirmation-step" class="container" style="display: none;">
         <h1>Session validée</h1>
         <p class="subtitle">Connecté : <strong id="user-email-display">...</strong></p>
@@ -72,7 +72,7 @@
         <p class="switch-text"><a href="#" id="cancel-auth">Se déconnecter</a></p>
     </div>
 
-    <!-- 6. TimeWall -->
+    <!-- 6. Interface TimeWall -->
     <div id="timewall-container" class="full-container" style="display: none;">
         <header class="nav-bar">
             <div class="logo">EuroShared</div>
@@ -81,7 +81,7 @@
         <div class="iframe-wrapper">
             <div id="timewall-loader" class="loader-overlay">
                 <div class="spinner"></div>
-                <p>Chargement sécurisé...</p>
+                <p>Chargement sécurisé de TimeWall...</p>
             </div>
             <iframe id="timewall-iframe" frameborder="0" allowfullscreen></iframe>
         </div>
