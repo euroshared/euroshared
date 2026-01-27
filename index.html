@@ -8,11 +8,13 @@
 </head>
 <body>
 
+    <!-- Indicateur de statut -->
     <div id="db-status" class="status-area">
         <span class="dot" id="status-dot"></span> 
         <span id="status-text">Vérification de la connexion...</span>
     </div>
 
+    <!-- 1. Inscription -->
     <div id="register-container" class="container">
         <h1>Inscription</h1>
         <form id="register-form">
@@ -27,6 +29,7 @@
         <p class="switch-text">Déjà membre ? <a href="#" id="to-login">Se connecter</a></p>
     </div>
 
+    <!-- 2. Connexion -->
     <div id="login-container" class="container" style="display: none;">
         <h1>Connexion</h1>
         <form id="login-form">
@@ -41,6 +44,16 @@
         <p class="switch-text">Nouveau ? <a href="#" id="to-register">Créer un compte</a></p>
     </div>
 
+    <!-- 3. Récupération de mot de passe (Champ Unique) -->
+    <div id="forgot-password-container" class="container" style="display: none;">
+        <h1>Récupération</h1>
+        <p class="subtitle">Saisissez votre e-mail pour recevoir un lien.</p>
+        <input type="email" id="email-recovery-confirm" placeholder="Confirmez votre e-mail" required>
+        <button id="send-recovery-btn" class="btn-primary">Envoyer le lien</button>
+        <p class="switch-text"><a href="#" id="back-to-login">Retour à la connexion</a></p>
+    </div>
+
+    <!-- 4. Confirmation après authentification -->
     <div id="confirmation-step" class="container" style="display: none;">
         <h1>Session validée</h1>
         <p class="subtitle">Connecté en tant que : <strong id="user-email-display">...</strong></p>
@@ -48,6 +61,7 @@
         <p class="switch-text">Ce n'est pas vous ? <a href="#" id="cancel-auth">Se déconnecter</a></p>
     </div>
 
+    <!-- 5. TimeWall -->
     <div id="timewall-container" class="full-container" style="display: none;">
         <header class="nav-bar">
             <div class="logo">EuroShared</div>
