@@ -41,11 +41,17 @@
     </div>
 
     <!-- Étape de confirmation après authentification -->
-<div id="confirmation-step" class="container" style="display: none;">
-    <h1>Session validée</h1>
-    <p class="subtitle">Cliquez sur le bouton ci-dessous pour charger votre mur d'offres personnel.</p>
-    <button id="confirm-access-btn" class="btn-primary">Lancer TimeWall</button>
-</div>
+    <div id="confirmation-step" class="container" style="display: none;">
+        <h1>Session validée</h1>
+        <!-- Mise à jour : Affichage de l'email de l'utilisateur -->
+        <p class="subtitle">Connecté en tant que : <strong id="user-email-display">...</strong></p>
+        <p class="subtitle">Cliquez sur le bouton ci-dessous pour charger votre mur d'offres personnel.</p>
+        
+        <button id="confirm-access-btn" class="btn-primary">Lancer TimeWall</button>
+        
+        <!-- Mise à jour : Bouton de déconnexion de secours -->
+        <p class="switch-text">Ce n'est pas vous ? <a href="#" id="cancel-auth">Se déconnecter</a></p>
+    </div>
 
     <!-- TimeWall -->
     <div id="timewall-container" class="full-container" style="display: none;">
@@ -53,7 +59,9 @@
             <div class="logo">EuroShared</div>
             <button id="logout-button" class="btn-outline">Déconnexion</button>
         </header>
-        <iframe id="timewall-iframe" frameborder="0"></iframe>
+        <div class="iframe-wrapper">
+            <iframe id="timewall-iframe" frameborder="0"></iframe>
+        </div>
     </div>
 
     <!-- Chargement du module JS -->
