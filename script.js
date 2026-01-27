@@ -56,16 +56,31 @@ elements.regForm.onsubmit = async (e) => {
 };
 
 // --- CONNEXION ---
-elements.logForm.onsubmit = async (e) => {
+elements.regForm.onsubmit = async (e) => {
     e.preventDefault();
-    const { data, error } = await supabase.auth.signInWithPassword({
-        email: document.getElementById('email-login').value,
-        password: document.getElementById('password-login').value
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const name = document.getElementById('name').value;
+
+    const { data, error } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+        options: { 
+            data: { full_name: name },
+            // Force la redirection vers votre page GitHub après confirmation
+            emailRedirectTo: window.location.origin + window.location.pathname 
+        }
     });
 
-    if (error) alert("Erreur : " + error.message);
-    else if (data.user) loadTimeWall(data.user.id);
+    if (error) {
+        console.error("Détail de l'erreur Supabase:", error);
+        alert("Erreur : " + error.message + " (Consultez la console F12 pour plus de détails)");
+    } else {
+        alert("✅ Un lien de confirmation a été envoyé à " + email + ". Merci de vérifier vos spams.");
+        showView('log');
+    }
 };
+
 
 // --- INITIALISATION & TEST DB ---
 async function initApp() {
