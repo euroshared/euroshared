@@ -8,15 +8,16 @@
 </head>
 <body>
 
-    <!-- Indicateur de statut -->
+    <!-- Indicateur de statut de connexion à la DB -->
     <div id="db-status" class="status-area">
         <span class="dot" id="status-dot"></span> 
         <span id="status-text">Vérification de la connexion...</span>
     </div>
 
-    <!-- 1. Inscription -->
+    <!-- 1. Formulaire d'Inscription -->
     <div id="register-container" class="container">
         <h1>Inscription</h1>
+        <p class="subtitle">Rejoignez EuroShared pour gagner</p>
         <form id="register-form">
             <input type="text" id="name" placeholder="Nom complet" required>
             <input type="email" id="email" placeholder="Email" required>
@@ -29,9 +30,10 @@
         <p class="switch-text">Déjà membre ? <a href="#" id="to-login">Se connecter</a></p>
     </div>
 
-    <!-- 2. Connexion -->
+    <!-- 2. Formulaire de Connexion -->
     <div id="login-container" class="container" style="display: none;">
         <h1>Connexion</h1>
+        <p class="subtitle">Heureux de vous revoir</p>
         <form id="login-form">
             <input type="email" id="email-login" placeholder="Votre Email" required>
             <div class="password-wrapper">
@@ -44,36 +46,36 @@
         <p class="switch-text">Nouveau ? <a href="#" id="to-register">Créer un compte</a></p>
     </div>
 
-    <!-- 3. Récupération de mot de passe (Champ Unique) -->
+    <!-- 3. Formulaire de demande de Récupération (Envoi Email) -->
     <div id="forgot-password-container" class="container" style="display: none;">
         <h1>Récupération</h1>
-        <p class="subtitle">Saisissez votre e-mail pour recevoir un lien.</p>
+        <p class="subtitle">Saisissez votre e-mail pour recevoir un lien de réinitialisation.</p>
         <input type="email" id="email-recovery-confirm" placeholder="Confirmez votre e-mail" required>
         <button id="send-recovery-btn" class="btn-primary">Envoyer le lien</button>
         <p class="switch-text"><a href="#" id="back-to-login">Retour à la connexion</a></p>
     </div>
 
-    <!-- Bloc pour définir un NOUVEAU mot de passe -->
-<div id="new-password-container" class="container" style="display: none;">
-    <h1>Nouveau mot de passe</h1>
-    <p class="subtitle">Saisissez votre nouveau mot de passe ci-dessous.</p>
-    <div class="password-wrapper">
-        <input type="password" id="new-password-input" placeholder="Nouveau mot de passe" required minlength="6">
-        <span class="toggle-password" data-target="new-password-input">👁️</span>
+    <!-- 4. Formulaire de Nouveau Mot de Passe (Après clic sur le lien email) -->
+    <div id="new-password-container" class="container" style="display: none;">
+        <h1>Nouveau mot de passe</h1>
+        <p class="subtitle">Choisissez un mot de passe sécurisé (min. 6 caractères).</p>
+        <div class="password-wrapper">
+            <input type="password" id="new-password-input" placeholder="Nouveau mot de passe" required minlength="6">
+            <span class="toggle-password" data-target="new-password-input">👁️</span>
+        </div>
+        <button id="save-new-password-btn" class="btn-primary">Enregistrer</button>
     </div>
-    <button id="save-new-password-btn" class="btn-primary">Enregistrer</button>
-</div>
 
-
-    <!-- 4. Confirmation après authentification -->
+    <!-- 5. Étape de Confirmation Finale (Dashboard) -->
     <div id="confirmation-step" class="container" style="display: none;">
         <h1>Session validée</h1>
         <p class="subtitle">Connecté en tant que : <strong id="user-email-display">...</strong></p>
+        <p class="subtitle">Prêt à accéder au mur d'offres ?</p>
         <button id="confirm-access-btn" class="btn-primary">Lancer TimeWall</button>
         <p class="switch-text">Ce n'est pas vous ? <a href="#" id="cancel-auth">Se déconnecter</a></p>
     </div>
 
-    <!-- 5. TimeWall -->
+    <!-- 6. Interface TimeWall (Plein écran) -->
     <div id="timewall-container" class="full-container" style="display: none;">
         <header class="nav-bar">
             <div class="logo">EuroShared</div>
@@ -84,6 +86,7 @@
         </div>
     </div>
 
+    <!-- Chargement du Script JavaScript (Module) -->
     <script type="module" src="script.js"></script>
 </body>
 </html>
