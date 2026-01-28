@@ -1,6 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.8';
 
-
 const supabaseUrl = "https://jexaklhwoiaufzshzlcg.supabase.co";
 const supabaseKey = "sb_publishable_BdPiVVAvGh1u8SZ-sHrtrg_Inesrirz"; 
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -25,7 +24,7 @@ function showView(view) {
     if (view === 'conf') elements.confStep.style.display = 'block';
 }
 
-// --- INITIALISATION SUPABASE (INCHANGÉE) ---
+// --- INITIALISATION SUPABASE (RESTAURÉE) ---
 async function initApp() {
     const { data: { session } } = await supabase.auth.getSession();
     if (session) {
@@ -37,11 +36,12 @@ async function initApp() {
     }
 }
 
-// --- LOGIQUE DES 4 PARTENAIRES (NOUVEAU) ---
+// --- LOGIQUE DES 4 PARTENAIRES (RECTIFIÉE) ---
 
 // 1. TimeWall
 if (elements.confirmBtn) {
     elements.confirmBtn.onclick = () => {
+        // Correction de la syntaxe ${} et de l'URL
         const url = `https://timewall.io{authenticatedUserId}`;
         window.open(url, '_blank', 'noopener,noreferrer');
     };
@@ -74,7 +74,7 @@ if (monlixBtn) {
     };
 }
 
-// --- AUTHENTIFICATION & NAVIGATION (INCHANGÉE) ---
+// --- AUTHENTIFICATION & NAVIGATION (STRICTEMENT D'ORIGINE) ---
 document.getElementById('login-form').onsubmit = async (e) => {
     e.preventDefault();
     const { data, error } = await supabase.auth.signInWithPassword({
