@@ -39,7 +39,6 @@ function showView(view) {
 
 // --- INITIALISATION & CONNEXION À LA BASE ---
 async function initApp() {
-    // Vérifier si une session existe déjà
     const { data: { session }, error: sessionError } = await supabase.auth.getSession();
     
     if (sessionError) {
@@ -113,7 +112,7 @@ document.getElementById('send-recovery-btn').onclick = async () => {
     else alert("✅ Email de récupération envoyé !");
 };
 
-// --- DÉCLENCHEMENT TIMEWALL ---
+// --- DÉCLENCHEMENT TIMEWALL (MISE À JOUR : NOUVEL ONGLET) ---
 if (elements.confirmBtn) {
     elements.confirmBtn.onclick = () => {
         if (!authenticatedUserId) {
@@ -124,13 +123,10 @@ if (elements.confirmBtn) {
         const widgetId = "9c481747da9d5015";
         const wallUrl = `https://timewall.io/v2/wall?widgetId=${widgetId}&userId=${authenticatedUserId}`;
         
-        showView('tw');
-        elements.twCont.classList.remove('iframe-loaded');
-        elements.iframe.src = wallUrl;
+        console.log("Accès TimeWall autorisé pour :", authenticatedUserId);
         
-        elements.iframe.onload = () => {
-            elements.twCont.classList.add('iframe-loaded');
-        };
+        // RECTIFICATION : On utilise window.open pour éviter les erreurs d'adresse IP et de 404
+        window.open(wallUrl, '_blank', 'noopener,noreferrer');
     };
 }
 
