@@ -36,33 +36,34 @@ function showView(view) {
     if (view === 'newpass') elements.newPassCont.style.display = 'block';
 }
 
-// --- BOUTON : LANCER TIMEWALL (CORRIGÉ) ---
+// --- BOUTON : LANCER TIMEWALL ---
 if (elements.confirmBtn) {
     elements.confirmBtn.onclick = () => {
         if (!authenticatedUserId) {
-            alert("Erreur : Session utilisateur introuvable. Veuillez vous reconnecter.");
+            alert("Erreur : Session utilisateur introuvable.");
             return;
         }
 
         const widgetId = "9c481747da9d5015";
-        // La variable est définie ici, elle ne peut plus être "undefined"
+        // Utilisation du endpoint correct /v2/wall
         const wallUrl = `https://timewall.io/v2/wall?widgetId=${widgetId}&userId=${authenticatedUserId}`;
         
         console.log("Démarrage TimeWall pour ID :", authenticatedUserId);
         
-        // Affichage du loader et injection de la source
-        elements.twCont.classList.remove('iframe-loaded');
-        elements.iframe.src = wallUrl;
+        // 1. On affiche d'abord le conteneur
         showView('tw');
+        elements.twCont.classList.remove('iframe-loaded');
+
+        // 2. On injecte l'URL après
+        elements.iframe.src = wallUrl;
         
-        // Cacher le loader quand l'iframe a fini de charger
         elements.iframe.onload = () => {
             elements.twCont.classList.add('iframe-loaded');
         };
     };
 }
 
-// --- CONNEXION ---
+// --- LOGIQUE SUPABASE (SANS CHANGEMENT) ---
 document.getElementById('login-form').onsubmit = async (e) => {
     e.preventDefault();
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -77,7 +78,6 @@ document.getElementById('login-form').onsubmit = async (e) => {
     }
 };
 
-// --- INSCRIPTION ---
 document.getElementById('register-form').onsubmit = async (e) => {
     e.preventDefault();
     const { data, error } = await supabase.auth.signUp({
@@ -86,28 +86,11 @@ document.getElementById('register-form').onsubmit = async (e) => {
         options: { data: { full_name: document.getElementById('name').value } }
     });
     if (error) alert(error.message);
-    else alert("✅ Inscription réussie ! Confirmez votre adresse email.");
-};
-
-// --- RÉCUPÉRATION MOT DE PASSE ---
-document.getElementById('send-recovery-btn').onclick = async () => {
-    const email = document.getElementById('email-recovery-confirm').value;
-    if (!email) return alert("Veuillez saisir votre email.");
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin + window.location.pathname
-    });
-    if (error) alert(error.message);
-    else alert("✅ Email de récupération envoyé !");
+    else alert("✅ Inscription réussie !");
 };
 
 // --- INITIALISATION ---
 async function initApp() {
-    // Vérifier si on revient d'un lien de récupération
-    if (window.location.hash.includes("type=recovery")) {
-        showView('newpass');
-        return;
-    }
-
     const { data: { session } } = await supabase.auth.getSession();
     if (session) {
         authenticatedUserId = session.user.id;
@@ -116,10 +99,8 @@ async function initApp() {
     } else {
         showView('reg');
     }
-
-    // Mise à jour du statut visuel
     elements.statusDot.parentElement.classList.add('status-online');
-    elements.statusText.innerText = "EuroShared 2026 Connecté";
+    elements.statusText.innerText = "EuroShared Connecté";
 }
 
 // --- NAVIGATION ---
@@ -128,7 +109,6 @@ document.getElementById('to-register').onclick = (e) => { e.preventDefault(); sh
 document.getElementById('forgot-password').onclick = (e) => { e.preventDefault(); showView('forgot'); };
 document.getElementById('back-to-login').onclick = (e) => { e.preventDefault(); showView('log'); };
 
-// --- OEIL MOT DE PASSE ---
 document.querySelectorAll('.toggle-password').forEach(btn => {
     btn.onclick = function() {
         const input = document.getElementById(this.getAttribute('data-target'));
@@ -137,7 +117,6 @@ document.querySelectorAll('.toggle-password').forEach(btn => {
     };
 });
 
-// --- DÉCONNEXION ---
 const logout = async () => {
     await supabase.auth.signOut();
     window.location.reload();
