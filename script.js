@@ -1,5 +1,8 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.8';
 
+import { createClient } from 'https://esm.sh';
+
+// CONFIGURATION BASE DE DONNÉES (STRICTEMENT D'ORIGINE)
 const supabaseUrl = "https://jexaklhwoiaufzshzlcg.supabase.co";
 const supabaseKey = "sb_publishable_BdPiVVAvGh1u8SZ-sHrtrg_Inesrirz"; 
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -36,12 +39,11 @@ async function initApp() {
     }
 }
 
-// --- LOGIQUE DES 4 PARTENAIRES (RECTIFIÉE) ---
+// --- LOGIQUE DES 4 PARTENAIRES (RECTIFIÉE AVEC SYNTAXE CORRECTE) ---
 
 // 1. TimeWall
 if (elements.confirmBtn) {
     elements.confirmBtn.onclick = () => {
-        // Correction de la syntaxe ${} et de l'URL
         const url = `https://timewall.io{authenticatedUserId}`;
         window.open(url, '_blank', 'noopener,noreferrer');
     };
@@ -52,7 +54,7 @@ const lootBtn = document.getElementById('btn-lootably');
 if (lootBtn) {
     lootBtn.onclick = () => {
         const url = `https://wall.lootably.com{authenticatedUserId}`;
-        window.open(url, '_blank');
+        window.open(url, '_blank', 'noopener,noreferrer');
     };
 }
 
@@ -61,7 +63,7 @@ const cpaBtn = document.getElementById('btn-cpalead');
 if (cpaBtn) {
     cpaBtn.onclick = () => {
         const url = `https://www.cpalead.com{authenticatedUserId}`;
-        window.open(url, '_blank');
+        window.open(url, '_blank', 'noopener,noreferrer');
     };
 }
 
@@ -70,11 +72,11 @@ const monlixBtn = document.getElementById('btn-monlix');
 if (monlixBtn) {
     monlixBtn.onclick = () => {
         const url = `https://ads.monlix.com{authenticatedUserId}`;
-        window.open(url, '_blank');
+        window.open(url, '_blank', 'noopener,noreferrer');
     };
 }
 
-// --- AUTHENTIFICATION & NAVIGATION (STRICTEMENT D'ORIGINE) ---
+// --- AUTHENTIFICATION & NAVIGATION (D'ORIGINE) ---
 document.getElementById('login-form').onsubmit = async (e) => {
     e.preventDefault();
     const { data, error } = await supabase.auth.signInWithPassword({
