@@ -1,6 +1,11 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.8';
 
-// Configuration Supabase (Identifiants d'origine conservés)
+
+
+
+
+
+// Configuration Supabase
 const supabaseUrl = "https://jexaklhwoiaufzshzlcg.supabase.co";
 const supabaseKey = "sb_publishable_BdPiVVAvGh1u8SZ-sHrtrg_Inesrirz"; 
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -37,16 +42,10 @@ function showView(view) {
     if (view === 'newpass') elements.newPassCont.style.display = 'block';
 }
 
-// --- INITIALISATION & CONNEXION À LA BASE ---
+// --- INITIALISATION ---
 async function initApp() {
     const { data: { session }, error: sessionError } = await supabase.auth.getSession();
     
-    if (sessionError) {
-        console.error("Erreur de base de données:", sessionError.message);
-        elements.statusText.innerText = "Erreur de connexion";
-        return;
-    }
-
     if (session) {
         authenticatedUserId = session.user.id;
         elements.userEmailDisplay.innerText = session.user.email;
@@ -60,41 +59,34 @@ async function initApp() {
 
 function updateStatus(online) {
     if (online) {
-        elements.statusDot.parentElement.classList.add('status-online');
+        elements.statusDot.style.backgroundColor = "#00ff00";
         elements.statusText.innerText = "EuroShared Connecté";
     } else {
-        elements.statusDot.parentElement.classList.remove('status-online');
+        elements.statusDot.style.backgroundColor = "#ff0000";
         elements.statusText.innerText = "En attente de connexion";
     }
 }
 
-// --- INSCRIPTION ---
+// --- AUTHENTIFICATION ---
 document.getElementById('register-form').onsubmit = async (e) => {
     e.preventDefault();
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const name = document.getElementById('name').value;
-
     const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: { data: { full_name: name } }
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value,
+        options: { data: { full_name: document.getElementById('name').value } }
     });
-
-    if (error) alert("Erreur d'inscription: " + error.message);
-    else alert("✅ Inscription réussie ! Vérifiez votre email pour confirmer.");
+    if (error) alert(error.message);
+    else alert("Vérifiez votre email !");
 };
 
-// --- CONNEXION ---
 document.getElementById('login-form').onsubmit = async (e) => {
     e.preventDefault();
-    const email = document.getElementById('email-login').value;
-    const password = document.getElementById('password-login').value;
-
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
-    if (error) alert("Erreur: " + error.message);
-    else if (data.user) {
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email: document.getElementById('email-login').value,
+        password: document.getElementById('password-login').value
+    });
+    if (error) alert(error.message);
+    else {
         authenticatedUserId = data.user.id;
         elements.userEmailDisplay.innerText = data.user.email;
         showView('conf');
@@ -102,45 +94,30 @@ document.getElementById('login-form').onsubmit = async (e) => {
     }
 };
 
-// --- MOT DE PASSE OUBLIÉ ---
-document.getElementById('send-recovery-btn').onclick = async () => {
-    const email = document.getElementById('email-recovery-confirm').value;
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin + window.location.pathname
-    });
-    if (error) alert(error.message);
-    else alert("✅ Email de récupération envoyé !");
-};
-
-// --- DÉCLENCHEMENT TIMEWALL (MISE À JOUR : NOUVEL ONGLET) ---
+// --- DÉCLENCHEMENT TIMEWALL (LIEN CORRECT) ---
 if (elements.confirmBtn) {
     elements.confirmBtn.onclick = () => {
-        if (!authenticatedUserId) {
-            alert("Veuillez vous reconnecter.");
-            return;
-        }
+        if (!authenticatedUserId) return alert("Session expirée");
 
-        const widgetId = "9c481747da9d5015";
-        const wallUrl = `https://timewall.io/v2/wall?widgetId=${widgetId}&userId=${authenticatedUserId}`;
+        // L'identifiant de ton mur
+        const offerWallId = "9c481747da9d5015";
         
-        console.log("Accès TimeWall autorisé pour :", authenticatedUserId);
+        // LE LIEN QUI MARCHE (oid / uid)
+        const wallUrl = `https://timewall.io/users/login?oid=${offerWallId}&uid=${authenticatedUserId}&tab=tasks`;
         
-        // RECTIFICATION : On utilise window.open pour éviter les erreurs d'adresse IP et de 404
-        window.open(wallUrl, '_blank', 'noopener,noreferrer');
+        console.log("Chargement de TimeWall...");
+        
+        // Injection et changement de vue
+        elements.iframe.src = wallUrl;
+        showView('tw');
     };
 }
 
-// button
-document.getElementById('btn-google').onclick = () => {
-    window.open("https://www.google.com", '_blank');
-};
-
-
-// --- NAVIGATION & DÉCONNEXION ---
-document.getElementById('to-login').onclick = (e) => { e.preventDefault(); showView('log'); };
-document.getElementById('to-register').onclick = (e) => { e.preventDefault(); showView('reg'); };
-document.getElementById('forgot-password').onclick = (e) => { e.preventDefault(); showView('forgot'); };
-document.getElementById('back-to-login').onclick = (e) => { e.preventDefault(); showView('log'); };
+// --- NAVIGATION ---
+document.getElementById('back-to-dashboard').onclick = () => showView('conf');
+document.getElementById('to-login').onclick = () => showView('log');
+document.getElementById('to-register').onclick = () => showView('reg');
+document.getElementById('forgot-password').onclick = () => showView('forgot');
 
 const logout = async () => {
     await supabase.auth.signOut();
@@ -149,12 +126,11 @@ const logout = async () => {
 document.getElementById('logout-button').onclick = logout;
 document.getElementById('cancel-auth').onclick = logout;
 
-// Gestion de l'œil mot de passe
+// Toggle Password
 document.querySelectorAll('.toggle-password').forEach(btn => {
     btn.onclick = function() {
         const input = document.getElementById(this.getAttribute('data-target'));
         input.type = input.type === "password" ? "text" : "password";
-        this.innerText = input.type === "password" ? "👁️" : "🙈";
     };
 });
 
