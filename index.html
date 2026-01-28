@@ -13,9 +13,10 @@
         <span id="status-text">Vérification...</span>
     </div>
 
-    <!-- Section Inscription (Inchangée) -->
+    <!-- Section Inscription -->
     <div id="register-container" class="container">
         <h1>Inscription</h1>
+        <p class="subtitle">Rejoignez EuroShared pour gagner</p>
         <form id="register-form">
             <input type="text" id="name" placeholder="Nom complet" required>
             <input type="email" id="email" placeholder="Email" required>
@@ -28,7 +29,7 @@
         <p class="switch-text">Déjà membre ? <a href="#" id="to-login">Se connecter</a></p>
     </div>
 
-    <!-- Section Connexion (Inchangée) -->
+    <!-- Section Connexion -->
     <div id="login-container" class="container" style="display: none;">
         <h1>Connexion</h1>
         <form id="login-form">
@@ -40,24 +41,18 @@
             <button type="submit" class="btn-primary">Accéder aux offres</button>
         </form>
         <p class="switch-text"><a href="#" id="forgot-password">Mot de passe oublié ?</a></p>
+        <p class="switch-text">Nouveau ? <a href="#" id="to-register">Créer un compte</a></p>
     </div>
 
-    <!-- 5. Dashboard avec 4 Menus (MISE À JOUR) -->
+    <!-- Dashboard avec les 4 Menus -->
     <div id="confirmation-step" class="container" style="display: none;">
         <h1>Session validée</h1>
         <p class="subtitle">Connecté : <strong id="user-email-display">...</strong></p>
 
         <div class="menu-grid">
-            <!-- Partenaire 1 : TimeWall -->
             <button id="confirm-access-btn" class="btn-primary">🚀 Lancer TimeWall</button>
-            
-            <!-- Partenaire 2 : Lootably -->
             <button id="btn-lootably" class="btn-primary" style="margin-top: 10px; background: #2c3e50;">💎 Lancer Lootably</button>
-            
-            <!-- Partenaire 3 : CPALead -->
             <button id="btn-cpalead" class="btn-primary" style="margin-top: 10px; background: #8e44ad;">💰 Lancer CPALead</button>
-            
-            <!-- Partenaire 4 : Monlix -->
             <button id="btn-monlix" class="btn-primary" style="margin-top: 10px; background: #d35400;">🔥 Lancer Monlix</button>
         </div>
 
