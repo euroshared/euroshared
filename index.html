@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EuroShared - Dashboard</title>
+    <title>EuroShared - Offres TimeWall</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <!-- Statut de connexion -->
     <div id="db-status" class="status-area">
         <span class="dot" id="status-dot"></span> 
         <span id="status-text">Vérification...</span>
     </div>
 
-    <!-- Section Inscription -->
+    <!-- 1. Inscription -->
     <div id="register-container" class="container">
         <h1>Inscription</h1>
         <p class="subtitle">Rejoignez EuroShared pour gagner</p>
@@ -29,7 +30,7 @@
         <p class="switch-text">Déjà membre ? <a href="#" id="to-login">Se connecter</a></p>
     </div>
 
-    <!-- Section Connexion -->
+    <!-- 2. Connexion -->
     <div id="login-container" class="container" style="display: none;">
         <h1>Connexion</h1>
         <form id="login-form">
@@ -44,19 +45,46 @@
         <p class="switch-text">Nouveau ? <a href="#" id="to-register">Créer un compte</a></p>
     </div>
 
-    <!-- Dashboard avec les 4 Menus -->
+    <!-- 3. Récupération Email -->
+    <div id="forgot-password-container" class="container" style="display: none;">
+        <h1>Récupération</h1>
+        <p class="subtitle">Saisissez votre e-mail pour recevoir un lien.</p>
+        <input type="email" id="email-recovery-confirm" placeholder="Confirmez votre e-mail" required>
+        <button id="send-recovery-btn" class="btn-primary">Envoyer le lien</button>
+        <p class="switch-text"><a href="#" id="back-to-login">Retour à la connexion</a></p>
+    </div>
+
+    <!-- 4. Nouveau Mot de Passe -->
+    <div id="new-password-container" class="container" style="display: none;">
+        <h1>Nouveau mot de passe</h1>
+        <div class="password-wrapper">
+            <input type="password" id="new-password-input" placeholder="Nouveau mot de passe" required minlength="6">
+            <span class="toggle-password" data-target="new-password-input">👁️</span>
+        </div>
+        <button id="save-new-password-btn" class="btn-primary">Enregistrer</button>
+    </div>
+
+    <!-- 5. Confirmation / Dashboard -->
     <div id="confirmation-step" class="container" style="display: none;">
         <h1>Session validée</h1>
         <p class="subtitle">Connecté : <strong id="user-email-display">...</strong></p>
-
-        <div class="menu-grid">
-            <button id="confirm-access-btn" class="btn-primary">🚀 Lancer TimeWall</button>
-            <button id="btn-lootably" class="btn-primary" style="margin-top: 10px; background: #2c3e50;">💎 Lancer Lootably</button>
-            <button id="btn-cpalead" class="btn-primary" style="margin-top: 10px; background: #8e44ad;">💰 Lancer CPALead</button>
-            <button id="btn-monlix" class="btn-primary" style="margin-top: 10px; background: #d35400;">🔥 Lancer Monlix</button>
-        </div>
-
+        <button id="confirm-access-btn" class="btn-primary">Lancer TimeWall</button>
+        
+         <!-- Nouveau bouton pour un autre partenaire (ex: Lootably ou autre) -->
+   <button id="btn-google" class="btn-primary" style="margin-top: 10px; background: #4285F4;">🌐 Visiter Google</button>
+        
         <p class="switch-text"><a href="#" id="cancel-auth">Se déconnecter</a></p>
+    </div>
+
+    <!-- 6. Interface TimeWall (Gardée pour compatibilité ID) -->
+    <div id="timewall-container" class="full-container" style="display: none;">
+        <header class="nav-bar">
+            <div class="logo">EuroShared</div>
+            <button id="logout-button" class="btn-outline">Déconnexion</button>
+        </header>
+        <div class="iframe-wrapper">
+            <iframe id="timewall-iframe" frameborder="0" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
     </div>
 
     <script type="module" src="./script.js"></script>
