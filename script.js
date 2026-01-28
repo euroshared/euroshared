@@ -130,6 +130,12 @@ if (elements.confirmBtn) {
     };
 }
 
+// button
+document.getElementById('btn-google').onclick = () => {
+    window.open("https://www.google.com", '_blank');
+};
+
+
 // --- NAVIGATION & DÉCONNEXION ---
 document.getElementById('to-login').onclick = (e) => { e.preventDefault(); showView('log'); };
 document.getElementById('to-register').onclick = (e) => { e.preventDefault(); showView('reg'); };
