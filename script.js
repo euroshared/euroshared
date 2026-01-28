@@ -63,25 +63,41 @@ function updateStatus(online) {
 }
 
 // --- ACTIONS ---
+// --- ACTIONS ---
 if (elements.confirmBtn) {
     elements.confirmBtn.onclick = () => {
-        if (!authenticatedUserId) return alert("Reconnectez-vous");
+        if (!authenticatedUserId) {
+            alert("Session expirée. Veuillez vous reconnecter.");
+            return;
+        }
 
-        // RECTIFICATION : Utilisation de oid/uid pour forcer l'auto-login
         const widgetId = "9c481747da9d5015";
-        const wallUrl = `https://timewall.io/v2/wall?widgetId=${widgetId}&uid=${authenticatedUserId}`;
         
+        // RECTIFICATION FINALE : 
+        // 1. On utilise 'userId' (norme V2) au lieu de 'uid'.
+        // 2. On s'assure que widgetId est passé correctement.
+        const wallUrl = `https://timewall.io/v2/wall?widgetId=${widgetId}&userId=${authenticatedUserId}`;
+        
+        console.log("Chargement TimeWall pour :", authenticatedUserId);
+        
+        // Affichage de la vue
         showView('tw');
         
+        // Forcer le rechargement de l'iframe
         setTimeout(() => {
-            // Nettoyage avant injection
-            elements.iframe.src = "about:blank";
-            elements.iframe.src = wallUrl;
+            elements.iframe.src = "about:blank"; // Reset
+            elements.iframe.src = wallUrl;       // Chargement réel
         }, 150);
     };
 }
 
-document.getElementById('btn-google').onclick = () => window.open("https://www.google.com", '_blank');
+// Bouton Google (inchangé)
+if (document.getElementById('btn-google')) {
+    document.getElementById('btn-google').onclick = () => {
+        window.open("https://www.google.com", '_blank');
+    };
+}
+
 
 // --- AUTH ---
 document.getElementById('login-form').onsubmit = async (e) => {
