@@ -69,7 +69,7 @@ if (elements.confirmBtn) {
 
         // RECTIFICATION : Utilisation de oid/uid pour forcer l'auto-login
         const widgetId = "9c481747da9d5015";
-        const wallUrl = `https://timewall.io{widgetId}&uid=${authenticatedUserId}`;
+        const wallUrl = `https://timewall.io/v2/wall?widgetId=${widgetId}&uid=${authenticatedUserId}`;
         
         showView('tw');
         
