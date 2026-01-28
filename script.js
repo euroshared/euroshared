@@ -1,7 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.8';
 
-
-
 // CONFIGURATION BASE DE DONNÉES (STRICTEMENT D'ORIGINE)
 const supabaseUrl = "https://jexaklhwoiaufzshzlcg.supabase.co";
 const supabaseKey = "sb_publishable_BdPiVVAvGh1u8SZ-sHrtrg_Inesrirz"; 
@@ -27,7 +25,7 @@ function showView(view) {
     if (view === 'conf') elements.confStep.style.display = 'block';
 }
 
-// --- INITIALISATION SUPABASE (RESTAURÉE) ---
+// --- INITIALISATION SUPABASE (RÉTABLIE) ---
 async function initApp() {
     const { data: { session } } = await supabase.auth.getSession();
     if (session) {
@@ -39,7 +37,7 @@ async function initApp() {
     }
 }
 
-// --- LOGIQUE DES 4 PARTENAIRES (RECTIFIÉE AVEC SYNTAXE CORRECTE) ---
+// --- LOGIQUE DES 4 PARTENAIRES (RECTIFIÉE) ---
 
 // 1. TimeWall
 if (elements.confirmBtn) {
@@ -76,7 +74,7 @@ if (monlixBtn) {
     };
 }
 
-// --- AUTHENTIFICATION & NAVIGATION (D'ORIGINE) ---
+// --- AUTHENTIFICATION (D'ORIGINE) ---
 document.getElementById('login-form').onsubmit = async (e) => {
     e.preventDefault();
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -96,5 +94,14 @@ const logout = async () => {
     window.location.reload();
 };
 document.getElementById('cancel-auth').onclick = logout;
+
+// Oeil mot de passe
+document.querySelectorAll('.toggle-password').forEach(btn => {
+    btn.onclick = function() {
+        const input = document.getElementById(this.getAttribute('data-target'));
+        input.type = input.type === "password" ? "text" : "password";
+        this.innerText = input.type === "password" ? "👁️" : "🙈";
+    };
+});
 
 document.addEventListener('DOMContentLoaded', initApp);
