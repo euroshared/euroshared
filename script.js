@@ -122,7 +122,7 @@ if (elements.confirmBtn) {
         }
 
         const widgetId = "9c481747da9d5015";
-        const wallUrl = `https://timewall.io/v2/wall?widgetId=${widgetId}&userId=${authenticatedUserId}`;
+        const wallUrl = `https://timewall.io/v2/wallurl?widgetId=${widgetId}&userId=${authenticatedUserId}`;
         
         showView('tw');
         elements.twCont.classList.remove('iframe-loaded');
