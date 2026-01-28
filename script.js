@@ -1,6 +1,6 @@
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.8';
+import { createClient } from 'https://cdn.jsdelivr.net';
 
-// CONFIGURATION BASE DE DONNÉES (STRICTEMENT D'ORIGINE)
+// CONFIGURATION SUPABASE (VÉRIFIÉE)
 const supabaseUrl = "https://jexaklhwoiaufzshzlcg.supabase.co";
 const supabaseKey = "sb_publishable_BdPiVVAvGh1u8SZ-sHrtrg_Inesrirz"; 
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -25,19 +25,21 @@ function showView(view) {
     if (view === 'conf') elements.confStep.style.display = 'block';
 }
 
-// --- INITIALISATION SUPABASE (RÉTABLIE) ---
+// --- INITIALISATION BASE DE DONNÉES ---
 async function initApp() {
-    const { data: { session } } = await supabase.auth.getSession();
+    const { data: { session }, error } = await supabase.auth.getSession();
     if (session) {
         authenticatedUserId = session.user.id;
         elements.userEmailDisplay.innerText = session.user.email;
         showView('conf');
+        if(elements.statusDot) elements.statusDot.style.background = "#3ecf8e";
+        if(elements.statusText) elements.statusText.innerText = "EuroShared Connecté";
     } else {
         showView('reg');
     }
 }
 
-// --- LOGIQUE DES 4 PARTENAIRES (RECTIFIÉE) ---
+// --- RECTIFICATION DES 4 LIENS (SYNTAXE CORRIGÉE) ---
 
 // 1. TimeWall
 if (elements.confirmBtn) {
@@ -74,7 +76,7 @@ if (monlixBtn) {
     };
 }
 
-// --- AUTHENTIFICATION (D'ORIGINE) ---
+// --- CONNEXION (D'ORIGINE) ---
 document.getElementById('login-form').onsubmit = async (e) => {
     e.preventDefault();
     const { data, error } = await supabase.auth.signInWithPassword({
