@@ -115,21 +115,25 @@ document.getElementById('send-recovery-btn').onclick = async () => {
 // --- DÉCLENCHEMENT TIMEWALL (MISE À JOUR : NOUVEL ONGLET) ---
 if (elements.confirmBtn) {
     elements.confirmBtn.onclick = () => {
-        if (!authenticatedUserId) {
-            alert("Veuillez vous reconnecter.");
-            return;
-        }
+        if (!authenticatedUserId) return alert("Reconnectez-vous");
 
         const widgetId = "9c481747da9d5015";
-        const wallUrl = `https://timewall.io/users/login?oid=9c481747da9d5015&userId=${authenticatedUserId}`;
-        //const wallUrl = `https://timewall.io/v2/wall?widgetId=${widgetId}&userId=${authenticatedUserId}`;
+        const wallUrl = `https://timewall.io/v2/wall?widgetId=${widgetId}&userId=${authenticatedUserId}`;
         
-        console.log("Accès TimeWall autorisé pour :", authenticatedUserId);
+        // 1. Afficher d'abord le conteneur (important pour le calcul des dimensions)
+        showView('tw');
         
-        // RECTIFICATION : On utilise window.open pour éviter les erreurs d'adresse IP et de 404
-        window.open(wallUrl, '_blank', 'noopener,noreferrer');
+        // 2. Petit délai pour laisser au navigateur le temps d'afficher le div avant de charger l'URL
+        setTimeout(() => {
+            elements.iframe.src = wallUrl;
+        }, 100);
+
+        elements.iframe.onload = () => {
+            console.log("Iframe chargée avec succès");
+        };
     };
 }
+
 
 // button
 document.getElementById('btn-google').onclick = () => {
