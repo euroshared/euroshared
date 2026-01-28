@@ -1,12 +1,12 @@
 :root {
-    --primary-color: #3ecf8e;
+    --primary-color: #3ecf8e; /* Vert Supabase */
     --secondary-color: #2e3c42;
     --bg-color: #f4f7f9;
     --white: #ffffff;
     --error-color: #e74c3c;
 }
 
-/* --- BASE --- */
+/* --- RESET & BASE --- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { 
     font-family: 'Segoe UI', sans-serif; 
@@ -17,7 +17,7 @@ body {
     min-height: 100vh; 
 }
 
-/* --- STATUT --- */
+/* --- INDICATEUR DE STATUT --- */
 .status-area { 
     position: fixed; 
     top: 15px; 
@@ -38,7 +38,7 @@ body {
     box-shadow: 0 0 8px var(--primary-color); 
 }
 
-/* --- CONTAINERS AUTH --- */
+/* --- FORMULAIRES (CONTAINERS) --- */
 .container { 
     background: white; 
     padding: 40px; 
@@ -50,78 +50,9 @@ body {
     box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
 }
 
-/* --- INTERFACE TIMEWALL (AMÉLIORÉ) --- */
-.full-container { 
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%; 
-    height: 100vh; 
-    display: none; /* Piloté par JS */
-    flex-direction: column; 
-    background: var(--white);
-    z-index: 2000;
-}
+h1 { color: var(--secondary-color); margin-bottom: 10px; }
+.subtitle { color: #666; margin-bottom: 25px; font-size: 14px; }
 
-.nav-bar { 
-    background: var(--secondary-color); 
-    color: white; 
-    padding: 15px 25px; 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    flex-shrink: 0;
-}
-.logo { font-weight: bold; color: var(--primary-color); font-size: 1.2rem; }
-
-/* --- GESTION IFRAME & LOADER --- */
-.iframe-wrapper { 
-    position: relative; 
-    flex-grow: 1; 
-    width: 100%; 
-    height: 100%;
-    background: #fff; 
-}
-
-#timewall-iframe { 
-    width: 100%; 
-    height: 100%; 
-    border: none; 
-    opacity: 0; /* Caché pendant le chargement */
-    transition: opacity 0.4s ease-in-out;
-}
-
-.loader-overlay { 
-    position: absolute; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%; 
-    background: white; 
-    display: flex; 
-    flex-direction: column; 
-    justify-content: center; 
-    align-items: center; 
-    z-index: 100; 
-}
-
-.spinner { 
-    width: 45px; 
-    height: 45px; 
-    border: 4px solid #f3f3f3; 
-    border-top: 4px solid var(--primary-color); 
-    border-radius: 50%; 
-    animation: spin 1s linear infinite; 
-    margin-bottom: 15px; 
-}
-
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-/* État quand chargé */
-.iframe-loaded #timewall-iframe { opacity: 1; }
-.iframe-loaded .loader-overlay { display: none; }
-
-/* --- FORMULAIRES & BOUTONS --- */
 input { 
     width: 100%; 
     padding: 12px; 
@@ -130,6 +61,8 @@ input {
     border-radius: 6px; 
     font-size: 16px; 
 }
+
+/* --- WRAPPER MOT DE PASSE & ŒIL --- */
 .password-wrapper { position: relative; width: 100%; }
 .toggle-password { 
     position: absolute; 
@@ -138,8 +71,10 @@ input {
     cursor: pointer; 
     color: #888; 
     font-size: 18px; 
+    user-select: none;
 }
 
+/* --- BOUTONS --- */
 .btn-primary { 
     width: 100%; 
     padding: 14px; 
@@ -168,5 +103,75 @@ input {
     color: white;
 }
 
+/* --- INTERFACE TIMEWALL (FULLSCREEN) --- */
+.full-container { 
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%; 
+    height: 100vh; 
+    display: none; 
+    flex-direction: column; 
+    background: var(--white);
+    z-index: 2000;
+}
+
+.nav-bar { 
+    background: var(--secondary-color); 
+    color: white; 
+    padding: 15px 25px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+}
+.logo { font-weight: bold; color: var(--primary-color); font-size: 1.2rem; }
+
+.iframe-wrapper { 
+    position: relative; 
+    flex-grow: 1; 
+    width: 100%; 
+    height: 100%;
+}
+
+#timewall-iframe { 
+    width: 100%; 
+    height: 100%; 
+    border: none; 
+    opacity: 0; 
+    transition: opacity 0.5s ease;
+}
+
+/* --- LOADER --- */
+.loader-overlay { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: white; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    z-index: 100; 
+}
+
+.spinner { 
+    width: 45px; 
+    height: 45px; 
+    border: 4px solid #f3f3f3; 
+    border-top: 4px solid var(--primary-color); 
+    border-radius: 50%; 
+    animation: spin 1s linear infinite; 
+    margin-bottom: 15px; 
+}
+
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* État d'affichage après chargement */
+.iframe-loaded #timewall-iframe { opacity: 1; }
+.iframe-loaded .loader-overlay { display: none; }
+
+/* --- TEXTES DE NAVIGATION --- */
 .switch-text { margin-top: 20px; font-size: 13px; color: #666; }
 .switch-text a { color: var(--primary-color); text-decoration: none; font-weight: bold; }
