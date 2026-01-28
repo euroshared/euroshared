@@ -8,7 +8,6 @@
 </head>
 <body>
 
-    <!-- Statut de connexion -->
     <div id="db-status" class="status-area">
         <span class="dot" id="status-dot"></span> 
         <span id="status-text">Vérification...</span>
@@ -54,7 +53,7 @@
         <p class="switch-text"><a href="#" id="back-to-login">Retour à la connexion</a></p>
     </div>
 
-    <!-- 4. Nouveau Mot de Passe -->
+    <!-- 4. Nouveau Mot de Passe (Après clic email) -->
     <div id="new-password-container" class="container" style="display: none;">
         <h1>Nouveau mot de passe</h1>
         <div class="password-wrapper">
@@ -64,36 +63,26 @@
         <button id="save-new-password-btn" class="btn-primary">Enregistrer</button>
     </div>
 
-    <!-- 5. Confirmation / Dashboard -->
+    <!-- 5. Dashboard -->
     <div id="confirmation-step" class="container" style="display: none;">
         <h1>Session validée</h1>
         <p class="subtitle">Connecté : <strong id="user-email-display">...</strong></p>
         <button id="confirm-access-btn" class="btn-primary">Lancer TimeWall</button>
-        
-        <!-- Bouton Google -->
         <button id="btn-google" class="btn-primary" style="margin-top: 10px; background: #4285F4;">🌐 Visiter Google</button>
-        
         <p class="switch-text"><a href="#" id="cancel-auth">Se déconnecter</a></p>
     </div>
 
-    <!-- 6. Interface TimeWall (Adaptée pour la sécurité de l'iframe) -->
+    <!-- 6. Interface TimeWall -->
     <div id="timewall-container" class="full-container" style="display: none;">
         <header class="nav-bar">
             <div class="logo">EuroShared</div>
-            <!-- Ajout d'un bouton retour pour ne pas rester bloqué dans l'iframe -->
-            <button id="back-to-dashboard" class="btn-outline" style="margin-right: 10px; border-color: var(--primary-color); color: var(--primary-color);">Retour</button>
-            <button id="logout-button" class="btn-outline">Déconnexion</button>
+            <div>
+                <button id="back-to-dash" class="btn-outline" style="margin-right:10px; color:white; border-color:white;">Retour</button>
+                <button id="logout-button" class="btn-outline">Déconnexion</button>
+            </div>
         </header>
         <div class="iframe-wrapper">
-            <!-- Ajout des permissions allow et sandbox pour éviter les erreurs de chargement -->
-            <iframe 
-                id="timewall-iframe" 
-                frameborder="0" 
-                allowfullscreen 
-                allow="camera; microphone; clipboard-write"
-                sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
-                referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
+            <iframe id="timewall-iframe" frameborder="0" allow="camera; microphone; clipboard-write" sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
         </div>
     </div>
 
