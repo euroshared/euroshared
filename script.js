@@ -74,29 +74,41 @@ if (elements.confirmBtn) {
         const widgetId = "9c481747da9d5015";
         
         // RECTIFICATION FINALE : 
-        // 1. On utilise 'userId' (norme V2) au lieu de 'uid'.
-        // 2. On s'assure que widgetId est passé correctement.
-        const wallUrl = `https://timewall.io/v2/wall?widgetId=${widgetId}&userId=${authenticatedUserId}`;
+// --- ACTIONS ---
+if (elements.confirmBtn) {
+    elements.confirmBtn.onclick = () => {
+        if (!authenticatedUserId) {
+            alert("Session expirée. Veuillez vous reconnecter.");
+            return;
+        }
+
+        const placementId = "9c481747da9d5015";
         
-        console.log("Chargement TimeWall pour :", authenticatedUserId);
+        // RECTIFICATION : ANCIENNE MÉTHODE (V1)
+        // On utilise /users/login avec 'oid' et 'uid'
+        const wallUrl = `https://timewall.io/user/login?=${placementId}&uid=${authenticatedUserId}`;
+        
+        
+        console.log("Lancement ancienne méthode pour :", authenticatedUserId);
         
         // Affichage de la vue
         showView('tw');
         
-        // Forcer le rechargement de l'iframe
+        // Injection sécurisée dans l'iframe
         setTimeout(() => {
-            elements.iframe.src = "about:blank"; // Reset
-            elements.iframe.src = wallUrl;       // Chargement réel
+            elements.iframe.src = "about:blank"; 
+            elements.iframe.src = wallUrl;
         }, 150);
     };
 }
 
-// Bouton Google (inchangé)
+// Bouton Google
 if (document.getElementById('btn-google')) {
     document.getElementById('btn-google').onclick = () => {
         window.open("https://www.google.com", '_blank');
     };
 }
+
 
 
 // --- AUTH ---
