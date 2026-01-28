@@ -104,4 +104,12 @@ document.querySelectorAll('.toggle-password').forEach(btn => {
     };
 });
 
+console.log("Tentative de connexion à Supabase...");
+supabase.auth.onAuthStateChange((event, session) => {
+  console.log("Événement Auth :", event);
+  if (session) console.log("Utilisateur connecté :", session.user.email);
+  else console.log("Aucune session active.");
+});
+
+
 document.addEventListener('DOMContentLoaded', initApp);
