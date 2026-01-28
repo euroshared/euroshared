@@ -1,6 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.8';
 
-// Configuration Supabase (Identifiants d'origine conservés)
 const supabaseUrl = "https://jexaklhwoiaufzshzlcg.supabase.co";
 const supabaseKey = "sb_publishable_BdPiVVAvGh1u8SZ-sHrtrg_Inesrirz"; 
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -21,7 +20,6 @@ const elements = {
 
 let authenticatedUserId = null;
 
-// --- GESTION DES VUES ---
 function showView(view) {
     const containers = [
         elements.regCont, elements.logCont, elements.twCont, 
@@ -37,16 +35,12 @@ function showView(view) {
     if (view === 'newpass') elements.newPassCont.style.display = 'block';
 }
 
-// --- INITIALISATION & CONNEXION À LA BASE ---
 async function initApp() {
     const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-    
     if (sessionError) {
-        console.error("Erreur de base de données:", sessionError.message);
         elements.statusText.innerText = "Erreur de connexion";
         return;
     }
-
     if (session) {
         authenticatedUserId = session.user.id;
         elements.userEmailDisplay.innerText = session.user.email;
@@ -68,32 +62,35 @@ function updateStatus(online) {
     }
 }
 
-// --- INSCRIPTION ---
-document.getElementById('register-form').onsubmit = async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const name = document.getElementById('name').value;
+// --- ACTIONS ---
+if (elements.confirmBtn) {
+    elements.confirmBtn.onclick = () => {
+        if (!authenticatedUserId) return alert("Reconnectez-vous");
 
-    const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: { data: { full_name: name } }
-    });
+        // RECTIFICATION : Utilisation de oid/uid pour forcer l'auto-login
+        const widgetId = "9c481747da9d5015";
+        const wallUrl = `https://timewall.io{widgetId}&uid=${authenticatedUserId}`;
+        
+        showView('tw');
+        
+        setTimeout(() => {
+            // Nettoyage avant injection
+            elements.iframe.src = "about:blank";
+            elements.iframe.src = wallUrl;
+        }, 150);
+    };
+}
 
-    if (error) alert("Erreur d'inscription: " + error.message);
-    else alert("✅ Inscription réussie ! Vérifiez votre email pour confirmer.");
-};
+document.getElementById('btn-google').onclick = () => window.open("https://www.google.com", '_blank');
 
-// --- CONNEXION ---
+// --- AUTH ---
 document.getElementById('login-form').onsubmit = async (e) => {
     e.preventDefault();
-    const email = document.getElementById('email-login').value;
-    const password = document.getElementById('password-login').value;
-
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
-    if (error) alert("Erreur: " + error.message);
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email: document.getElementById('email-login').value,
+        password: document.getElementById('password-login').value
+    });
+    if (error) alert(error.message);
     else if (data.user) {
         authenticatedUserId = data.user.id;
         elements.userEmailDisplay.innerText = data.user.email;
@@ -102,49 +99,20 @@ document.getElementById('login-form').onsubmit = async (e) => {
     }
 };
 
-// --- MOT DE PASSE OUBLIÉ ---
-document.getElementById('send-recovery-btn').onclick = async () => {
-    const email = document.getElementById('email-recovery-confirm').value;
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin + window.location.pathname
+document.getElementById('register-form').onsubmit = async (e) => {
+    e.preventDefault();
+    const { error } = await supabase.auth.signUp({
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value,
+        options: { data: { full_name: document.getElementById('name').value } }
     });
     if (error) alert(error.message);
-    else alert("✅ Email de récupération envoyé !");
+    else alert("✅ Inscription réussie !");
 };
 
-// --- DÉCLENCHEMENT TIMEWALL (MISE À JOUR : NOUVEL ONGLET) ---
-if (elements.confirmBtn) {
-    elements.confirmBtn.onclick = () => {
-        if (!authenticatedUserId) return alert("Reconnectez-vous");
-
-        const widgetId = "9c481747da9d5015";
-        const wallUrl = `https://timewall.io/v2/wall?widgetId=${widgetId}&userId=${authenticatedUserId}`;
-        
-        // 1. Afficher d'abord le conteneur (important pour le calcul des dimensions)
-        showView('tw');
-        
-        // 2. Petit délai pour laisser au navigateur le temps d'afficher le div avant de charger l'URL
-        setTimeout(() => {
-            elements.iframe.src = wallUrl;
-        }, 100);
-
-        elements.iframe.onload = () => {
-            console.log("Iframe chargée avec succès");
-        };
-    };
-}
-
-
-// button
-document.getElementById('btn-google').onclick = () => {
-    window.open("https://www.google.com", '_blank');
-};
-
-
-// --- NAVIGATION & DÉCONNEXION ---
+// --- NAV ---
 document.getElementById('to-login').onclick = (e) => { e.preventDefault(); showView('log'); };
 document.getElementById('to-register').onclick = (e) => { e.preventDefault(); showView('reg'); };
-document.getElementById('forgot-password').onclick = (e) => { e.preventDefault(); showView('forgot'); };
 document.getElementById('back-to-login').onclick = (e) => { e.preventDefault(); showView('log'); };
 
 const logout = async () => {
@@ -154,7 +122,6 @@ const logout = async () => {
 document.getElementById('logout-button').onclick = logout;
 document.getElementById('cancel-auth').onclick = logout;
 
-// Gestion de l'œil mot de passe
 document.querySelectorAll('.toggle-password').forEach(btn => {
     btn.onclick = function() {
         const input = document.getElementById(this.getAttribute('data-target'));
