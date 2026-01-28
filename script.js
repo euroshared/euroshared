@@ -46,7 +46,7 @@ if (elements.confirmBtn) {
 
         const widgetId = "9c481747da9d5015";
         // La variable est définie ici, elle ne peut plus être "undefined"
-        const wallUrl = `https://timewall.io{widgetId}&userId=${authenticatedUserId}`;
+        const wallUrl = `https://timewall.io/v2/wall?widgetId=${widgetId}&userId=${authenticatedUserId}`;
         
         console.log("Démarrage TimeWall pour ID :", authenticatedUserId);
         
