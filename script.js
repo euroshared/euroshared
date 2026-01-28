@@ -11,7 +11,6 @@ const elements = {
     confStep: document.getElementById('confirmation-step'),
     forgotCont: document.getElementById('forgot-password-container'),
     newPassCont: document.getElementById('new-password-container'),
-    iframe: document.getElementById('timewall-iframe'),
     userEmailDisplay: document.getElementById('user-email-display'),
     statusText: document.getElementById('status-text'),
     statusDot: document.getElementById('status-dot'),
@@ -36,34 +35,25 @@ function showView(view) {
     if (view === 'newpass') elements.newPassCont.style.display = 'block';
 }
 
-// --- BOUTON : LANCER TIMEWALL ---
+// --- BOUTON : LANCER TIMEWALL (NOUVEL ONGLET) ---
 if (elements.confirmBtn) {
     elements.confirmBtn.onclick = () => {
         if (!authenticatedUserId) {
-            alert("Erreur : Session utilisateur introuvable.");
+            alert("Erreur : Session utilisateur introuvable. Veuillez vous reconnecter.");
             return;
         }
 
         const widgetId = "9c481747da9d5015";
-        // Utilisation du endpoint correct /v2/wall
-        const wallUrl = `https://timewall.io/v2/wall?widgetId=${widgetId}&userId=${authenticatedUserId}`;
+        const wallUrl = `https://timewall.io{widgetId}&userId=${authenticatedUserId}`;
         
-        console.log("Démarrage TimeWall pour ID :", authenticatedUserId);
+        console.log("Ouverture de TimeWall dans un nouvel onglet...");
         
-        // 1. On affiche d'abord le conteneur
-        showView('tw');
-        elements.twCont.classList.remove('iframe-loaded');
-
-        // 2. On injecte l'URL après
-        elements.iframe.src = wallUrl;
-        
-        elements.iframe.onload = () => {
-            elements.twCont.classList.add('iframe-loaded');
-        };
+        // Ouvre TimeWall proprement dans un nouvel onglet
+        window.open(wallUrl, '_blank', 'noopener,noreferrer');
     };
 }
 
-// --- LOGIQUE SUPABASE (SANS CHANGEMENT) ---
+// --- LOGIQUE SUPABASE ---
 document.getElementById('login-form').onsubmit = async (e) => {
     e.preventDefault();
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -109,19 +99,10 @@ document.getElementById('to-register').onclick = (e) => { e.preventDefault(); sh
 document.getElementById('forgot-password').onclick = (e) => { e.preventDefault(); showView('forgot'); };
 document.getElementById('back-to-login').onclick = (e) => { e.preventDefault(); showView('log'); };
 
-document.querySelectorAll('.toggle-password').forEach(btn => {
-    btn.onclick = function() {
-        const input = document.getElementById(this.getAttribute('data-target'));
-        input.type = input.type === "password" ? "text" : "password";
-        this.innerText = input.type === "password" ? "👁️" : "🙈";
-    };
-});
-
 const logout = async () => {
     await supabase.auth.signOut();
     window.location.reload();
 };
-document.getElementById('logout-button').onclick = logout;
 document.getElementById('cancel-auth').onclick = logout;
 
 document.addEventListener('DOMContentLoaded', initApp);
