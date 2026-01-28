@@ -70,20 +70,30 @@
         <p class="subtitle">Connecté : <strong id="user-email-display">...</strong></p>
         <button id="confirm-access-btn" class="btn-primary">Lancer TimeWall</button>
         
-         <!-- Nouveau bouton pour un autre partenaire (ex: Lootably ou autre) -->
-   <button id="btn-google" class="btn-primary" style="margin-top: 10px; background: #4285F4;">🌐 Visiter Google</button>
+        <!-- Bouton Google -->
+        <button id="btn-google" class="btn-primary" style="margin-top: 10px; background: #4285F4;">🌐 Visiter Google</button>
         
         <p class="switch-text"><a href="#" id="cancel-auth">Se déconnecter</a></p>
     </div>
 
-    <!-- 6. Interface TimeWall (Gardée pour compatibilité ID) -->
+    <!-- 6. Interface TimeWall (Adaptée pour la sécurité de l'iframe) -->
     <div id="timewall-container" class="full-container" style="display: none;">
         <header class="nav-bar">
             <div class="logo">EuroShared</div>
+            <!-- Ajout d'un bouton retour pour ne pas rester bloqué dans l'iframe -->
+            <button id="back-to-dashboard" class="btn-outline" style="margin-right: 10px; border-color: var(--primary-color); color: var(--primary-color);">Retour</button>
             <button id="logout-button" class="btn-outline">Déconnexion</button>
         </header>
         <div class="iframe-wrapper">
-            <iframe id="timewall-iframe" frameborder="0" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <!-- Ajout des permissions allow et sandbox pour éviter les erreurs de chargement -->
+            <iframe 
+                id="timewall-iframe" 
+                frameborder="0" 
+                allowfullscreen 
+                allow="camera; microphone; clipboard-write"
+                sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
         </div>
     </div>
 
