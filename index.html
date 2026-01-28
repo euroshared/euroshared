@@ -72,18 +72,13 @@
         <p class="switch-text"><a href="#" id="cancel-auth">Se déconnecter</a></p>
     </div>
 
-    <!-- 6. Interface TimeWall (Iframe restaurée) -->
+    <!-- 6. Interface TimeWall (Gardée pour compatibilité ID) -->
     <div id="timewall-container" class="full-container" style="display: none;">
         <header class="nav-bar">
             <div class="logo">EuroShared</div>
             <button id="logout-button" class="btn-outline">Déconnexion</button>
         </header>
         <div class="iframe-wrapper">
-            <div id="timewall-loader" class="loader-overlay">
-                <div class="spinner"></div>
-                <p>Chargement sécurisé de TimeWall...</p>
-            </div>
-            <!-- ATTRIBUT REFERRERPOLICY AJOUTÉ POUR ÉVITER LE 404 -->
             <iframe id="timewall-iframe" frameborder="0" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
     </div>
