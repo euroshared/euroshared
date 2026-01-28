@@ -1,6 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.8';
 
-import { createClient } from 'https://esm.sh';
+
 
 // CONFIGURATION BASE DE DONNÉES (STRICTEMENT D'ORIGINE)
 const supabaseUrl = "https://jexaklhwoiaufzshzlcg.supabase.co";
