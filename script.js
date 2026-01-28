@@ -1,5 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.8';
 
+// Configuration Supabase (Identifiants d'origine conservés)
 const supabaseUrl = "https://jexaklhwoiaufzshzlcg.supabase.co";
 const supabaseKey = "sb_publishable_BdPiVVAvGh1u8SZ-sHrtrg_Inesrirz"; 
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -11,6 +12,7 @@ const elements = {
     confStep: document.getElementById('confirmation-step'),
     forgotCont: document.getElementById('forgot-password-container'),
     newPassCont: document.getElementById('new-password-container'),
+    iframe: document.getElementById('timewall-iframe'),
     userEmailDisplay: document.getElementById('user-email-display'),
     statusText: document.getElementById('status-text'),
     statusDot: document.getElementById('status-dot'),
@@ -35,65 +37,104 @@ function showView(view) {
     if (view === 'newpass') elements.newPassCont.style.display = 'block';
 }
 
-// --- BOUTON : LANCER TIMEWALL (NOUVEL ONGLET) ---
+// --- INITIALISATION & CONNEXION À LA BASE ---
+async function initApp() {
+    // Vérifier si une session existe déjà
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+    
+    if (sessionError) {
+        console.error("Erreur de base de données:", sessionError.message);
+        elements.statusText.innerText = "Erreur de connexion";
+        return;
+    }
+
+    if (session) {
+        authenticatedUserId = session.user.id;
+        elements.userEmailDisplay.innerText = session.user.email;
+        showView('conf');
+        updateStatus(true);
+    } else {
+        showView('reg');
+        updateStatus(false);
+    }
+}
+
+function updateStatus(online) {
+    if (online) {
+        elements.statusDot.parentElement.classList.add('status-online');
+        elements.statusText.innerText = "EuroShared Connecté";
+    } else {
+        elements.statusDot.parentElement.classList.remove('status-online');
+        elements.statusText.innerText = "En attente de connexion";
+    }
+}
+
+// --- INSCRIPTION ---
+document.getElementById('register-form').onsubmit = async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const name = document.getElementById('name').value;
+
+    const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { full_name: name } }
+    });
+
+    if (error) alert("Erreur d'inscription: " + error.message);
+    else alert("✅ Inscription réussie ! Vérifiez votre email pour confirmer.");
+};
+
+// --- CONNEXION ---
+document.getElementById('login-form').onsubmit = async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email-login').value;
+    const password = document.getElementById('password-login').value;
+
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error) alert("Erreur: " + error.message);
+    else if (data.user) {
+        authenticatedUserId = data.user.id;
+        elements.userEmailDisplay.innerText = data.user.email;
+        showView('conf');
+        updateStatus(true);
+    }
+};
+
+// --- MOT DE PASSE OUBLIÉ ---
+document.getElementById('send-recovery-btn').onclick = async () => {
+    const email = document.getElementById('email-recovery-confirm').value;
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + window.location.pathname
+    });
+    if (error) alert(error.message);
+    else alert("✅ Email de récupération envoyé !");
+};
+
+// --- DÉCLENCHEMENT TIMEWALL ---
 if (elements.confirmBtn) {
     elements.confirmBtn.onclick = () => {
         if (!authenticatedUserId) {
-            alert("Erreur : Session utilisateur introuvable. Veuillez vous reconnecter.");
+            alert("Veuillez vous reconnecter.");
             return;
         }
 
         const widgetId = "9c481747da9d5015";
         const wallUrl = `https://timewall.io{widgetId}&userId=${authenticatedUserId}`;
         
-        console.log("Ouverture de TimeWall dans un nouvel onglet...");
+        showView('tw');
+        elements.twCont.classList.remove('iframe-loaded');
+        elements.iframe.src = wallUrl;
         
-        // Ouvre TimeWall proprement dans un nouvel onglet
-        window.open(wallUrl, '_blank', 'noopener,noreferrer');
+        elements.iframe.onload = () => {
+            elements.twCont.classList.add('iframe-loaded');
+        };
     };
 }
 
-// --- LOGIQUE SUPABASE ---
-document.getElementById('login-form').onsubmit = async (e) => {
-    e.preventDefault();
-    const { data, error } = await supabase.auth.signInWithPassword({
-        email: document.getElementById('email-login').value,
-        password: document.getElementById('password-login').value
-    });
-    if (error) alert(error.message);
-    else if (data.user) {
-        authenticatedUserId = data.user.id;
-        elements.userEmailDisplay.innerText = data.user.email;
-        showView('conf');
-    }
-};
-
-document.getElementById('register-form').onsubmit = async (e) => {
-    e.preventDefault();
-    const { data, error } = await supabase.auth.signUp({
-        email: document.getElementById('email').value,
-        password: document.getElementById('password').value,
-        options: { data: { full_name: document.getElementById('name').value } }
-    });
-    if (error) alert(error.message);
-    else alert("✅ Inscription réussie !");
-};
-
-// --- INITIALISATION ---
-async function initApp() {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session) {
-        authenticatedUserId = session.user.id;
-        elements.userEmailDisplay.innerText = session.user.email;
-        showView('conf');
-    } else {
-        showView('reg');
-    }
-    elements.statusDot.parentElement.classList.add('status-online');
-    elements.statusText.innerText = "EuroShared Connecté";
-}
-
-// --- NAVIGATION ---
+// --- NAVIGATION & DÉCONNEXION ---
 document.getElementById('to-login').onclick = (e) => { e.preventDefault(); showView('log'); };
 document.getElementById('to-register').onclick = (e) => { e.preventDefault(); showView('reg'); };
 document.getElementById('forgot-password').onclick = (e) => { e.preventDefault(); showView('forgot'); };
@@ -103,6 +144,16 @@ const logout = async () => {
     await supabase.auth.signOut();
     window.location.reload();
 };
+document.getElementById('logout-button').onclick = logout;
 document.getElementById('cancel-auth').onclick = logout;
+
+// Gestion de l'œil mot de passe
+document.querySelectorAll('.toggle-password').forEach(btn => {
+    btn.onclick = function() {
+        const input = document.getElementById(this.getAttribute('data-target'));
+        input.type = input.type === "password" ? "text" : "password";
+        this.innerText = input.type === "password" ? "👁️" : "🙈";
+    };
+});
 
 document.addEventListener('DOMContentLoaded', initApp);
