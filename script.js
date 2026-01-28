@@ -85,9 +85,19 @@ if (elements.confirmBtn) {
         const placementId = "9c481747da9d5015";
         
         // RECTIFICATION : ANCIENNE MÉTHODE (V1)
-        // On utilise /users/login avec 'oid' et 'uid'
-        const wallUrl = `https://timewall.io/user/login?=${placementId}&uid=${authenticatedUserId}`;
+// --- ACTIONS ---
+if (elements.confirmBtn) {
+    elements.confirmBtn.onclick = () => {
+        if (!authenticatedUserId) {
+            alert("Session expirée. Veuillez vous reconnecter.");
+            return;
+        }
+
+        const placementId = "9c481747da9d5015";
         
+        // RECTIFICATION : ANCIENNE MÉTHODE (V1)
+        // On utilise /users/login avec 'oid' et 'uid'
+        const wallUrl = `https://timewall.io{placementId}&uid=${authenticatedUserId}`;
         
         console.log("Lancement ancienne méthode pour :", authenticatedUserId);
         
@@ -108,6 +118,7 @@ if (document.getElementById('btn-google')) {
         window.open("https://www.google.com", '_blank');
     };
 }
+
 
 
 
