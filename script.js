@@ -136,6 +136,46 @@ document.getElementById('back-to-dash').onclick = () => showView('conf');
 document.getElementById('cancel-auth').onclick = async () => { await supabase.auth.signOut(); location.reload(); };
 document.getElementById('logout-button').onclick = async () => { await supabase.auth.signOut(); location.reload(); };
 
+
+
+/**
+ * Vérifie la connexion à Supabase indépendamment du reste de l'application
+ */
+async function verifySupabaseConnection() {
+    const statusText = document.getElementById('status-text');
+    const statusDot = document.getElementById('db-status');
+
+    try {
+        // Tentative de récupération de la version du serveur (test réseau minimal)
+        const { data, error } = await supabase.from('_test_connection').select('*').limit(1).maybeSingle();
+        
+        // Note: Même si la table n'existe pas (erreur 404), si Supabase répond, 
+        // c'est que la connexion au projet est établie.
+        if (error && error.code === 'PGRST301') { 
+             // Erreur de table manquante, mais le serveur a répondu !
+             console.log("Connecté à l'API Supabase");
+        }
+
+        // Mise à jour visuelle
+        statusDot.style.backgroundColor = "#4ade80"; // Vert
+        statusDot.style.boxShadow = "0 0 10px #4ade80";
+        statusText.innerText = "EuroShared Connecté";
+        statusText.style.color = "#4ade80";
+
+    } catch (err) {
+        // En cas d'échec total (pas d'internet, URL Supabase invalide, etc.)
+        statusDot.style.backgroundColor = "#f87171"; // Rouge
+        statusDot.style.boxShadow = "0 0 10px #f87171";
+        statusText.innerText = "Erreur de connexion base de données";
+        statusText.style.color = "#f87171";
+        console.error("Diagnostic Supabase échoué:", err);
+    }
+}
+
+// Lancement automatique au chargement
+document.addEventListener('DOMContentLoaded', verifySupabaseConnection);
+
+
 document.addEventListener('DOMContentLoaded', initApp);
 
 
