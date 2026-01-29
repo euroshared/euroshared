@@ -51,23 +51,11 @@ async function initApp() {
 // Actions
 document.getElementById('register-form').onsubmit = async (e) => {
     e.preventDefault();
-    
-    // Remplace par ton URL réelle GitHub Pages
-    const siteUrl = "https://euroshared.github.io/euroshared/"; 
-
     const { error } = await supabase.auth.signUp({
         email: document.getElementById('email').value,
-        password: document.getElementById('password').value,
-        options: {
-            emailRedirectTo: siteUrl, // FORCE LA REDIRECTION ICI
-        }
+        password: document.getElementById('password').value
     });
-
-    if (error) {
-        alert(error.message);
-    } else {
-        alert("Vérifiez vos emails pour confirmer votre compte !");
-    }
+    if (error) alert(error.message); else alert("Vérifiez vos emails !");
 };
 
 document.getElementById('login-form').onsubmit = async (e) => {
@@ -135,28 +123,6 @@ document.getElementById('back-to-login').onclick = () => showView('log');
 document.getElementById('back-to-dash').onclick = () => showView('conf');
 document.getElementById('cancel-auth').onclick = async () => { await supabase.auth.signOut(); location.reload(); };
 document.getElementById('logout-button').onclick = async () => { await supabase.auth.signOut(); location.reload(); };
-
-
-
-/**
- * Vérifie la connexion à Supabase indépendamment du reste de l'application
- */
-async function verifySupabaseConnection() {
-    const statusText = document.getElementById('status-text');
-    const statusDot = document.getElementById('db-status');
-
-    try {
-        // Tentative de récupération de la version du serveur (test réseau minimal)
-        const { data, error } = await supabase.from('_test_connection').select('*').limit(1).maybeSingle();
-        
-        // Note: Même si la table n'existe pas (erreur 404), si Supabase répond, 
-        // c'est que la connexion au projet est établie.
-        if (error && error.code === 'PGRST301') { 
-             // Erreur de table manquante, mais le serveur a répondu !
-             console.log("Connecté à l'API Supabase");
-        }
-
-
 
 document.addEventListener('DOMContentLoaded', initApp);
 
