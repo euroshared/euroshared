@@ -25,6 +25,7 @@ let authenticatedUserId = null;
 // 2. TA MÉTHODE : CONFIGURATION DYNAMIQUE DES OFFRES
 const wallConfigs = {
     timewall: (uid) => `https://timewall.io{uid}&tab=tasks`,
+    timewall: (uid) =>  `https://timewall.io/users/login?oid=9c481747da9d5015&uid=${uid}&tab=tasks`;
     monlix: (uid) => `https://offers.monlix.com{uid}`,
     lootably: (uid) => `https://wall.lootably.com{uid}`
 };
