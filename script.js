@@ -80,6 +80,25 @@ document.getElementById('confirm-access-btn').onclick = () => {
     showView('tw');
 };
 
+// espace activation de visualiser mot de passe
+document.querySelectorAll('.toggle-password').forEach(btn => {
+    btn.addEventListener('click', function() {
+        // On récupère l'ID de l'input cible via l'attribut data-target
+        const targetId = this.getAttribute('data-target');
+        const input = document.getElementById(targetId);
+        
+        // On bascule entre le type 'password' et 'text'
+        if (input.type === "password") {
+            input.type = "text";
+            this.textContent = "🙈"; // Optionnel : change l'icône
+        } else {
+            input.type = "password";
+            this.textContent = "👁️";
+        }
+    });
+});
+
+
 // Navigation
 document.getElementById('to-login').onclick = () => showView('log');
 document.getElementById('to-register').onclick = () => showView('reg');
