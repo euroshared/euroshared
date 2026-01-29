@@ -8,82 +8,91 @@
 </head>
 <body>
 
-    <div id="db-status" class="status-area">
-        <span class="dot" id="status-dot"></span> 
-        <span id="status-text">Vérification...</span>
+    <!-- ZONE STATUT (Double confirmation maintenue) -->
+    <div class="status-area">
+        <div id="db-status"> <!-- TON ID ORIGINAL -->
+            <span class="dot" id="status-dot"></span> 
+            <span id="status-text">Vérification...</span>
+        </div>
+        <div style="margin-top: 4px; font-size: 0.8em;">
+            <span class="dot" id="server-dot" style="background: gray;"></span>
+            <span id="status-server">Liaison serveur...</span> <!-- AJOUT POUR LE JS -->
+        </div>
     </div>
 
-    <!-- 1. Inscription -->
+    <!-- 1. INSCRIPTION -->
     <div id="register-container" class="container">
         <h1>Inscription</h1>
         <p class="subtitle">Rejoignez EuroShared pour gagner</p>
-        <form id="register-form">
+        <form id="register-form"> <!-- TON ID ORIGINAL -->
             <input type="text" id="name" placeholder="Nom complet" required>
             <input type="email" id="email" placeholder="Email" required>
             <div class="password-wrapper">
                 <input type="password" id="password" placeholder="Mot de passe" required minlength="6">
-                <span class="toggle-password" data-target="password">👁️</span>
+                <span class="toggle-password" data-target="password">👁️</span> <!-- TON ID ORIGINAL -->
             </div>
             <button type="submit" class="btn-primary">S'inscrire</button>
         </form>
-        <p class="switch-text">Déjà membre ? <a href="#" id="to-login">Se connecter</a></p>
+        <p class="switch-text">Déjà membre ? <a href="#" id="to-login">Se connecter</a></p> <!-- TON ID ORIGINAL -->
     </div>
 
-     <button id="btn-google" class="btn-primary" style="margin-top: 10px; background: #4285F4;">🌐 Visiter Google</button>
+    <!-- BOUTON GOOGLE (Placé exactement comme ton code) -->
+    <button id="btn-google" class="btn-primary" style="margin-top: 10px; background: #4285F4;">🌐 Visiter Google</button> <!-- TON ID ORIGINAL -->
 
-    <!-- 2. Connexion -->
+    <!-- 2. CONNEXION -->
     <div id="login-container" class="container" style="display: none;">
         <h1>Connexion</h1>
-        <form id="login-form">
+        <form id="login-form"> <!-- TON ID ORIGINAL -->
             <input type="email" id="email-login" placeholder="Votre Email" required>
             <div class="password-wrapper">
                 <input type="password" id="password-login" placeholder="Mot de passe" required>
-                <span class="toggle-password" data-target="password-login">👁️</span>
+                <span class="toggle-password" data-target="password-login">👁️</span> <!-- TON ID ORIGINAL -->
             </div>
             <button type="submit" class="btn-primary">Accéder aux offres</button>
         </form>
-        <p class="switch-text"><a href="#" id="forgot-password">Mot de passe oublié ?</a></p>
-        <p class="switch-text">Nouveau ? <a href="#" id="to-register">Créer un compte</a></p>
+        <p class="switch-text"><a href="#" id="forgot-password">Mot de passe oublié ?</a></p> <!-- TON ID ORIGINAL -->
+        <p class="switch-text">Nouveau ? <a href="#" id="to-register">Créer un compte</a></p> <!-- TON ID ORIGINAL -->
     </div>
 
-    <!-- 3. Récupération Email -->
+    <!-- 3. RÉCUPÉRATION EMAIL -->
     <div id="forgot-password-container" class="container" style="display: none;">
         <h1>Récupération</h1>
         <p class="subtitle">Saisissez votre e-mail pour recevoir un lien.</p>
-        <input type="email" id="email-recovery-confirm" placeholder="Confirmez votre e-mail" required>
-        <button id="send-recovery-btn" class="btn-primary">Envoyer le lien</button>
-        <p class="switch-text"><a href="#" id="back-to-login">Retour à la connexion</a></p>
+        <input type="email" id="email-recovery-confirm" placeholder="Confirmez votre e-mail" required> <!-- TON ID ORIGINAL -->
+        <button id="send-recovery-btn" class="btn-primary">Envoyer le lien</button> <!-- TON ID ORIGINAL -->
+        <p class="switch-text"><a href="#" id="back-to-login">Retour à la connexion</a></p> <!-- TON ID ORIGINAL -->
     </div>
 
-    <!-- 4. Nouveau Mot de Passe (Après clic email) -->
-    <div id="new-password-container" class="container" style="display: none;">
-        <h1>Nouveau mot de passe</h1>
-        <div class="password-wrapper">
-            <input type="password" id="new-password-input" placeholder="Nouveau mot de passe" required minlength="6">
-            <span class="toggle-password" data-target="new-password-input">👁️</span>
-        </div>
-        <button id="save-new-password-btn" class="btn-primary">Enregistrer</button>
-    </div>
-
-    <!-- 5. Dashboard -->
+    <!-- 5. DASHBOARD (Adapté pour afficher le travail) -->
     <div id="confirmation-step" class="container" style="display: none;">
         <h1>Session validée</h1>
-        <p class="subtitle">Connecté : <strong id="user-email-display">...</strong></p>
-        <button id="confirm-access-btn" class="btn-primary">Lancer TimeWall</button>
-        <p class="switch-text"><a href="#" id="cancel-auth">Se déconnecter</a></p>
+        <p class="subtitle">Connecté : <strong id="user-email-display">...</strong></p> <!-- TON ID ORIGINAL -->
+        
+        <!-- AFFICHAGE DU SOLDE (Indispensable pour le JS) -->
+        <div style="margin: 10px 0; font-weight: bold; color: #007bff;">
+            Solde : <span id="user-balance">0.00 pts</span>
+        </div>
+
+        <!-- ZONE DE TRAVAIL (Boutons multi-murs) -->
+        <div class="work-selection">
+            <button id="confirm-access-btn" class="ow-btn btn-primary" data-name="timewall">Lancer TimeWall</button> <!-- TON ID ORIGINAL + CLASS ow-btn -->
+            <button class="ow-btn btn-primary" data-name="monlix" style="margin-top:5px; background:#6366f1;">Lancer Monlix</button>
+        </div>
+
+        <p class="switch-text"><a href="#" id="cancel-auth">Se déconnecter</a></p> <!-- TON ID ORIGINAL -->
     </div>
 
-    <!-- 6. Interface TimeWall -->
+    <!-- 6. INTERFACE DE TRAVAIL (IFRAME) -->
     <div id="timewall-container" class="full-container" style="display: none;">
         <header class="nav-bar">
             <div class="logo">EuroShared</div>
             <div>
-                <button id="back-to-dash" class="btn-outline" style="margin-right:10px; color:white; border-color:white;">Retour</button>
-                <button id="logout-button" class="btn-outline">Déconnexion</button>
+                <button id="back-to-dash" class="btn-outline" style="margin-right:10px;">Retour</button> <!-- TON ID ORIGINAL -->
+                <button id="logout-button" class="btn-outline">Déconnexion</button> <!-- TON ID ORIGINAL -->
             </div>
         </header>
         <div class="iframe-wrapper">
-            <iframe id="timewall-iframe" frameborder="0" allow="camera; microphone; clipboard-write" sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
+            <iframe id="timewall-iframe" frameborder="0" sandbox="allow-forms allow-scripts allow-same-origin allow-popups"></iframe> <!-- TON ID ORIGINAL -->
         </div>
     </div>
 
