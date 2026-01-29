@@ -141,3 +141,49 @@ document.addEventListener('DOMContentLoaded', initApp);
 
 
 
+
+/**
+ * Diagnostic Indépendant de la connexion Supabase
+ * Aucun conflit avec le reste du code
+ */
+const verifySupabaseHealth = async () => {
+    // Sélection locale des éléments pour éviter les conflits globaux
+    const dot = document.getElementById('checker-dot');
+    const label = document.getElementById('checker-label');
+
+    if (!dot || !label) return; // Sécurité si les éléments ne sont pas encore chargés
+
+    try {
+        // Test de connexion : on interroge l'API Supabase
+        // On utilise getSession qui est l'appel le plus rapide et fiable
+        const { data, error, status } = await supabase.auth.getSession();
+
+        // Si le statut HTTP est entre 200 et 299, le serveur répond
+        if (status >= 200 && status < 300) {
+            dot.classList.add('is-connected');
+            dot.classList.remove('is-disconnected');
+            label.innerText = "EuroShared Connecté";
+            label.style.color = "#00ff88";
+        } else {
+            throw new Error("Statut de réponse invalide");
+        }
+
+    } catch (err) {
+        console.error("Erreur Diagnostic Supabase:", err.message);
+        dot.classList.add('is-disconnected');
+        dot.classList.remove('is-connected');
+        label.innerText = "Connexion instable";
+        label.style.color = "#ff4444";
+    }
+};
+
+// Lancement une fois que le DOM est prêt
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', verifySupabaseHealth);
+} else {
+    verifySupabaseHealth();
+}
+
+
+
+
