@@ -2,6 +2,18 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.8';
 
 const supabase = createClient("https://jexaklhwoiaufzshzlcg.supabase.co", "sb_publishable_BdPiVVAvGh1u8SZ-sHrtrg_Inesrirz");
 
+//test
+const urlParams = new URLSearchParams(window.location.hash.replace('#', '?'));
+if (urlParams.has('error')) {
+    alert("Erreur d'authentification : " + urlParams.get('error_description'));
+    // Nettoie l'URL pour éviter de boucler sur l'erreur
+    window.location.hash = '';
+}
+//test
+
+
+
+
 const elements = {
     regCont: document.getElementById('register-container'),
     logCont: document.getElementById('login-container'),
