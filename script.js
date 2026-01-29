@@ -172,8 +172,6 @@ async function verifySupabaseConnection() {
     }
 }
 
-// Lancement automatique au chargement
-document.addEventListener('DOMContentLoaded', verifySupabaseConnection);
 
 
 document.addEventListener('DOMContentLoaded', initApp);
