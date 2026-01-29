@@ -48,15 +48,28 @@ async function initApp() {
     }
 }
 
-// Actions
+// Actions confirmation email
 document.getElementById('register-form').onsubmit = async (e) => {
     e.preventDefault();
+    
+    // Remplace par ton URL réelle GitHub Pages
+    const siteUrl = "https://ton-pseudo.github.io"; 
+
     const { error } = await supabase.auth.signUp({
         email: document.getElementById('email').value,
-        password: document.getElementById('password').value
+        password: document.getElementById('password').value,
+        options: {
+            emailRedirectTo: siteUrl, // FORCE LA REDIRECTION ICI
+        }
     });
-    if (error) alert(error.message); else alert("Vérifiez vos emails !");
+
+    if (error) {
+        alert(error.message);
+    } else {
+        alert("Vérifiez vos emails pour confirmer votre compte !");
+    }
 };
+
 
 document.getElementById('login-form').onsubmit = async (e) => {
     e.preventDefault();
