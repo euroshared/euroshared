@@ -82,15 +82,38 @@ async function initApp() {
     }
 }
 
-// 6. CHARGEMENT DES GAINS DEPUIS SUPABASE
 async function loadUserGains() {
     if (!authenticatedUserId) return;
-    const { data: postbacks } = await supabase.from('timewall_postbacks').select('amount').eq('user_id', authenticatedUserId);
-    if (postbacks && elements.userBalance) {
-        const total = postbacks.reduce((sum, item) => sum + Number(item.amount), 0);
-        elements.userBalance.innerText = total.toFixed(2) + " pts";
+
+    // On récupère tous les gains de l'utilisateur, peu importe le partenaire
+    const { data: postbacks, error } = await supabase
+        .from('timewall_postbacks')
+        .select('amount, provider')
+        .eq('user_id', authenticatedUserId);
+
+    if (error) {
+        console.error("Erreur de récupération :", error.message);
+        return;
+    }
+
+    if (postbacks) {
+        // 1. Calcul du Solde Global (Addition de tout)
+        const totalGlobal = postbacks.reduce((sum, item) => sum + Number(item.amount), 0);
+        if(elements.userBalance) elements.userBalance.innerText = totalGlobal.toFixed(2) + " pts";
+
+        // 2. Calcul par partenaire (Optionnel : pour affichage détaillé)
+        const soldeTimeWall = postbacks
+            .filter(item => item.provider === 'timewall')
+            .reduce((sum, item) => sum + Number(item.amount), 0);
+
+        const soldeMonlix = postbacks
+            .filter(item => item.provider === 'monlix')
+            .reduce((sum, item) => sum + Number(item.amount), 0);
+
+        console.log(`Détails : TimeWall: ${soldeTimeWall} | Monlix: ${soldeMonlix}`);
     }
 }
+
 
 // 7. ACTIONS AUTHENTIFICATION (PRÉSERVÉES : INSCRIPTION / CONNEXION / RÉCUPÉRATION)
 document.getElementById('register-form').onsubmit = async (e) => {
