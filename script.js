@@ -53,7 +53,7 @@ document.getElementById('register-form').onsubmit = async (e) => {
     e.preventDefault();
     
     // Remplace par ton URL réelle GitHub Pages
-    const siteUrl = "https://ton-pseudo.github.io"; 
+    const siteUrl = "https://euroshared.github.io/euroshared/"; 
 
     const { error } = await supabase.auth.signUp({
         email: document.getElementById('email').value,
