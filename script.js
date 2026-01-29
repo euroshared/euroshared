@@ -81,14 +81,13 @@ async function initApp() {
         showView('reg');
     }
 }
-
+// --- CHARGEMENT DU SOLDE AVEC COMMISSION DE 20% (0.2$ pour 1$) ---
 async function loadUserGains() {
     if (!authenticatedUserId) return;
 
-    // On récupère tous les gains de l'utilisateur, peu importe le partenaire
     const { data: postbacks, error } = await supabase
         .from('timewall_postbacks')
-        .select('amount, provider')
+        .select('amount, provider, created_at')
         .eq('user_id', authenticatedUserId);
 
     if (error) {
@@ -97,22 +96,29 @@ async function loadUserGains() {
     }
 
     if (postbacks) {
-        // 1. Calcul du Solde Global (Addition de tout)
-        const totalGlobal = postbacks.reduce((sum, item) => sum + Number(item.amount), 0);
-        if(elements.userBalance) elements.userBalance.innerText = totalGlobal.toFixed(2) + " pts";
+        // CALCUL DU SOLDE NET (Ce que l'utilisateur voit après ta part de 20%)
+        const totalNet = postbacks.reduce((sum, item) => {
+            const montantBrut = Number(item.amount);
+            const partUtilisateur = montantBrut * 0.8; // On lui laisse 80%, tu gardes 20%
+            return sum + partUtilisateur;
+        }, 0);
 
-        // 2. Calcul par partenaire (Optionnel : pour affichage détaillé)
-        const soldeTimeWall = postbacks
-            .filter(item => item.provider === 'timewall')
-            .reduce((sum, item) => sum + Number(item.amount), 0);
+        // AFFICHAGE DANS TON HTML
+        if(elements.userBalance) {
+            elements.userBalance.innerText = totalNet.toFixed(2) + " $";
+        }
 
-        const soldeMonlix = postbacks
-            .filter(item => item.provider === 'monlix')
-            .reduce((sum, item) => sum + Number(item.amount), 0);
-
-        console.log(`Détails : TimeWall: ${soldeTimeWall} | Monlix: ${soldeMonlix}`);
+        // MISE À JOUR DE L'HISTORIQUE (Optionnel)
+        if(elements.gainsHistory) {
+            elements.gainsHistory.innerHTML = postbacks.slice(0, 5).map(g => `
+                <div class="gain-item">
+                    ✅ +${(Number(g.amount) * 0.8).toFixed(2)} $ [${g.provider}]
+                </div>
+            `).join('');
+        }
     }
 }
+
 
 
 // 7. ACTIONS AUTHENTIFICATION (PRÉSERVÉES : INSCRIPTION / CONNEXION / RÉCUPÉRATION)
