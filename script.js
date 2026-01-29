@@ -1,7 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.8';
 
-import { createClient } from 'https://esm.sh';
-
 // 1. CONFIGURATION & CONNEXION (Point de départ stable)
 const SUPABASE_URL = "https://jexaklhwoiaufzshzlcg.supabase.co";
 const SUPABASE_KEY = "sb_publishable_BdPiVVAvGh1u8SZ-sHrtrg_Inesrirz";
