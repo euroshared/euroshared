@@ -99,6 +99,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    const btnGoogle = document.getElementById('btn-google');
+
+    if (btnGoogle) {
+        btnGoogle.addEventListener('click', () => {
+            // Ouvre Google dans un nouvel onglet
+            window.open('https://www.google.com', '_blank');
+            
+            // OU pour ouvrir dans la même fenêtre, utilise :
+            // window.location.href = 'https://www.google.com';
+        });
+    }
+});
 
 
 
