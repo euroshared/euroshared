@@ -156,22 +156,6 @@ async function verifySupabaseConnection() {
              console.log("Connecté à l'API Supabase");
         }
 
-        // Mise à jour visuelle
-        statusDot.style.backgroundColor = "#4ade80"; // Vert
-        statusDot.style.boxShadow = "0 0 10px #4ade80";
-        statusText.innerText = "EuroShared Connecté";
-        statusText.style.color = "#4ade80";
-
-    } catch (err) {
-        // En cas d'échec total (pas d'internet, URL Supabase invalide, etc.)
-        statusDot.style.backgroundColor = "#f87171"; // Rouge
-        statusDot.style.boxShadow = "0 0 10px #f87171";
-        statusText.innerText = "Erreur de connexion base de données";
-        statusText.style.color = "#f87171";
-        console.error("Diagnostic Supabase échoué:", err);
-    }
-}
-
 
 
 document.addEventListener('DOMContentLoaded', initApp);
