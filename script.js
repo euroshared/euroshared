@@ -81,22 +81,28 @@ document.getElementById('confirm-access-btn').onclick = () => {
 };
 
 // espace activation de visualiser mot de passe
-document.querySelectorAll('.toggle-password').forEach(btn => {
-    btn.addEventListener('click', function() {
-        // On récupère l'ID de l'input cible via l'attribut data-target
-        const targetId = this.getAttribute('data-target');
-        const input = document.getElementById(targetId);
+// On écoute les clics sur tout le document
+document.addEventListener('click', function(event) {
+    // On vérifie si l'élément cliqué possède la classe 'toggle-password'
+    if (event.target.classList.contains('toggle-password')) {
         
-        // On bascule entre le type 'password' et 'text'
-        if (input.type === "password") {
-            input.type = "text";
-            this.textContent = "🙈"; // Optionnel : change l'icône
-        } else {
-            input.type = "password";
-            this.textContent = "👁️";
+        // On récupère l'ID de l'input cible (via data-target)
+        const targetId = event.target.getAttribute('data-target');
+        const input = document.getElementById(targetId);
+
+        if (input) {
+            // Bascule le type entre password et text
+            if (input.type === "password") {
+                input.type = "text";
+                event.target.textContent = "🙈"; // Icône œil barré
+            } else {
+                input.type = "password";
+                event.target.textContent = "👁️"; // Icône œil ouvert
+            }
         }
-    });
+    }
 });
+
 
 
 // Navigation
