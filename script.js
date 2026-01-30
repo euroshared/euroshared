@@ -2,14 +2,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.8';
 
 const supabase = createClient("https://jexaklhwoiaufzshzlcg.supabase.co", "sb_publishable_BdPiVVAvGh1u8SZ-sHrtrg_Inesrirz");
 
-//test
-const urlParams = new URLSearchParams(window.location.hash.replace('#', '?'));
-if (urlParams.has('error')) {
-    alert("Erreur d'authentification : " + urlParams.get('error_description'));
-    // Nettoie l'URL pour éviter de boucler sur l'erreur
-    window.location.hash = '';
-}
-//test
+let authenticatedUserId = null;
 
 const elements = {
     regCont: document.getElementById('register-container'),
@@ -17,21 +10,23 @@ const elements = {
     twCont: document.getElementById('timewall-container'),
     confStep: document.getElementById('confirmation-step'),
     forgotCont: document.getElementById('forgot-password-container'),
+     newPwdCont: document.getElementById('new-password-container'),
     iframe: document.getElementById('timewall-iframe'),
     statusDot: document.getElementById('status-dot'),
     statusText: document.getElementById('status-text'),
     userEmail: document.getElementById('user-email-display')
 };
 
-let authenticatedUserId = null;
-
 function showView(view) {
     [elements.regCont, elements.logCont, elements.twCont, elements.confStep, elements.forgotCont].forEach(c => c.style.display = 'none');
+    [elements.regCont, elements.logCont, elements.twCont, elements.confStep, elements.forgotCont, elements.newPwdCont].forEach(c => c.style.display = 'none');
+    
     if(view === 'reg') elements.regCont.style.display = 'block';
     if(view === 'log') elements.logCont.style.display = 'block';
     if(view === 'tw') elements.twCont.style.display = 'flex';
     if(view === 'conf') elements.confStep.style.display = 'block';
     if(view === 'forgot') elements.forgotCont.style.display = 'block';
+    if(view === 'newpwd') elements.newPwdCont.style.display = 'block'; 
 }
 
 function updateStatus(isOnline) {
@@ -56,6 +51,8 @@ async function initApp() {
         updateStatus(false);
     }
 }
+// Si l'URL contient le jeton, on change de vue immédiatement après le chargement
+if (window.location.hash.includes('type=recovery')) window.addEventListener('load', () => showView('newpwd'));
 
 // Actions confirmation email
 document.getElementById('register-form').onsubmit = async (e) => {
