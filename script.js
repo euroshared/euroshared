@@ -61,28 +61,6 @@ async function initApp() {
 document.getElementById('register-form').onsubmit = async (e) => {
     e.preventDefault();
     
-    // Remplace par ton URL réelle GitHub Pages
-    const siteUrl = "https://euroshared.github.io/euroshared/"; 
-
-    const { error } = await supabase.auth.signUp({
-        email: document.getElementById('email').value,
-        password: document.getElementById('password').value,
-        options: {
-            emailRedirectTo: siteUrl, // FORCE LA REDIRECTION ICI
-        }
-    });
-
-    if (error) {
-        alert(error.message);
-    } else {
-        alert("Vérifiez vos emails pour confirmer votre compte !");
-    }
-};
-
-// function login
-document.getElementById('register-form').onsubmit = async (e) => {
-    e.preventDefault();
-    
     const { data, error } = await supabase.auth.signUp({
         email: document.getElementById('email').value,
         password: document.getElementById('password').value
@@ -118,9 +96,20 @@ document.getElementById('send-recovery-btn').onclick = async () => {
     }
 };
 // Acceder aux sites offerwalls
-document.getElementById('confirm-access-btn').onclick = () => {
+document.getElementById('confirm-access-btn').onclick = async () => {
+    // 1. Double vérification de la session pour être SÛR d'avoir l'ID
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+        alert("Session expirée. Veuillez vous reconnecter.");
+        showView('log');
+        return;
+    }
+    // 2. On récupère le VRAI ID de la session actuelle
+    const userId = session.user.id;
     const offerWallId = "9c481747da9d5015";
+    // 3. On génère l'URL avec le bon UID
     const wallUrl = `https://timewall.io/users/login?oid=${offerWallId}&uid=${authenticatedUserId}&tab=tasks`;
+    console.log("Ouverture TimeWall pour ID:", userId); // Pour tes tests
     elements.iframe.src = wallUrl;
     showView('tw');
 };
