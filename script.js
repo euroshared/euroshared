@@ -18,7 +18,6 @@ const elements = {
 };
 
 function showView(view) {
-    [elements.regCont, elements.logCont, elements.twCont, elements.confStep, elements.forgotCont].forEach(c => c.style.display = 'none');
     [elements.regCont, elements.logCont, elements.twCont, elements.confStep, elements.forgotCont, elements.newPwdCont].forEach(c => c.style.display = 'none');
     
     if(view === 'reg') elements.regCont.style.display = 'block';
@@ -101,6 +100,22 @@ document.getElementById('send-recovery-btn').onclick = async () => {
         showView('log');
     }
 };
+
+// À mettre à la suite des autres onclick
+if (document.getElementById('save-new-password-btn')) {
+    document.getElementById('save-new-password-btn').onclick = async () => {
+        const newPassword = document.getElementById('new-password-input').value;
+        const { error } = await supabase.auth.updateUser({ password: newPassword });
+        if (error) alert(error.message);
+        else {
+            alert("Mot de passe mis à jour !");
+            window.location.hash = "";
+            showView('log');
+        }
+    };
+}
+
+
 // Acceder aux sites offerwalls
 document.getElementById('confirm-access-btn').onclick = () => {
     const offerWallId = "9c481747da9d5015";
