@@ -1,32 +1,30 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.8';
 
+// Configuration Supabase
 const supabase = createClient("https://jexaklhwoiaufzshzlcg.supabase.co", "sb_publishable_BdPiVVAvGh1u8SZ-sHrtrg_Inesrirz");
 
-// Gestion des erreurs d'URL
-const urlParams = new URLSearchParams(window.location.hash.replace('#', '?'));
-if (urlParams.has('error')) {
-    alert("Erreur d'authentification : " + urlParams.get('error_description'));
-    window.location.hash = '';
-}
-
+// Éléments du DOM
+const getEl = (id) => document.getElementById(id);
 const elements = {
-    regCont: document.getElementById('register-container'),
-    logCont: document.getElementById('login-container'),
-    twCont: document.getElementById('timewall-container'),
-    confStep: document.getElementById('confirmation-step'),
-    forgotCont: document.getElementById('forgot-password-container'),
-    iframe: document.getElementById('timewall-iframe'),
-    statusDot: document.getElementById('status-dot'),
-    statusText: document.getElementById('status-text'),
-    userEmail: document.getElementById('user-email-display')
+    regCont: getEl('register-container'),
+    logCont: getEl('login-container'),
+    twCont: getEl('timewall-container'),
+    confStep: getEl('confirmation-step'),
+    forgotCont: getEl('forgot-password-container'),
+    newPwdCont: getEl('new-password-container'),
+    iframe: getEl('timewall-iframe'),
+    statusText: getEl('status-text'),
+    userEmail: getEl('user-email-display'),
+    dbStatus: getEl('db-status')
 };
 
 let authenticatedUserId = null;
 
+// Gestion de l'affichage
 function showView(view) {
-    const views = [elements.regCont, elements.logCont, elements.twCont, elements.confStep, elements.forgotCont];
-    views.forEach(c => { if(c) c.style.display = 'none'; });
-    
+    const views = [elements.regCont, elements.logCont, elements.twCont, elements.confStep, elements.forgotCont, elements.newPwdCont];
+    views.forEach(v => { if(v) v.style.display = 'none'; });
+
     if(view === 'reg' && elements.regCont) elements.regCont.style.display = 'block';
     if(view === 'log' && elements.logCont) elements.logCont.style.display = 'block';
     if(view === 'tw' && elements.twCont) elements.twCont.style.display = 'flex';
@@ -34,19 +32,17 @@ function showView(view) {
     if(view === 'forgot' && elements.forgotCont) elements.forgotCont.style.display = 'block';
 }
 
+// Mise à jour du statut visuel
 function updateStatus(isOnline) {
-    const dbStatus = document.getElementById('db-status');
-    if (dbStatus) {
-        if (isOnline) {
-            dbStatus.classList.add('status-online');
-            if(elements.statusText) elements.statusText.innerText = "EuroShared Connecté";
-        } else {
-            dbStatus.classList.remove('status-online');
-            if(elements.statusText) elements.statusText.innerText = "En attente de connexion";
-        }
+    if (elements.dbStatus) {
+        isOnline ? elements.dbStatus.classList.add('status-online') : elements.dbStatus.classList.remove('status-online');
+    }
+    if (elements.statusText) {
+        elements.statusText.innerText = isOnline ? "EuroShared Connecté" : "En attente de connexion";
     }
 }
 
+// Initialisation de l'application
 async function initApp() {
     const { data: { session } } = await supabase.auth.getSession();
     if (session) {
@@ -61,90 +57,69 @@ async function initApp() {
 }
 
 // Inscription
-const regForm = document.getElementById('register-form');
-if (regForm) {
-    regForm.addEventListener('submit', async (e) => {
+if (getEl('register-form')) {
+    getEl('register-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const siteUrl = "https://euroshared.github.io/euroshared/"; 
-        const fullName = document.getElementById('name').value;
-
+        const fullName = getEl('name').value;
         const { error } = await supabase.auth.signUp({
-            email: document.getElementById('email').value,
-            password: document.getElementById('password').value,
+            email: getEl('email').value,
+            password: getEl('password').value,
             options: {
-                emailRedirectTo: siteUrl,
+                emailRedirectTo: "https://euroshared.github.io/euroshared/",
                 data: { full_name: fullName }
             }
         });
-
         if (error) alert("Erreur : " + error.message);
-        else alert("Vérifiez vos emails pour confirmer votre compte !");
+        else alert("Vérifiez vos emails !");
     });
 }
 
 // Connexion
-const logForm = document.getElementById('login-form');
-if (logForm) {
-    logForm.addEventListener('submit', async (e) => {
+if (getEl('login-form')) {
+    getEl('login-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const { error } = await supabase.auth.signInWithPassword({
-            email: document.getElementById('email-login').value,
-            password: document.getElementById('password-login').value
+            email: getEl('email-login').value,
+            password: getEl('password-login').value
         });
-        if (error) alert(error.message); 
-        else location.reload();
+        if (error) alert(error.message);
+        else window.location.reload();
     });
 }
 
 // Mot de passe oublié
-const recoveryBtn = document.getElementById('send-recovery-btn');
-if (recoveryBtn) {
-    recoveryBtn.onclick = async () => {
-        const email = document.getElementById('email-recovery-confirm').value;
-        const resetUrl = "https://euroshared.github.io/euroshared/";    
-        const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: resetUrl });
-        if (error) alert("Erreur : " + error.message);
-        else {
-            alert("Lien envoyé ! Vérifiez votre boîte mail.");
-            showView('log');
-        }
+if (getEl('send-recovery-btn')) {
+    getEl('send-recovery-btn').onclick = async () => {
+        const email = getEl('email-recovery-confirm').value;
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: window.location.href
+        });
+        if (error) alert(error.message);
+        else alert("Lien envoyé !");
     };
 }
 
-// Offerwalls
-document.querySelectorAll('.wall-btn').forEach(button => {
-    button.onclick = () => {
+// Gestionnaire d'Offerwalls (Correction des URLs)
+document.querySelectorAll('.wall-btn').forEach(btn => {
+    btn.onclick = () => {
         if (!authenticatedUserId) {
-            alert("Session expirée. Veuillez vous reconnecter.");
+            alert("Veuillez vous connecter.");
             return;
         }
-        let wallUrl = button.getAttribute('data-url');
-        wallUrl = wallUrl.replace('{uid}', authenticatedUserId);
-        if(elements.iframe) elements.iframe.src = wallUrl;
-        showView('tw');
+        let rawUrl = btn.getAttribute('data-url');
+        // On nettoie les backticks ou guillemets en trop si présents dans le HTML
+        let cleanUrl = rawUrl.replace(/[`"']/g, ""); 
+        // On remplace le placeholder par l'ID réel
+        let finalUrl = cleanUrl.replace("${authenticatedUserId}", authenticatedUserId);
+        
+        if(elements.iframe) {
+            elements.iframe.src = finalUrl;
+            showView('tw');
+        }
     };
 });
 
-// Toggle Password
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.toggle-password').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const targetId = this.getAttribute('data-target');
-            const input = document.getElementById(targetId);
-            if (input) {
-                if (input.type === 'password') {
-                    input.type = 'text';
-                    this.textContent = '🙈';
-                } else {
-                    input.type = 'password';
-                    this.textContent = '👁️';
-                }
-            }
-        });
-    });
-});
-
-// Navigation & SignOut
+// Navigation
 const actions = {
     'to-login': () => showView('log'),
     'to-register': () => showView('reg'),
@@ -156,50 +131,36 @@ const actions = {
 };
 
 Object.entries(actions).forEach(([id, func]) => {
-    const el = document.getElementById(id);
-    if(el) el.onclick = func;
+    const el = getEl(id);
+    if(el) el.onclick = (e) => { e.preventDefault(); func(); };
 });
 
-document.addEventListener('DOMContentLoaded', initApp);
+// Toggle Password
+document.querySelectorAll('.toggle-password').forEach(btn => {
+    btn.onclick = function() {
+        const target = getEl(this.getAttribute('data-target'));
+        if(target) {
+            target.type = target.type === 'password' ? 'text' : 'password';
+            this.textContent = target.type === 'password' ? '👁️' : '🙈';
+        }
+    };
+});
 
 // Diagnostic Supabase
 async function checkSupabaseLink() {
-    const dot = document.getElementById('checker-dot');
-    const label = document.getElementById('checker-label');
-    if (!dot || !label) return;
-
+    const dot = getEl('checker-dot');
+    const label = getEl('checker-label');
     try {
         await supabase.auth.getSession();
-        dot.classList.add('online');
-        label.innerText = "Supabase Connecté";
+        if(dot) dot.style.backgroundColor = "green";
+        if(label) label.innerText = "Supabase Connecté";
     } catch (e) {
-        dot.classList.add('offline');
-        label.innerText = "Supabase Déconnecté";
+        if(dot) dot.style.backgroundColor = "red";
+        if(label) label.innerText = "Erreur de liaison";
     }
 }
-checkSupabaseLink();
 
-// Module de Validation
 document.addEventListener('DOMContentLoaded', () => {
-    const pwdInput = document.getElementById('password');
-    if (pwdInput) {
-        pwdInput.setAttribute('minLength', '6');
-        pwdInput.setAttribute('required', 'true');
-    }
-
-    const validateEmail = (formId) => {
-        const form = document.getElementById(formId);
-        if (!form) return;
-        form.addEventListener('submit', (e) => {
-            const email = form.querySelector('input[type="email"]');
-            if (email && !email.value.includes('@')) {
-                alert("Veuillez entrer une adresse email valide.");
-                e.preventDefault();
-                e.stopImmediatePropagation();
-            }
-        });
-    };
-
-    validateEmail('register-form');
-    validateEmail('login-form');
+    initApp();
+    checkSupabaseLink();
 });
