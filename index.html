@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EuroShared - Offres TimeWall</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
    <header>
@@ -73,7 +74,10 @@
         </div>
         <button id="save-new-password-btn" class="btn-primary">Enregistrer</button>
     </div>
+    <div class="cf-turnstile" data-sitekey="0x4AAAAAACVstQLucwQYDH5c" data-theme="dark"></div>
 
+    <button id="save-new-password-btn" class="btn-primary">Enregistrer</button>
+</div>
     <!-- 5. Dashboard -->
     <div id="confirmation-step" class="container" style="display: none;">
         <h1>Session validée</h1>
