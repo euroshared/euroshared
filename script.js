@@ -107,7 +107,7 @@ document.getElementById('send-recovery-btn').onclick = async () => {
 // Acceder aux sites offerwalls
 document.getElementById('confirm-access-btn').onclick = () => {
     const offerWallId = "9c481747da9d5015";
-   const wallUrl = `https://timewall.io/users/login?oid=${offerWallId}&uid=${authenticatedUserId}&tab=tasks`;
+   const wallUrl = `https://timewall.io/users/login?offerWallId=${offerWallId}&uid=${authenticatedUserId}&tab=tasks`;
     elements.iframe.src = wallUrl;
     showView('tw');
 };
