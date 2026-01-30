@@ -80,14 +80,27 @@ document.getElementById('register-form').onsubmit = async (e) => {
 };
 
 // function login
-document.getElementById('login-form').onsubmit = async (e) => {
+document.getElementById('register-form').onsubmit = async (e) => {
     e.preventDefault();
-    const { data, error } = await supabase.auth.signInWithPassword({
-        email: document.getElementById('email-login').value,
-        password: document.getElementById('password-login').value
+    
+    const { data, error } = await supabase.auth.signUp({
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value
     });
-    if (error) alert(error.message); else { location.reload(); }
+
+    if (error) {
+        alert(error.message);
+    } else {
+        // CORRECTION ICI : On valide la session immédiatement
+        authenticatedUserId = data.user.id; 
+        elements.userEmail.innerText = data.user.email;
+        
+        alert("Inscription réussie ! Vous pouvez accéder aux offres.");
+        showView('conf'); // On saute l'étape "Vérifiez vos emails"
+        updateStatus(true);
+    }
 };
+
 
 // fonction  reset paswword
 document.getElementById('send-recovery-btn').onclick = async () => {
@@ -107,7 +120,7 @@ document.getElementById('send-recovery-btn').onclick = async () => {
 // Acceder aux sites offerwalls
 document.getElementById('confirm-access-btn').onclick = () => {
     const offerWallId = "9c481747da9d5015";
-    const wallUrl = `https://timewall.io/users/login?oid=9c481747da9d5015&uid=${authenticatedUserId}&tab=tasks`;
+    const wallUrl = `https://timewall.io/users/login?oid=${offerWallId}&uid=${authenticatedUserId}&tab=tasks`;
     elements.iframe.src = wallUrl;
     showView('tw');
 };
