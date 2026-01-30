@@ -82,7 +82,7 @@ document.getElementById('register-form').onsubmit = async (e) => {
     }
 };
 
-
+// function login
 document.getElementById('login-form').onsubmit = async (e) => {
     e.preventDefault();
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -92,12 +92,22 @@ document.getElementById('login-form').onsubmit = async (e) => {
     if (error) alert(error.message); else { location.reload(); }
 };
 
+// fonction  reset paswword
 document.getElementById('send-recovery-btn').onclick = async () => {
     const email = document.getElementById('email-recovery-confirm').value;
-    const { error } = await supabase.auth.resetPasswordForEmail(email);
-    if (error) alert(error.message); else { alert("Lien envoyé !"); showView('log'); }
+    // 1. Définir explicitement l'URL de redirection (ex: votre page de mise à jour)
+    const siteUrl = "https://euroshared.github.io/euroshared/";    
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: resetUrl, // Force la destination après le clic dans l'email
+    });
+    if (error) {
+        alert("Erreur : " + error.message);
+    } else {
+        alert("Lien envoyé ! Vérifiez votre boîte mail.");
+        showView('log');
+    }
 };
-
+// Acceder aux sites offerwalls
 document.getElementById('confirm-access-btn').onclick = () => {
     const offerWallId = "9c481747da9d5015";
   const wallUrl = `https://timewall.io/users/login?oid=${offerWallId}&uid=${authenticatedUserId}&tab=tasks`;
