@@ -21,9 +21,10 @@ function showView(view) {
     [elements.regCont, elements.logCont, elements.twCont, elements.confStep, elements.forgotCont, elements.newPwdCont].forEach(c => c.style.display = 'none');
         if(view === 'newpwd') {
         elements.newPwdCont.style.display = 'block';
-        // Force le rendu du captcha s'il ne s'affiche pas
-        if (window.turnstile) turnstile.render('#new-password-container .cf-turnstile');
-    }
+        // Indique au script Cloudflare de scanner le nouveau bloc visible
+        if (typeof turnstile !== 'undefined') {
+            turnstile.reset(); 
+        }
     if(view === 'reg') elements.regCont.style.display = 'block';
     if(view === 'log') elements.logCont.style.display = 'block';
     if(view === 'tw') elements.twCont.style.display = 'flex';
