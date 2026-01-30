@@ -65,7 +65,7 @@ const regForm = document.getElementById('register-form');
 if (regForm) {
     regForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const siteUrl = "https://euroshared.github.io"; 
+        const siteUrl = "https://euroshared.github.io/euroshared/"; 
         const fullName = document.getElementById('name').value;
 
         const { error } = await supabase.auth.signUp({
@@ -101,7 +101,7 @@ const recoveryBtn = document.getElementById('send-recovery-btn');
 if (recoveryBtn) {
     recoveryBtn.onclick = async () => {
         const email = document.getElementById('email-recovery-confirm').value;
-        const resetUrl = "https://euroshared.github.io";    
+        const resetUrl = "https://euroshared.github.io/euroshared/";    
         const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: resetUrl });
         if (error) alert("Erreur : " + error.message);
         else {
