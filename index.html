@@ -64,20 +64,20 @@
         <button id="send-recovery-btn" class="btn-primary">Envoyer le lien</button>
         <p class="switch-text"><a href="#" id="back-to-login">Retour à la connexion</a></p>
     </div>
-
-    <!-- 4. Nouveau Mot de Passe (Après clic email) -->
+                <!-- 4. Nouveau Mot de Passe (Après clic email) -->
     <div id="new-password-container" class="container" style="display: none;">
         <h1>Nouveau mot de passe</h1>
+        <p class="subtitle">Sécurisez votre compte</p>
         <div class="password-wrapper">
             <input type="password" id="new-password-input" placeholder="Nouveau mot de passe" required minlength="6">
             <span class="toggle-password" data-target="new-password-input">👁️</span>
         </div>
+        
+        <!-- Turnstile à l'intérieur du container -->
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAACVstQLucwQYDH5c" data-theme="dark" style="margin: 15px 0;"></div>
+
         <button id="save-new-password-btn" class="btn-primary">Enregistrer</button>
     </div>
-    <div class="cf-turnstile" data-sitekey="0x4AAAAAACVstQLucwQYDH5c" data-theme="dark"></div>
-
-    <button id="save-new-password-btn" class="btn-primary">Enregistrer</button>
-</div>
     <!-- 5. Dashboard -->
     <div id="confirmation-step" class="container" style="display: none;">
         <h1>Session validée</h1>
