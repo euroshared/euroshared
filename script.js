@@ -19,7 +19,11 @@ const elements = {
 
 function showView(view) {
     [elements.regCont, elements.logCont, elements.twCont, elements.confStep, elements.forgotCont, elements.newPwdCont].forEach(c => c.style.display = 'none');
-    
+        if(view === 'newpwd') {
+        elements.newPwdCont.style.display = 'block';
+        // Force le rendu du captcha s'il ne s'affiche pas
+        if (window.turnstile) turnstile.render('#new-password-container .cf-turnstile');
+    }
     if(view === 'reg') elements.regCont.style.display = 'block';
     if(view === 'log') elements.logCont.style.display = 'block';
     if(view === 'tw') elements.twCont.style.display = 'flex';
