@@ -61,7 +61,7 @@ async function initApp() {
 document.getElementById('register-form').onsubmit = async (e) => {
     e.preventDefault();
     
-    const siteUrl = "https://euroshared.github.io"; 
+    const siteUrl = "https://euroshared.github.io/euroshared/"; 
     const fullName = document.getElementById('name').value; // Récupère le nom
 
     const { error } = await supabase.auth.signUp({
