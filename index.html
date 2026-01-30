@@ -75,14 +75,27 @@
     </div>
 
     <!-- 5. Dashboard -->
+        <!-- 5. Dashboard (Multi-Offerwalls) -->
     <div id="confirmation-step" class="container" style="display: none;">
-        <h1>Session validée</h1>
-        <p class="subtitle">Connecté : <strong id="user-email-display">...</strong></p>
-        <button id="confirm-access-btn" class="btn-primary">Lancer TimeWall</button>
-        <p class="switch-text"><a href="#" id="cancel-auth">Se déconnecter</a></p>
+    <h1>Session validée</h1>
+    <p class="subtitle">Connecté : <strong id="user-email-display">...</strong></p>
+    
+    <div class="offerwalls-list" style="display: flex; flex-direction: column; gap: 10px; margin: 20px 0;">
+        <!-- Bouton TimeWall -->
+        <button class="wall-btn btn-primary" data-url="https://timewall.io{uid}&tab=tasks">
+            Lancer TimeWall
+        </button>
+
+        <!-- Bouton Monlix (Exemple d'ajout facile) -->
+        <button class="wall-btn btn-primary" data-url="https://monlix.com{uid}" style="background-color: #2ecc71;">
+            Lancer Monlix
+        </button>
     </div>
 
-    <!-- 6. Interface TimeWall -->
+    <p class="switch-text"><a href="#" id="cancel-auth">Se déconnecter</a></p>
+</div>
+
+    <!-- 6. Interface ifram -->
     <div id="timewall-container" class="full-container" style="display: none;">
         <header class="nav-bar">
             <div class="logo">EuroShared</div>
