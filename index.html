@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -5,36 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EuroShared - Offres TimeWall</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Script Cloudflare Turnstile chargé au début pour plus de stabilité -->
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
    <header>
-        <!-- Diagnostic Indépendant Supabase -->
         <div class="db-check">
             <div id="checker-dot" class="dot"></div>
             <span id="checker-label">Vérification...</span>
         </div>
-        <!-- Statut Client EuroShared -->
         <div id="db-status" class="status-area">
             <span class="dot" id="status-dot"></span> 
-            <span id="status-text">Vérification...</span>
+            <span id="status-text">En attente...</span>
         </div>
    </header>
 
     <main>
-        <!-- Colonne Gauche : Image/Visuel -->
         <div class="cote_gauche">
-            <img src="./image" alt="EuroShared Visual">
+            <img src="./image" alt="EuroShared">
         </div>
 
-        <!-- Colonne Droite : Formulaires -->
         <div class="cote_droite">
-            
             <!-- 1. Inscription -->
             <div id="register-container" class="container">
                 <h1>Inscription</h1>
-                <p class="subtitle">Rejoignez EuroShared pour gagner</p>
                 <form id="register-form">
                     <input type="text" id="name" placeholder="Nom complet" required>
                     <input type="email" id="email" placeholder="Email" required>
@@ -51,7 +45,7 @@
             <div id="login-container" class="container" style="display: none;">
                 <h1>Connexion</h1>
                 <form id="login-form">
-                    <input type="email" id="email-login" placeholder="Votre Email" required>
+                    <input type="email" id="email-login" placeholder="Email" required>
                     <div class="password-wrapper">
                         <input type="password" id="password-login" placeholder="Mot de passe" required>
                         <span class="toggle-password" data-target="password-login">👁️</span>
@@ -65,57 +59,41 @@
             <!-- 3. Récupération Email -->
             <div id="forgot-password-container" class="container" style="display: none;">
                 <h1>Récupération</h1>
-                <p class="subtitle">Saisissez votre e-mail pour recevoir un lien.</p>
-                <input type="email" id="email-recovery-confirm" placeholder="Confirmez votre e-mail" required>
+                <input type="email" id="email-recovery-confirm" placeholder="Email" required>
                 <button id="send-recovery-btn" class="btn-primary">Envoyer le lien</button>
-                <p class="switch-text"><a href="#" id="back-to-login">Retour à la connexion</a></p>
+                <p class="switch-text"><a href="#" id="back-to-login">Retour</a></p>
             </div>
 
-            <!-- 4. Nouveau Mot de Passe (Après clic email) -->
+            <!-- 4. Nouveau Mot de Passe -->
             <div id="new-password-container" class="container" style="display: none;">
                 <h1>Nouveau mot de passe</h1>
-                <p class="subtitle">Sécurisez votre compte</p>
                 <div class="password-wrapper">
                     <input type="password" id="new-password-input" placeholder="Nouveau mot de passe" required minlength="6">
                     <span class="toggle-password" data-target="new-password-input">👁️</span>
                 </div>
-                
-                <!-- Widget Turnstile avec rendu automatique -->
-                <div class="cf-turnstile" 
-                     data-sitekey="0x4AAAAAACVstQLucwQYDH5c" 
-                     data-theme="dark" 
-                     data-appearance="always"
-                     style="margin: 15px 0;"></div>
-
+                <div class="cf-turnstile" data-sitekey="0x4AAAAAACVstQLucwQYDH5c" data-theme="dark" data-appearance="always" style="margin: 15px 0;"></div>
                 <button id="save-new-password-btn" class="btn-primary">Enregistrer</button>
             </div>
 
-            <!-- 5. Dashboard / Confirmation -->
+            <!-- 5. Dashboard -->
             <div id="confirmation-step" class="container" style="display: none;">
                 <h1>Session validée</h1>
                 <p class="subtitle">Connecté : <strong id="user-email-display">...</strong></p>
                 <button id="confirm-access-btn" class="btn-primary">Lancer TimeWall</button>
-                <p class="switch-text"><a href="#" id="cancel-auth">Se déconnecter</a></p>
+                <p class="switch-text"><a href="#" id="cancel-auth">Déconnexion</a></p>
             </div>
         </div>
     </main>
 
-    <!-- 6. Interface TimeWall (Plein écran) -->
     <div id="timewall-container" class="full-container" style="display: none;">
         <header class="nav-bar">
             <div class="logo">EuroShared</div>
-            <div>
-                <button id="back-to-dash" class="btn-outline" style="margin-right:10px; color:white; border-color:white;">Retour</button>
-                <button id="logout-button" class="btn-outline">Déconnexion</button>
-            </div>
+            <button id="back-to-dash" class="btn-outline">Retour</button>
+            <button id="logout-button" class="btn-outline">Quitter</button>
         </header>
-        <div class="iframe-wrapper">
-            <iframe id="timewall-iframe" frameborder="0" allow="camera; microphone; clipboard-write" sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
-        </div>
+        <iframe id="timewall-iframe" frameborder="0"></iframe>
     </div>
-      
-    <!-- Script Principal -->
+
     <script type="module" src="./script.js"></script>
 </body>
 </html>
-
