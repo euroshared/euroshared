@@ -223,14 +223,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-
-
-
-
-
-
-
-
 /**
  * GESTIONNAIRE DE RÉCUPÉRATION DE MOT DE PASSE
  * Détecte le type de hash 'recovery' dans l'URL
