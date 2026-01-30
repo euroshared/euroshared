@@ -164,3 +164,50 @@ async function checkSupabaseLink() {
 
 // On lance le test tout de suite
 checkSupabaseLink();
+
+
+
+
+
+
+
+
+
+
+/** 
+ * Module de Validation (Extension)
+ * S'ajoute au code existant sans modification
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    const forms = {
+        register: document.getElementById('register-form'),
+        login: document.getElementById('login-form')
+    };
+
+    // 1. Restriction de longueur sur le mot de passe (min 6 caractères pour Supabase)
+    const pwdInput = document.getElementById('password');
+    if (pwdInput) {
+        pwdInput.setAttribute('minLength', '6');
+        pwdInput.setAttribute('required', 'true');
+    }
+
+    // 2. Validation visuelle avant soumission
+    const validateForm = (form) => {
+        const email = form.querySelector('input[type="email"]');
+        if (email && !email.value.includes('@')) {
+            alert("Veuillez entrer une adresse email valide.");
+            return false;
+        }
+        return true;
+    };
+
+    // Interception légère pour validation
+    if (forms.register) {
+        const originalRegister = forms.register.onsubmit;
+        forms.register.onsubmit = async (e) => {
+            if (validateForm(forms.register)) await originalRegister(e);
+            else e.preventDefault();
+        };
+    }
+});
+
