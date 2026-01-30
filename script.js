@@ -10,7 +10,7 @@ const elements = {
     twCont: document.getElementById('timewall-container'),
     confStep: document.getElementById('confirmation-step'),
     forgotCont: document.getElementById('forgot-password-container'),
-     newPwdCont: document.getElementById('new-password-container'),
+    newPwdCont: document.getElementById('new-password-container'),
     iframe: document.getElementById('timewall-iframe'),
     statusDot: document.getElementById('status-dot'),
     statusText: document.getElementById('status-text'),
@@ -18,19 +18,23 @@ const elements = {
 };
 
 function showView(view) {
-    [elements.regCont, elements.logCont, elements.twCont, elements.confStep, elements.forgotCont, elements.newPwdCont].forEach(c => c.style.display = 'none');
-        if(view === 'newpwd') {
-        elements.newPwdCont.style.display = 'block';
-        // Indique au script Cloudflare de scanner le nouveau bloc visible
-        if (typeof turnstile !== 'undefined') {
-            turnstile.reset(); 
-        }
+    // 1. On cache tout
+    [elements.regCont, elements.logCont, elements.twCont, elements.confStep, elements.forgotCont, elements.newPwdCont].forEach(c => {
+        if(c) c.style.display = 'none';
+    });
+    
+    // 2. On affiche la vue demandée
     if(view === 'reg') elements.regCont.style.display = 'block';
     if(view === 'log') elements.logCont.style.display = 'block';
     if(view === 'tw') elements.twCont.style.display = 'flex';
     if(view === 'conf') elements.confStep.style.display = 'block';
     if(view === 'forgot') elements.forgotCont.style.display = 'block';
-    if(view === 'newpwd') elements.newPwdCont.style.display = 'block'; 
+    
+    if(view === 'newpwd') {
+        elements.newPwdCont.style.display = 'block';
+        // Reset Turnstile pour forcer l'affichage si le bloc était caché
+        if (typeof turnstile !== 'undefined') { turnstile.reset(); }
+    }
 }
 
 function updateStatus(isOnline) {
@@ -55,61 +59,53 @@ async function initApp() {
         updateStatus(false);
     }
 }
-// Si l'URL contient le jeton, on change de vue immédiatement après le chargement
-if (window.location.hash.includes('type=recovery')) window.addEventListener('load', () => showView('newpwd'));
 
-// Actions confirmation email
+// Détection du jeton de récupération
+if (window.location.hash.includes('type=recovery')) {
+    window.addEventListener('load', () => showView('newpwd'));
+}
+
+// Inscription
 document.getElementById('register-form').onsubmit = async (e) => {
     e.preventDefault();
-    
-    // Remplace par ton URL réelle GitHub Pages
     const siteUrl = "https://euroshared.github.io/euroshared/"; 
-
     const { error } = await supabase.auth.signUp({
         email: document.getElementById('email').value,
         password: document.getElementById('password').value,
-        options: {
-            emailRedirectTo: siteUrl, // FORCE LA REDIRECTION ICI
-        }
+        options: { emailRedirectTo: siteUrl }
     });
-
-    if (error) {
-        alert(error.message);
-    } else {
-        alert("Vérifiez vos emails pour confirmer votre compte !");
-    }
+    if (error) alert(error.message); 
+    else alert("Vérifiez vos emails !");
 };
 
-// function login
+// Connexion
 document.getElementById('login-form').onsubmit = async (e) => {
     e.preventDefault();
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
         email: document.getElementById('email-login').value,
         password: document.getElementById('password-login').value
     });
-    if (error) alert(error.message); else { location.reload(); }
+    if (error) alert(error.message); else location.reload();
 };
 
-// fonction  reset paswword
+// Reset Password (Envoi email)
 document.getElementById('send-recovery-btn').onclick = async () => {
     const email = document.getElementById('email-recovery-confirm').value;
-    // 1. Définir explicitement l'URL de redirection (ex: votre page de mise à jour)
     const resetUrl = "https://euroshared.github.io/euroshared/";    
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: resetUrl, // Force la destination après le clic dans l'email
-    });
-    if (error) {
-        alert("Erreur : " + error.message);
-    } else {
-        alert("Lien envoyé ! Vérifiez votre boîte mail.");
-        showView('log');
-    }
+    const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: resetUrl });
+    if (error) alert(error.message); 
+    else { alert("Lien envoyé !"); showView('log'); }
 };
 
-// À mettre à la suite des autres onclick
+// Enregistrement Nouveau Mot de Passe
 if (document.getElementById('save-new-password-btn')) {
     document.getElementById('save-new-password-btn').onclick = async () => {
         const newPassword = document.getElementById('new-password-input').value;
+        
+        // Vérification Turnstile
+        const turnstileRes = document.querySelector('[name="cf-turnstile-response"]');
+        if (turnstileRes && !turnstileRes.value) return alert("Veuillez valider le captcha.");
+
         const { error } = await supabase.auth.updateUser({ password: newPassword });
         if (error) alert(error.message);
         else {
@@ -120,33 +116,24 @@ if (document.getElementById('save-new-password-btn')) {
     };
 }
 
-
-// Acceder aux sites offerwalls
+// TimeWall
 document.getElementById('confirm-access-btn').onclick = () => {
-    const offerWallId = "9c481747da9d5015";
-  const wallUrl = `https://timewall.io/users/login?oid=9c481747da9d5015&uid=${authenticatedUserId}&tab=tasks`;
+    const wallUrl = `https://timewall.io/users/login?oid=9c481747da9d5015&uid=${authenticatedUserId}&tab=tasks`;
     elements.iframe.src = wallUrl;
     showView('tw');
 };
 
-// espace activation de visualiser mot de passe
+// Toggle Password (👁️)
 document.addEventListener('DOMContentLoaded', () => {
-    // Gestion du clic sur l'icône œil
     document.querySelectorAll('.toggle-password').forEach(btn => {
         btn.addEventListener('click', function() {
-            const targetId = this.getAttribute('data-target');
-            const input = document.getElementById(targetId);
-            
-            if (input.type === 'password') {
-                input.type = 'text';
-                this.textContent = '🙈'; // Change l'icône
-            } else {
-                input.type = 'password';
-                this.textContent = '👁️';
-            }
+            const input = document.getElementById(this.getAttribute('data-target'));
+            input.type = (input.type === 'password') ? 'text' : 'password';
+            this.textContent = (input.type === 'password') ? '👁️' : '🙈';
         });
     });
 });
+
 // Navigation
 document.getElementById('to-login').onclick = () => showView('log');
 document.getElementById('to-register').onclick = () => showView('reg');
@@ -155,124 +142,20 @@ document.getElementById('back-to-login').onclick = () => showView('log');
 document.getElementById('back-to-dash').onclick = () => showView('conf');
 document.getElementById('cancel-auth').onclick = async () => { await supabase.auth.signOut(); location.reload(); };
 document.getElementById('logout-button').onclick = async () => { await supabase.auth.signOut(); location.reload(); };
+
 document.addEventListener('DOMContentLoaded', initApp);
 
-/**
- * Diagnostic Indépendant de la connexion Supabase
- * Aucun conflit avec le reste du code
- */
+// Diagnostic Supabase
 async function checkSupabaseLink() {
     const dot = document.getElementById('checker-dot');
     const label = document.getElementById('checker-label');
-
     try {
-        // Un simple appel pour voir si Supabase répond
-        const { error } = await supabase.auth.getSession();
-        
-        // Si on a une réponse (même avec une erreur de session vide), le lien est établi
+        await supabase.auth.getSession();
         dot.classList.add('online');
-        label.innerText = "Superbase Connecté";
+        label.innerText = "Supabase Connecté";
     } catch (e) {
-        // Le lien ne fonctionne pas (problème réseau ou mauvaises clés)
         dot.classList.add('offline');
-        label.innerText = "Superbase Déconnecté";
+        label.innerText = "Supabase Déconnecté";
     }
 }
-
-// On lance le test tout de suite
 checkSupabaseLink();
-
-
-
-
-
-
-
-
-
-
-/** 
- * Module de Validation (Extension)
- * S'ajoute au code existant sans modification
- */
-document.addEventListener('DOMContentLoaded', () => {
-    const forms = {
-        register: document.getElementById('register-form'),
-        login: document.getElementById('login-form')
-    };
-
-    // 1. Restriction de longueur sur le mot de passe (min 6 caractères pour Supabase)
-    const pwdInput = document.getElementById('password');
-    if (pwdInput) {
-        pwdInput.setAttribute('minLength', '6');
-        pwdInput.setAttribute('required', 'true');
-    }
-
-    // 2. Validation visuelle avant soumission
-    const validateForm = (form) => {
-        const email = form.querySelector('input[type="email"]');
-        if (email && !email.value.includes('@')) {
-            alert("Veuillez entrer une adresse email valide.");
-            return false;
-        }
-        return true;
-    };
-
-    // Interception légère pour validation
-    if (forms.register) {
-        const originalRegister = forms.register.onsubmit;
-        forms.register.onsubmit = async (e) => {
-            if (validateForm(forms.register)) await originalRegister(e);
-            else e.preventDefault();
-        };
-    }
-});
-
-/**
- * GESTIONNAIRE DE RÉCUPÉRATION DE MOT DE PASSE
- * Détecte le type de hash 'recovery' dans l'URL
- */
-(async function handlePasswordReset() {
-    const hash = window.location.hash;
-    
-    // Vérifie si l'URL contient les paramètres de récupération de Supabase
-    if (hash && (hash.includes('type=recovery') || hash.includes('access_token='))) {
-        
-        // Attendre que le DOM soit chargé
-        setTimeout(() => {
-            // Affiche le conteneur du nouveau mot de passe (id déjà présent dans votre HTML)
-            const newPwdCont = document.getElementById('new-password-container');
-            if (newPwdCont) {
-                // Cache tous les autres containers
-                document.querySelectorAll('.container').forEach(c => c.style.display = 'none');
-                newPwdCont.style.display = 'block';
-            }
-        }, 500);
-
-        // Logique du bouton "Enregistrer"
-        const saveBtn = document.getElementById('save-new-password-btn');
-        const newPwdInput = document.getElementById('new-password-input');
-
-        if (saveBtn && newPwdInput) {
-            saveBtn.onclick = async () => {
-                const newPassword = newPwdInput.value;
-                if (newPassword.length < 6) {
-                    alert("Le mot de passe doit faire au moins 6 caractères.");
-                    return;
-                }
-
-                const { error } = await supabase.auth.updateUser({ password: newPassword });
-
-                if (error) {
-                    alert("Erreur : " + error.message);
-                } else {
-                    alert("Mot de passe mis à jour avec succès !");
-                    window.location.hash = ''; // Nettoie l'URL
-                    location.reload(); // Redirige vers l'accueil/login
-                }
-            };
-        }
-    }
-})();
-
-
