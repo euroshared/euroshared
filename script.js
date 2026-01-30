@@ -57,23 +57,26 @@ async function initApp() {
     }
 }
 
-// Actions confirmation email
+// Inscription avec transmission du nom pour le Trigger SQL
 document.getElementById('register-form').onsubmit = async (e) => {
     e.preventDefault();
     
-    // Remplace par ton URL réelle GitHub Pages
-    const siteUrl = "https://euroshared.github.io/euroshared/"; 
+    const siteUrl = "https://euroshared.github.io"; 
+    const fullName = document.getElementById('name').value; // Récupère le nom
 
     const { error } = await supabase.auth.signUp({
         email: document.getElementById('email').value,
         password: document.getElementById('password').value,
         options: {
-            emailRedirectTo: siteUrl, // FORCE LA REDIRECTION ICI
+            emailRedirectTo: siteUrl,
+            data: {
+                full_name: fullName // Transmis à NEW.raw_user_meta_data dans ton SQL
+            }
         }
     });
 
     if (error) {
-        alert(error.message);
+        alert("Erreur : " + error.message);
     } else {
         alert("Vérifiez vos emails pour confirmer votre compte !");
     }
@@ -104,13 +107,23 @@ document.getElementById('send-recovery-btn').onclick = async () => {
         showView('log');
     }
 };
-// Acceder aux sites offerwalls
-document.getElementById('confirm-access-btn').onclick = () => {
-    const offerWallId = "9c481747da9d5015";
-  const wallUrl = `https://timewall.io/users/login?oid=9c481747da9d5015&uid=${authenticatedUserId}&tab=tasks`;
-    elements.iframe.src = wallUrl;
-    showView('tw');
-};
+// Gestionnaire universel d'Offerwalls
+document.querySelectorAll('.wall-btn').forEach(button => {
+    button.onclick = () => {
+        if (!authenticatedUserId) {
+            alert("Session expirée. Veuillez vous reconnecter.");
+            return;
+        }
+
+        // Récupère l'URL brute et injecte l'UUID de l'utilisateur connecté
+        let wallUrl = button.getAttribute('data-url');
+        wallUrl = wallUrl.replace('{uid}', authenticatedUserId);
+
+        // Charge dans l'iframe et affiche
+        elements.iframe.src = wallUrl;
+        showView('tw');
+    };
+});
 
 // espace activation de visualiser mot de passe
 document.addEventListener('DOMContentLoaded', () => {
