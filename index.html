@@ -7,20 +7,24 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-   
-    <!--verification de la connection a la base de donne -->
-<div class="db-check">
-    <div id="checker-dot" class="dot"></div>
-    <span id="checker-label">Vérification...</span>
-</div>
+   <header>
+        <!--verification de la connection a la base de donne -->
+        <div class="db-check">
+            <div id="checker-dot" class="dot"></div>
+            <span id="checker-label">Vérification...</span>
+        </div>
     <!--verification de connection client -->
-    <div id="db-status" class="status-area">
-        <span class="dot" id="status-dot"></span> 
-        <span id="status-text">Vérification...</span>
-    </div>
-     <button id="btn-google" class="btn-primary" style="margin-top: 10px; background: #4285F4;">🌐 Visiter Google</button>
-    
-    <!-- 1. Inscription -->
+        <div id="db-status" class="status-area">
+            <span class="dot" id="status-dot"></span> 
+            <span id="status-text">Vérification...</span>
+        </div>
+   </header>
+    <main>
+        <div class ="cote_gauche">
+        <button id="btn-google" class="btn-primary" style="margin-top: 10px; background: #4285F4;">🌐 Visiter Google</button>
+        </div>
+         <div class="cote_droite">
+         <!-- 1. Inscription -->
     <div id="register-container" class="container">
         <h1>Inscription</h1>
         <p class="subtitle">Rejoignez EuroShared pour gagner</p>
@@ -92,6 +96,11 @@
         </div>
     </div>
 
+         </div>
+    </main>
+
+    
+    
     <script type="module" src="./script.js"></script>
 </body>
 </html>
