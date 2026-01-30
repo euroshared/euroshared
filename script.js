@@ -60,27 +60,24 @@ async function initApp() {
 // Actions confirmation email
 document.getElementById('register-form').onsubmit = async (e) => {
     e.preventDefault();
+    
+    // Remplace par ton URL réelle GitHub Pages
+    const siteUrl = "https://euroshared.github.io/euroshared/"; 
 
-    const { data, error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
         email: document.getElementById('email').value,
         password: document.getElementById('password').value,
-        // On enlève emailRedirectTo car il n'y a plus d'email envoyé
+        options: {
+            emailRedirectTo: siteUrl, // FORCE LA REDIRECTION ICI
+        }
     });
 
     if (error) {
-        alert("Erreur : " + error.message);
+        alert(error.message);
     } else {
-        // ✅ ON RÉCUPÈRE L'ID ICI
-        authenticatedUserId = data.user.id; 
-        
-        // ✅ ON PASSE DIRECTEMENT À L'ÉTAPE SUIVANTE
-        alert("Bienvenue ! Votre compte est prêt.");
-        elements.userEmail.innerText = data.user.email;
-        showView('conf'); // Affiche le dashboard ou l'étape de confirmation d'accès
-        updateStatus(true);
+        alert("Vérifiez vos emails pour confirmer votre compte !");
     }
 };
-
 
 // function login
 document.getElementById('login-form').onsubmit = async (e) => {
