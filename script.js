@@ -11,9 +11,6 @@ if (urlParams.has('error')) {
 }
 //test
 
-
-
-
 const elements = {
     regCont: document.getElementById('register-container'),
     logCont: document.getElementById('login-container'),
