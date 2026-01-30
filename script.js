@@ -211,3 +211,59 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+
+
+
+
+
+
+
+
+/**
+ * GESTIONNAIRE DE RÉCUPÉRATION DE MOT DE PASSE
+ * Détecte le type de hash 'recovery' dans l'URL
+ */
+(async function handlePasswordReset() {
+    const hash = window.location.hash;
+    
+    // Vérifie si l'URL contient les paramètres de récupération de Supabase
+    if (hash && (hash.includes('type=recovery') || hash.includes('access_token='))) {
+        
+        // Attendre que le DOM soit chargé
+        setTimeout(() => {
+            // Affiche le conteneur du nouveau mot de passe (id déjà présent dans votre HTML)
+            const newPwdCont = document.getElementById('new-password-container');
+            if (newPwdCont) {
+                // Cache tous les autres containers
+                document.querySelectorAll('.container').forEach(c => c.style.display = 'none');
+                newPwdCont.style.display = 'block';
+            }
+        }, 500);
+
+        // Logique du bouton "Enregistrer"
+        const saveBtn = document.getElementById('save-new-password-btn');
+        const newPwdInput = document.getElementById('new-password-input');
+
+        if (saveBtn && newPwdInput) {
+            saveBtn.onclick = async () => {
+                const newPassword = newPwdInput.value;
+                if (newPassword.length < 6) {
+                    alert("Le mot de passe doit faire au moins 6 caractères.");
+                    return;
+                }
+
+                const { error } = await supabase.auth.updateUser({ password: newPassword });
+
+                if (error) {
+                    alert("Erreur : " + error.message);
+                } else {
+                    alert("Mot de passe mis à jour avec succès !");
+                    window.location.hash = ''; // Nettoie l'URL
+                    location.reload(); // Redirige vers l'accueil/login
+                }
+            };
+        }
+    }
+})();
+
+
