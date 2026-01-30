@@ -164,3 +164,4 @@ document.addEventListener('DOMContentLoaded', () => {
     initApp();
     checkSupabaseLink();
 });
+
