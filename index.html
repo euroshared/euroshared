@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -6,94 +5,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EuroShared - Offres TimeWall</title>
     <link rel="stylesheet" href="style.css">
-        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
    <header>
+        <!--verification de la connection a la base de donne -->
         <div class="db-check">
             <div id="checker-dot" class="dot"></div>
             <span id="checker-label">Vérification...</span>
         </div>
+    <!--verification de connection client -->
         <div id="db-status" class="status-area">
             <span class="dot" id="status-dot"></span> 
-            <span id="status-text">En attente...</span>
+            <span id="status-text">Vérification...</span>
         </div>
    </header>
-
     <main>
-        <div class="cote_gauche">
-            <img src="./image" alt="EuroShared">
+        <div class ="cote_gauche">
+        <img src="./image">
         </div>
-
-        <div class="cote_droite">
-            <!-- 1. Inscription -->
-            <div id="register-container" class="container">
-                <h1>Inscription</h1>
-                <form id="register-form">
-                    <input type="text" id="name" placeholder="Nom complet" required>
-                    <input type="email" id="email" placeholder="Email" required>
-                    <div class="password-wrapper">
-                        <input type="password" id="password" placeholder="Mot de passe" required minlength="6">
-                        <span class="toggle-password" data-target="password">👁️</span>
-                    </div>
-                    <button type="submit" class="btn-primary">S'inscrire</button>
-                </form>
-                <p class="switch-text">Déjà membre ? <a href="#" id="to-login">Se connecter</a></p>
+         <div class="cote_droite">
+         <!-- 1. Inscription -->
+    <div id="register-container" class="container">
+        <h1>Inscription</h1>
+        <p class="subtitle">Rejoignez EuroShared pour gagner</p>
+        <form id="register-form">
+            <input type="text" id="name" placeholder="Nom complet" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <div class="password-wrapper">
+                <input type="password" id="password" placeholder="Mot de passe" required minlength="6">
+                <span class="toggle-password" data-target="password">👁️</span>
             </div>
+            <button type="submit" class="btn-primary">S'inscrire</button>
+        </form>
+        <p class="switch-text">Déjà membre ? <a href="#" id="to-login">Se connecter</a></p>
+    </div>
 
-            <!-- 2. Connexion -->
-            <div id="login-container" class="container" style="display: none;">
-                <h1>Connexion</h1>
-                <form id="login-form">
-                    <input type="email" id="email-login" placeholder="Email" required>
-                    <div class="password-wrapper">
-                        <input type="password" id="password-login" placeholder="Mot de passe" required>
-                        <span class="toggle-password" data-target="password-login">👁️</span>
-                    </div>
-                    <button type="submit" class="btn-primary">Accéder aux offres</button>
-                </form>
-                <p class="switch-text"><a href="#" id="forgot-password">Mot de passe oublié ?</a></p>
-                <p class="switch-text">Nouveau ? <a href="#" id="to-register">Créer un compte</a></p>
+    <!-- 2. Connexion -->
+    <div id="login-container" class="container" style="display: none;">
+        <h1>Connexion</h1>
+        <form id="login-form">
+            <input type="email" id="email-login" placeholder="Votre Email" required>
+            <div class="password-wrapper">
+                <input type="password" id="password-login" placeholder="Mot de passe" required>
+                <span class="toggle-password" data-target="password-login">👁️</span>
             </div>
+            <button type="submit" class="btn-primary">Accéder aux offres</button>
+        </form>
+        <p class="switch-text"><a href="#" id="forgot-password">Mot de passe oublié ?</a></p>
+        <p class="switch-text">Nouveau ? <a href="#" id="to-register">Créer un compte</a></p>
+    </div>
 
-            <!-- 3. Récupération Email -->
-            <div id="forgot-password-container" class="container" style="display: none;">
-                <h1>Récupération</h1>
-                <input type="email" id="email-recovery-confirm" placeholder="Email" required>
-                <button id="send-recovery-btn" class="btn-primary">Envoyer le lien</button>
-                <p class="switch-text"><a href="#" id="back-to-login">Retour</a></p>
-            </div>
+    <!-- 3. Récupération Email -->
+    <div id="forgot-password-container" class="container" style="display: none;">
+        <h1>Récupération</h1>
+        <p class="subtitle">Saisissez votre e-mail pour recevoir un lien.</p>
+        <input type="email" id="email-recovery-confirm" placeholder="Confirmez votre e-mail" required>
+        <button id="send-recovery-btn" class="btn-primary">Envoyer le lien</button>
+        <p class="switch-text"><a href="#" id="back-to-login">Retour à la connexion</a></p>
+    </div>
 
-            <!-- 4. Nouveau Mot de Passe -->
-            <div id="new-password-container" class="container" style="display: none;">
-                <h1>Nouveau mot de passe</h1>
-                <div class="password-wrapper">
-                    <input type="password" id="new-password-input" placeholder="Nouveau mot de passe" required minlength="6">
-                    <span class="toggle-password" data-target="new-password-input">👁️</span>
-                </div>
-                <div class="cf-turnstile" data-sitekey="0x4AAAAAACVstQLucwQYDH5c" data-theme="dark" data-appearance="always" style="margin: 15px 0;"></div>
-                <button id="save-new-password-btn" class="btn-primary">Enregistrer</button>
-            </div>
-
-            <!-- 5. Dashboard -->
-            <div id="confirmation-step" class="container" style="display: none;">
-                <h1>Session validée</h1>
-                <p class="subtitle">Connecté : <strong id="user-email-display">...</strong></p>
-                <button id="confirm-access-btn" class="btn-primary">Lancer TimeWall</button>
-                <p class="switch-text"><a href="#" id="cancel-auth">Déconnexion</a></p>
-            </div>
+    <!-- 4. Nouveau Mot de Passe (Après clic email) -->
+    <div id="new-password-container" class="container" style="display: none;">
+        <h1>Nouveau mot de passe</h1>
+        <div class="password-wrapper">
+            <input type="password" id="new-password-input" placeholder="Nouveau mot de passe" required minlength="6">
+            <span class="toggle-password" data-target="new-password-input">👁️</span>
         </div>
-    </main>
+        <button id="save-new-password-btn" class="btn-primary">Enregistrer</button>
+    </div>
 
+    <!-- 5. Dashboard -->
+    <div id="confirmation-step" class="container" style="display: none;">
+        <h1>Session validée</h1>
+        <p class="subtitle">Connecté : <strong id="user-email-display">...</strong></p>
+        <button id="confirm-access-btn" class="btn-primary">Lancer TimeWall</button>
+        <p class="switch-text"><a href="#" id="cancel-auth">Se déconnecter</a></p>
+    </div>
+
+    <!-- 6. Interface TimeWall -->
     <div id="timewall-container" class="full-container" style="display: none;">
         <header class="nav-bar">
             <div class="logo">EuroShared</div>
-            <button id="back-to-dash" class="btn-outline">Retour</button>
-            <button id="logout-button" class="btn-outline">Quitter</button>
+            <div>
+                <button id="back-to-dash" class="btn-outline" style="margin-right:10px; color:white; border-color:white;">Retour</button>
+                <button id="logout-button" class="btn-outline">Déconnexion</button>
+            </div>
         </header>
-        <iframe id="timewall-iframe" frameborder="0"></iframe>
+        <div class="iframe-wrapper">
+            <iframe id="timewall-iframe" frameborder="0" allow="camera; microphone; clipboard-write" sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
+        </div>
     </div>
 
+         </div>
+    </main>
+
+    
+    
     <script type="module" src="./script.js"></script>
 </body>
 </html>
