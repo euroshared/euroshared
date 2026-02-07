@@ -1,0 +1,61 @@
+
+@import url('./css/footer.css');
+@import url('./css/header.css');
+@import url('./css/icon_banque.css');
+@import url('./css/info_site.css');
+@import url('./css/main.css');
+@import url('./css/page_banque_wallet.css');
+@import url('./css/policy.css');
+@import url('./css/PTC_Faucet.css');
+
+
+* { box-sizing: border-box; margin: 0; padding: 0; 
+    font-family: 'Segoe UI', Roboto, sans-serif;
+     
+}
+body{
+   max-width: 100%;
+   margin: 0 ;
+   box-sizing: border-box
+}
+main{
+  margin: 20px;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+/* 
+@media (max-width: 600px) {
+    main { flex-direction: column; }
+    .cote_gauche, .cote_droite { width: 100%; height: auto; border: none; }
+}
+/* Responsive : Tout centrer sur mobile 
+@media (max-width: 600px) {
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  .footer-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+/* Responsive pour mobiles 
+@media (max-width: 600px) {
+    main {
+        padding: 15px;
+        margin: 10px;
+    }
+    
+    .privacy-policy-h1 {
+        font-size: 1.6rem;
+    }
+}
+
+/* Version Mobile 
+@media (max-width: 600px) {
+    .usage-guide { margin: 15px; padding: 20px; }
+    .privacy-policy-h1 { font-size: 1.8rem; }
+} 
+ */

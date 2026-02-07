@@ -1,0 +1,59 @@
+/* Titre principal */
+.privacy-policy-h1 {
+    font-size: 2rem;
+    color: #000;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+}
+
+/* Sous-titres (Dates) */
+.privacy-policy-h1 span {
+    display: block;
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: normal;
+    margin-top: 5px;
+}
+
+/* Paragraphes */
+.privacy-policy-p {
+    margin-bottom: 1.5rem;
+    text-align: justify;
+}
+
+/* Titres de sections (1, 2, 3...) */
+.privacy-policy-h2 {
+    font-size: 1.3rem;
+    color: #222;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+/* Listes ordonnées */
+.privacy-policy-ol {
+    margin-bottom: 20px;
+    padding-left: 20px;
+}
+
+.privacy-policy-ol li {
+    margin-bottom: 10px;
+}
+
+/* Style spécifique pour les listes imbriquées (Nom, Email, etc.) */
+.privacy-policy-ol .privacy-policy-ol {
+    list-style-type: disc; /* Change le style des sous-listes */
+    margin-top: 10px;
+}
+
+/* Liens (Email et Site) */
+main a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+main a:hover {
+    text-decoration: underline;
+}
+
+

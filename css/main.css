@@ -1,0 +1,252 @@
+/* --- Variables & Reset --- */
+:root {
+    --bg-page: #ffffff;
+    --bg-card: #f8f9fa;
+    --border-color: #e9ecef;
+    --primary-blue: #007bff;
+    --primary-hover: #0056b3;
+    --text-main: #333;
+    --text-sub: #668;
+    --success: #28a745;
+    --danger: #dc3545;
+}
+
+.main_accueil{
+display: flex;
+justify-content: space-between;
+gap: 20px;
+flex-wrap: wrap;
+padding: 10px;
+}
+
+/* --- Côté Gauche (Présentation) --- */
+.cote_gauche {
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    border-radius: 30px;
+    max-width: 100%;
+    flex: 1 1 200px;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.cote_droite{
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    border: 1px solid rgb(164, 164, 252);
+    border-radius: 15px;
+    max-width: 100%;
+    flex: 1 1 200px;
+    justify-content: center;
+    align-items: center;
+}
+
+.cote_gauche h1 { font-size: 1.4rem;
+     margin-bottom: 5px; color: var(--primary-blue); 
+}
+
+.cote_gauche p{
+    font-size: 0.9rem;
+    color:  #666;
+    padding-bottom: 10px;
+}
+
+.container_img_accueil{
+        width: 500px;
+        overflow: hidden;
+        box-sizing: border-box;
+        border: solid 1px white;
+}
+.container_img_accueil>img{
+        max-width: 100%;
+        height: auto;
+        display: block;
+        object-fit: cover;
+        display: block;
+        border-radius: 15px;
+        margin: auto;
+
+}
+
+/* Bouton bleu stylisé */
+.btn_consult {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    width: fit-content;
+    text-decoration: none;
+    list-style: none;
+    
+}
+.btn_consult:hover {
+  transform: translateY(-1px) scale(1.1);
+}
+
+
+.btn-blue:hover {
+    background-color: #0069d9;
+    transform: translateY(-1px);
+     color: #fcf9f9; 
+
+}
+
+/* --- Côté Droite (Formulaires & Cartes) --- */
+
+
+#register-container {
+    border: 1px solid rgb(167, 167, 238);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;  
+    width: 80%;  
+    height: 100%;
+    padding: 15px;
+
+}
+
+.container > h1 { 
+    color:#007bff;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+/* --- Formulaires --- */
+form { display: flex; flex-direction: column; gap: 15px; }
+
+input {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border 0.3s;
+    padding: 10px;
+}
+
+input:focus { border-color: var(--primary-blue); }
+
+.password-wrapper { position: relative; }
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+/* --- Boutons --- */
+.btn-primary {
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-primary:hover { background-color: var(--primary-hover); }
+.btn-primary:active { transform: scale(1.1); }
+
+.switch-text {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.85rem;
+}
+
+.switch-text a { color: var(--primary-blue); text-decoration: none; font-weight: 600; }
+
+/* --- Dashboard & Iframe --- */
+.offerwalls-list { margin-top: 20px; }
+
+#timewall-container {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: white; z-index: 1000;
+    display: flex; flex-direction: column;
+}
+
+.nav-bar {
+    background: #222;
+    color: white;
+    padding: 15px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.iframe-wrapper { flex: 1; }
+iframe { width: 100%; height: 100%; }
+
+.switch-text:hover{
+      transform: translateY(-1px) scale(1.1);
+  color: green; 
+}
+
+
+/* Style du point de statut (ID utilisé dans votre JS) */
+
+.db-check, .status-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #475569;
+}
+
+.dot.online, .status-online .dot { background: var(--success); box-shadow: 0 0 10px var(--success); }
+.dot.offline { background: var(--error); }
+
+
+
+
+.connect-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: sans-serif;
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+.connect-dot {
+  width: 10px;
+  height: 10px;
+  background-color: #808080; /* Gris par défaut */
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+/* État connecté */
+.connect-dot.online {
+  background-color: #2ecc71; /* Vert */
+  box-shadow: 0 0 8px #2ecc71;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+
+
+

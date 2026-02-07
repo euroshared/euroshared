@@ -1,0 +1,195 @@
+:root {
+    --primary: #00d2ff;
+    --secondary: #3a7bd5;
+    --dark: #1a1a2e;
+    --text: #ffffff;
+}
+
+
+.info-banque-wallet{
+   max-width: 100%;
+   min-height: 100px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #3a7bd5;
+    color: white;
+
+}
+.info-banque-wallet>hr{
+    border: 1px solid goldenrod;
+}
+
+.info-banque-wallet>p{
+    line-height: 1.3rem;
+    margin-bottom: 15px;
+}
+
+    /* Bouton bleu stylisé */
+.btn-consult-google{
+    background-color: white;
+    color: goldenrod;
+    border: none;
+    padding: 5px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    width: fit-content;
+    text-decoration: none;
+    list-style: none;
+    
+}
+.btn-consult-google:hover {
+  transform: translateY(-1px) scale(1.1);
+}
+
+
+.info-banque-wallet > h2{
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+.info-banque-wallet > p{
+    font-size: 0.9rem;
+    line-height: 25px;
+}
+
+
+.proposition_insription_cls_ptc{
+    min-height: 40px;
+    max-width: 100%;
+    color:darkolivegreen ;
+    text-align: center;
+    border: 1px solid rgb(228, 223, 223);
+    margin-bottom: 15px;
+    justify-items: center;
+    padding: 10px;
+    font-size: 0.9rem;
+
+}
+.card_principal_bank {
+    display: flex;
+    border: 1px solid rgba(231, 231, 231, 0.726);
+    border-radius: 20px;
+    padding: 15px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+    gap: 20px;
+    flex-wrap: wrap; 
+}
+.card{
+    flex: 1 1 300px;
+    width: 100%;
+}
+.carde{
+    position: relative;
+    overflow: hidden;
+    flex: 1 1 300px;
+    width: 100%;
+}
+
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    
+}
+.div_img_card_header{
+    max-width: 100%;
+    height: 100px;
+    overflow: hidden;
+    flex: 1 1 100px;
+     margin-bottom: 5px;
+}
+.div_img_card_header>img{
+    display: block;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+   
+}
+
+
+.description {
+    font-size: 0.95rem;
+    color:#1a1a2e;
+    line-height: 1.5;
+    margin-bottom: 5px;
+   justify-content: center;
+   align-items: center;
+   text-align: center;
+}
+
+
+.card-body{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: center;
+    justify-items: center;
+}
+
+
+.footer-text {
+    font-size: 0.8rem;
+    color: rgb(17, 169, 230);
+}
+
+.share-trigger {
+    background: transparent;
+    border: none;
+    color: var(--primary);
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: 0.3s;
+}
+
+/* Modal de partage */
+.share-modal {
+    position: absolute;
+    bottom: -100%;
+    right: 0px;
+    width: 60%;
+    background:none;
+    transition: bottom 0.4s ease;
+}
+
+.share-modal.active {
+    bottom: 0;
+}
+
+.modal-content {
+    padding: 5px;
+    text-align: center;
+}
+
+.social-icons {
+    display: flex;
+    justify-content:center;
+}
+
+.icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: blue;
+    text-decoration: none;
+    font-size: 1.5rem;
+}
+
+
+.link-copy {
+    color: black;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.link-copy span:hover {
+    text-decoration: underline;
+    color: black;
+}

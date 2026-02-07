@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>Accueil - EuroShared</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Appel balise meta -->
+     <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+<!-- Balises obligatoires -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://euroshared.github.io/euroshared/">
+<meta property="og:title" content="Services et Marketing d'Affiliation">
+<meta property="og:description" content="Découvrez des stratégies simples pour générer des revenus supplémentaires et profiter de parrainages de services financiers partout dans le monde.">
+<meta property="og:image" content="https://euroshared.github.io/euroshared/image.jpg">
+
+<!-- Twitter (X) -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Services et Marketing d'Affiliation">
+<meta name="twitter:description" content="Gagnez des revenus supplémentaires grâce à nos stratégies de parrainage financier.">
+<meta name="twitter:image" content="https://euroshared.github.io/euroshared/image.jpg">
+
+<!-- SEO & Indexation -->
+<link rel="canonical" href="https://euroshared.github.io/euroshared/">
+<meta name="robots" content="index, follow">
+<meta property="article:publisher" content="https://web.facebook.com/profile.php?id=61585128356414" />
+
+
+
+</head>
+<!-- Fin de l'espace head-->
+<body> <!-- Debut de l'espace header-->
+    <header>
+       <div class="header">
+            <h1 class="logo_h1">
+            Euro<span class="couleur_logo">shared</span>
+            <div class="connect-check">
+          <div id="connect-checker-dot" class="connect-dot"></div>
+          <span id="connect-checker-label">Vérification...</span>
+        </div>
+      </h1>
+              <!-- Bouton Burger -->
+        <button class="burger-menu" id="burgerBtn" aria-label="Ouvrir le menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+
+        <!-- Navigation -->
+        <nav class="nav-links" id="navLinks">
+            <ul class="liste_humb">
+                <li><a href="./index.html">Accueil</a></li>
+                
+                <li><a class="PTC_GPT_Micro_taches" href="./pages/PTC_GPT_Micro_taches.html" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          title="menu PTC/GTP & Micro-taches"
+          aria-label="Lien vers page PTC/GPT et Micro-taches"
+          loading="lazy"> PTC/GPT & Micro-taches</a></li>
+                        <li><a class="Logiciels_applications" href="./pages/Logiciels_applications.html" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          title="menu Logiciels et applications"
+          aria-label="Lien vers la page Logiciels et applications"
+          loading="lazy"> Logiciels & applications</a></li>
+
+                          <li><a id="menu-page_wallet_banque" href="./pages/Banque_Wallet.html" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          title="menu wallets et banques en ligne"
+          aria-label="Lien vers la page wallets et banques en ligne"
+          loading="lazy"> wallets & banques en ligne</a></li>
+                 </ul>
+        </nav>
+  </div>
+    </header>
+<!-- Fin de l'espace header-->
+ <!-- Debut de l'espace main-->
+    <main>
+        <section class="main_accueil">
+            <div class="cote_gauche">
+                <h1>Bienvenue sur EuroShared</h1>
+                <div class="container_img_accueil">
+                    <img src="./image.jpg" alt="image_principal" loading="lazy" decoding="async" fetchpriority="high">
+                </div>
+                <article class="Accueil-info-article">
+                    <h1>Informations</h1>
+                    <p>Euroshared est une plateforme d'affiliation qui 
+                    travaille étroitement <br>
+                    avec plusieurs offerwalls dans le monde. 
+                    <br>
+                    Consultez nos guides avant de profiter des offres.</p> 
+                    <a class="btn_consult" href="./pages/info_du_site.html">Consulter</a>
+                </article>
+            </div>
+
+            <div class="cote_droite">
+       <div class="magic-bank-grid">
+    <a href="https://faucetpay.io" target="_blank" class="magic-item fp">
+        <i class="fa-solid fa-wallet"></i> <span class="magic-name">FaucetPay</span>
+    </a>
+    <a href="https://www.binance.com" target="_blank" class="magic-item bn">
+        <i class="fa-brands fa-bitcoin"></i> <span class="magic-name">Binance</span>
+    </a>
+    <a href="#" class="magic-item pp">
+        <i class="fa-brands fa-paypal"></i> <span class="magic-name">PayPal</span>
+    </a>
+    <a href="#" class="magic-item wu">
+        <i class="fa-solid fa-money-bill-transfer"></i> <span class="magic-name">Western Union</span>
+    </a>
+</div>
+
+
+                <!-- Statut de connexion -->
+                <div id="db-status" class="status-area">
+                    <span class="dot" id="status-dot"></span> 
+                    <span id="status-text">Vérification...</span>
+                </div>
+
+                <!-- Formulaire Inscription -->
+                <div id="register-container" class="container">
+                    <h1>Inscription</h1>
+                    <form id="register-form">
+                        <input type="text" id="name" placeholder="Nom complet" required>
+                        <input type="email" id="email" placeholder="Email" required>
+                        <div class="password-wrapper">
+                            <input type="password" id="password" placeholder="Mot de passe" required minlength="6">
+                            <span class="toggle-password" data-target="password">👁️</span>
+                        </div>
+                        <button type="submit" class="btn-primary">S'inscrire</button>
+                    </form>
+                    <p class="switch-text">Déjà membre ? <a href="#" id="to-login">Se connecter</a></p>
+                </div>
+
+                <!-- Formulaire Connexion -->
+                <div id="login-container" class="container" style="display: none;">
+                    <h1>Connexion</h1>
+                    <form id="login-form">
+                        <input type="email" id="email-login" placeholder="Votre Email" required>
+                        <div class="password-wrapper">
+                            <input type="password" id="password-login" placeholder="Mot de passe" required>
+                            <span class="toggle-password" data-target="password-login">👁️</span>
+                        </div>
+                        <button type="submit" class="btn-primary">Accéder aux offres</button>
+                    </form>
+                    <p class="switch-text"><a href="#" id="forgot-password">Mot de passe oublié ?</a></p>
+                    <p class="switch-text">Nouveau ? <a href="#" id="to-register">Créer un compte</a></p>
+                </div>
+                <!-- 3. Récupération & Nouveau Mot de Passe -->
+<div id="forgot-password-container" class="container" style="display: none;">
+    <h1>Sécurité</h1>
+
+    <!-- ÉTAPE A : Demander le lien (Visible par défaut) -->
+    <div id="step-request-email">
+        <p class="subtitle" style="font-size: 0.8rem; margin-bottom: 15px;">Saisissez votre e-mail pour recevoir un lien de réinitialisation.</p>
+        <input type="email" id="email-recovery-confirm" placeholder="Confirmez votre e-mail" required style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ddd;">
+        <button id="send-recovery-btn" class="btn-primary" style="width: 100%;">Envoyer le lien</button>
+    </div>
+
+    <!-- ÉTAPE B : Nouveau mot de passe (Caché, s'affiche via le lien email) -->
+    <div id="step-new-password" style="display: none;">
+        <p class="subtitle" style="font-size: 0.8rem; margin-bottom: 15px; color: #28a745;">✅ Identité vérifiée. Choisissez un nouveau mot de passe.</p>
+        <input type="password" id="new-password-input" placeholder="6 caractères minimum" required style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ddd;">
+        <button id="save-new-password-btn" class="btn-primary" style="width: 100%; background-color: #28a745;">Enregistrer le mot de passe</button>
+    </div>
+
+    <p class="switch-text" style="margin-top: 15px;"><a href="#" id="back-to-login">Retour à la connexion</a></p>
+</div>
+ <!-- Dashboard (Section validée après connexion) -->
+                <div id="confirmation-step" class="container" style="display: none;">
+                    <h1>Session validée</h1>
+                    <p class="subtitle">Connecté : <strong id="user-email-display">...</strong></p>
+                    
+                    <!-- Affichage du Solde -->
+                    <div class="balance-card" style="background: rgba(0,123,255,0.08); padding: 15px; border-radius: 12px; margin: 20px 0; border: 1px solid rgba(0,123,255,0.2); text-align: center;">
+                        <span style="font-size: 0.85rem; color: #555; text-transform: uppercase;">Solde Cumulé EuroShared</span>
+                        <h2 id="balance-value" style="color: #007bff; margin: 5px 0; font-size: 2rem;">0.00 Points</h2>
+                    </div>
+
+                    <!-- BLOC RETRAIT (Rectifié : à l'intérieur du dashboard) -->
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <button id="withdraw-trigger" class="btn-outline" style="font-size: 0.8rem; padding: 5px 15px; border-radius: 20px; cursor: pointer;">
+                            📤 Retirer mes points
+                        </button>
+                    </div>
+
+                    <div id="withdraw-section" style="display: none; background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 10px; margin-bottom: 20px; color: #333; text-align: left;">
+                        <p style="font-size: 0.9rem; margin-bottom: 10px;">Demande de paiement</p>
+                        <select id="payout-method" style="width: 100%; padding: 8px; margin-bottom: 10px; border-radius: 5px;">
+                            <option value="FaucetPay">FaucetPay</option>
+                            <option value="Binance">Binance Pay</option>
+                            <option value="PayPal">PayPal</option>
+                        </select>
+                        <input type="text" id="payout-address" placeholder="Adresse email ou ID de paiement" style="width: 100%; padding: 8px; margin-bottom: 10px; border-radius: 5px;">
+                        <input type="number" id="withdraw-amount" placeholder="Montant en points" style="width: 100%; padding: 8px; margin-bottom: 10px; border-radius: 5px;">
+                        <button id="confirm-withdrawal" class="btn-primary" style="width: 100%;">Confirmer la demande</button>
+                        <p id="withdraw-msg" style="font-size: 0.8rem; margin-top: 10px; text-align: center; font-weight: bold;"></p>
+                    </div>
+
+                    <!-- Historique des gains -->
+                    <div class="history-card" style="margin-top: 15px; background: #fff; border-radius: 10px; padding: 10px; border: 1px solid #ddd; color: #333; text-align: left;">
+                        <h4 style="margin: 0 0 10px 0; font-size: 0.9rem;">Activités récentes</h4>
+                        <div id="history-list">Chargement...</div>
+                    </div>
+                    
+                    <!-- Boutons Offerwalls -->
+                    <div class="offerwalls-list" style="display: flex; flex-direction: column; gap: 10px; margin: 20px 0;">
+                        <button class="wall-btn btn-primary" data-url="https://timewall.io{authenticatedUserId}&tab=tasks">Lancer TimeWall</button>
+                        <button class="wall-btn btn-primary" data-url="https://reward-me.eu{authenticatedUserId}">Accéder à MyLead</button>
+                    </div>
+
+                    <p class="switch-text"><a href="#" id="cancel-auth">Se déconnecter</a></p>
+                </div>
+
+                <!-- Iframe Container -->
+                <div id="timewall-container" class="full-container" style="display: none;">
+                    <header class="nav-bar" style="background:#333; color:white; padding:10px; display:flex; justify-content:space-between;">
+                        <div class="logo">EuroShared</div>
+                        <div>
+                            <button id="back-to-dash" class="btn-outline" style="color:white; border-color:white;">Retour</button>
+                        </div>
+                    </header>
+                    <div class="iframe-wrapper">
+                        <iframe id="timewall-iframe" frameborder="0" style="width:100%; height:80vh;" sandbox="allow-forms allow-scripts allow-same-origin allow-popups"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>         
+    </main>
+<!-- Fin de l'espace main-->
+ <!-- Debut de l'espace footer-->
+<footer>
+<div class="footer-content">
+    
+    <!-- Nom du site et Copyright -->
+    <div class="footer-brand">
+      <h2 class="brand-name">Euro<span class="span_footer">Shared</span></h2>
+    </div>
+            <p class="copyright">&copy; <span class="current-date"></span>
+         Tous droits réservés.</p>
+
+    <!-- Liens Utiles / Politiques -->
+    <div class="footer-links">
+    
+      <a href="./pages/politiques.html" 
+      rel="noopener noreferrer" 
+        title="Consulter notre politique-confidentialite"
+        aria-label="Politique de Confidentialité EuroShared"
+        loading="lazy"
+      class="legal-link">Politique de Confidentialité</a>
+
+      <a href="./pages/info_du_site.html" class="legal-link"
+          rel="noopener noreferrer" 
+          title="Consulter infos du site"
+          aria-label="Conditions d'utilisation generale"
+          loading="lazy">Conditions d'utilisation</a>
+    </div>
+
+    <!-- Réseaux Sociaux (Position Horizontale) -->
+    <div class="footer-socials">
+      <a href="https://web.facebook.com/profile.php?id=61585128356414" target="_blank" rel="noopener" class="social-icon fb" title="Facebook">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <a href="#" target="_blank" rel="noopener" class="social-icon yt" title="YouTube">
+        <i class="fab fa-youtube"></i>
+      </a>
+      <a href="#" target="_blank" rel="noopener" class="social-icon wa" title="WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+      </a>
+      <a href="#" target="_blank" rel="noopener" class="social-icon tg" title="Telegram">
+        <i class="fab fa-telegram-plane"></i>
+      </a>
+    </div>
+  </div>
+</footer>
+<!-- Fin de l'espace footer-->
+ <!-- injection message float-->
+ <msg-footer></msg-footer> 
+ <script src="codeJS/Msghtml_injection.js"></script>
+<!-- Espace appel sript-->
+    <script type="module" src="scriptConnect.js"></script>
+    <script src="./sriptConnect.js"></script>
+</body>
+</html>

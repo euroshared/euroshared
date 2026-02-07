@@ -1,0 +1,47 @@
+
+/* configuration icon compte bancaire*/
+.magic-bank-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 15px;
+  justify-content: center;
+  background-color: #ffffff; /* Fond propre */
+}
+
+.magic-item {
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Style des icônes */
+.magic-item i {
+  font-size: 35px; 
+}
+
+/* Style des petits noms "Magiques" */
+.magic-name {
+  font-size: 11px;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color:  rgb(1, 66, 1);
+}
+
+/* Couleurs signatures des marques */
+.fp { color: #4e5de4; } /* Bleu FaucetPay */
+.bn { color: #F3BA2F; } /* Jaune Binance */
+.pp { color: #003087; } /* Bleu PayPal */
+.wu { color: #ffcc00; } /* Jaune/Noir WU */
+.mg { color: #e03a3e; } /* Rouge MoneyGram */
+
+/* Effet de lévitation au survol */
+.magic-item:hover {
+  transform: translateY(-5px) scale(1.1);
+  color: #000; 
+}
+

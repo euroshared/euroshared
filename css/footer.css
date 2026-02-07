@@ -1,0 +1,216 @@
+
+footer{
+  min-height: 100px;
+  padding: 10px;
+  background-color:  #007bff;
+}
+
+.stilmate-footer {
+  background-color: #1a1a1a; 
+  color: #ffffff;
+  padding: 40px 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border-top: 1px solid #333;
+}
+
+.footer-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; 
+  align-items: center;
+  gap: 30px;
+}
+
+/* Style de la marque */
+.brand-name {
+  font-size: 24px;
+  letter-spacing: 2px;
+  margin: 0;
+  color: black; 
+}
+
+.brand-name span{
+  color: white;
+}
+.copyright {
+  font-size: 13px;
+  color: white;
+  margin-top: 5px;
+}
+
+/* Liens légaux */
+.footer-links {
+  display: flex;
+  gap: 20px;
+}
+
+.legal-link {
+  color:white;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s;
+}
+
+.legal-link:hover {
+  color: #ffffff;
+}
+
+/* Réseaux Sociaux Horizontaux */
+.footer-socials {
+  display: flex;
+  gap: 20px;
+}
+
+.social-icon {
+  font-size: 20px;
+  color: white;
+  text-decoration: none;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #333;
+  transition: all 0.3s ease;
+}
+
+/* Couleurs au survol */
+.social-icon.fb:hover { background-color: #1877F2; transform: translateY(-3px); }
+.social-icon.yt:hover { background-color: #FF0000; transform: translateY(-3px); }
+.social-icon.wa:hover { background-color: #25D366; transform: translateY(-3px); }
+.social-icon.tg:hover { background-color: #0088cc; transform: translateY(-3px); }
+
+
+
+/* debut configuration espace cookies de la page accueil*/
+.cookie-container {
+    position: fixed;
+    bottom: -50px; 
+    left: 0;
+    right: 0;
+    background-color: #2c3e50;
+    color: white;
+    padding: 5px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: bottom 0.5s ease-in-out;
+    z-index: 9999;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+}
+.cookie-container > p{
+ color: white;   
+ font-style: italic;
+ font-size: 0.8rem;
+}
+
+.cookie-container.show {
+    bottom: 0; 
+}
+
+.cookie-btn {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 15px;
+}
+
+.cookie-btn:hover { background: #2ecc71; }
+.cookie-container a { color: #3498db; text-decoration: underline; }
+
+/*   chat  */
+.chat-container {
+    position: fixed;
+    bottom: 30px;
+    right: 20px;
+    z-index: 9999;
+    font-family: sans-serif;
+    display: block !important; 
+}
+
+
+.chat-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.chat-btn:hover{
+  transform: translateY(-1px) scale(1.1);
+  color: green; /* Le texte devient plus noir au survol */
+}
+  
+
+.chat-window {
+    display: none; /* Caché par défaut */
+    width: 300px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.chat-window.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+.chat-header {
+    background: #007bff;
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+}
+
+.chat-form {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chat-form input, .chat-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box; /* Évite que ça dépasse */
+}
+
+.chat-form textarea {
+    height: 80px;
+    resize: none;
+}
+
+.chat-form button {
+    background: rgb(145, 142, 142);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.chat-form:hover {
+  transform: translateY(-1px) scale(1.1);
+  color: #000; /* Le texte devient plus noir au survol */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,130 @@
+/* --- Variables & Reset --- */
+:root {
+    --bg-page: #ffffff;
+    --bg-card: #f8f9fa;
+    --border-color: #e9ecef;
+    --primary-blue: #007bff;
+    --primary-hover: #0056b3;
+    --text-main: #333;
+    --text-sub: #666;
+    --success: #28a745;
+    --danger: #dc3545;
+}
+
+/* --- Header & Status --- */
+
+.db-check, .status-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    
+}
+.status-area{
+    margin-bottom: 15px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #ccc;
+}
+
+#status-dot.online { background-color: var(--success);
+     box-shadow: 0 0 5px var(--success); }
+
+/* --- Layout Principal --- */
+
+/* debut epace header  la page accueil*/
+.header{
+display: flex;
+justify-content: space-between;
+padding: 20px 40px;
+border-bottom: solid 2px rgb(240, 238, 238);
+margin-bottom: 10px;
+align-content: center;
+
+}
+
+
+.mise_en_forme_logo_accueil{
+display: flex;
+flex-direction: column;
+}
+
+
+.logo_h1{
+    font-size: 1.2rem;
+    font-family: "quicksand";
+    color:black;
+    width: auto; 
+    display: flex;
+    
+}
+.logo_h1>span{
+    color: #2563eb;
+}
+
+
+
+/* Style du bouton burger */
+.burger-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1000;
+    margin-right: 50px;
+}
+
+.burger-menu:hover{
+  transform: translateY(-1px) scale(1.4);
+  color: green; 
+}
+
+
+.bar {
+    width: 20px;
+    height: 0.2rem;
+    background-color:#2563eb;
+    transition: 0.3s;
+}
+
+.nav-links {
+    position: fixed;
+    right: -100%; /* Menu caché à droite */
+    top: 0;
+    width: 30%;
+    transition: 0.4s;
+    display: flex;
+    justify-content: center;
+    align-items: center;   
+    margin-top: 15px; 
+}
+
+/* Le sélecteur combiné est plus puissant */
+nav#navLinks ul li a {
+    text-decoration: none !important; 
+    color: #0056b3 !important;       
+    list-style-type: none;
+     line-height: 1.6;
+}
+
+nav#navLinks ul {
+    list-style: none !important;
+    padding: 10px;
+}
+
+.nav-links.active {
+    right: 0;
+
+}
+
+/* Animation du burger en "X" */
+.burger-menu.active .bar:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+.burger-menu.active .bar:nth-child(2) { opacity: 0; }
+.burger-menu.active .bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }

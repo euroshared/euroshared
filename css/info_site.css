@@ -1,0 +1,55 @@
+/* On réutilise la base de la politique de confidentialité */
+.usage-guide {
+    max-width: 850px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05); /* Petite ombre pour le relief */
+}
+
+.privacy-policy-h1 {
+    font-size: 2.2rem;
+    color: #1a1a1a;
+    border-bottom: 3px solid #007bff; /* Barre bleue pour marquer la marque */
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+}
+
+.privacy-policy-h1 span {
+    display: block;
+    font-size: 1rem;
+    color: #007bff;
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+.privacy-policy-h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-top: 40px;
+    background: #f8f9fa; /* Fond léger pour séparer les sections */
+    padding: 10px;
+    border-left: 5px solid #007bff;
+}
+
+.privacy-policy-p {
+    line-height: 1.8;
+    color: #444;
+    margin-bottom: 20px;
+}
+
+.privacy-policy-ol {
+    padding-left: 25px;
+}
+
+.privacy-policy-ol li {
+    margin-bottom: 15px;
+    color: #444;
+}
+
+.privacy-policy-ol li strong {
+    color: #007bff; /* Met les mots-clés en bleu */
+}
+
+
